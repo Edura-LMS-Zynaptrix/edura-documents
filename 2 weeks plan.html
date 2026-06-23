@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDURA — 2-Week War Plan</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+  --bg:       #08090d;
+  --s1:       #0f1117;
+  --s2:       #161922;
+  --s3:       #1d2130;
+  --border:   #232838;
+  --red:      #ff4757;
+  --orange:   #ff8c42;
+  --yellow:   #ffd166;
+  --green:    #06d6a0;
+  --blue:     #4cc9f0;
+  --purple:   #7b5ea7;
+  --text:     #dde3f0;
+  --muted:    #6b7594;
+  --dim:      #3d4560;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ── DANGER BANNER ── */
+.danger-banner {
+  background: linear-gradient(90deg, #ff4757 0%, #c0392b 100%);
+  padding: 10px 48px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.blink {
+  width: 8px; height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* ── HERO ── */
+.hero {
+  padding: 56px 48px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '14';
+  position: absolute;
+  right: -20px; top: -30px;
+  font-family: 'Syne', sans-serif;
+  font-size: 320px;
+  font-weight: 800;
+  color: rgba(255,71,87,0.04);
+  pointer-events: none;
+  line-height: 1;
+}
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.0;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--red);
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 620px;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+
+/* stat row */
+.stat-row {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.stat {
+  border-left: 2px solid var(--border);
+  padding-left: 14px;
+}
+.stat-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.stat-val.red    { color: var(--red); }
+.stat-val.orange { color: var(--orange); }
+.stat-val.green  { color: var(--green); }
+.stat-val.blue   { color: var(--blue); }
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ── LAYOUT ── */
+.container { padding: 0 48px 64px; max-width: 1280px; }
+
+.section-head {
+  padding: 40px 0 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.section-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--red);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.section-head h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+/* ── HONEST ASSESSMENT ── */
+.honest-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.honest-card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px 22px;
+}
+.honest-card.red-tint   { border-color: rgba(255,71,87,0.3); background: rgba(255,71,87,0.04); }
+.honest-card.green-tint { border-color: rgba(6,214,160,0.3); background: rgba(6,214,160,0.04); }
+.honest-card h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 12px;
+}
+.honest-card h3.red    { color: var(--red); }
+.honest-card h3.green  { color: var(--green); }
+.honest-card ul { list-style: none; }
+.honest-card ul li {
+  font-size: 12.5px;
+  color: var(--muted);
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.honest-card ul li:last-child { border-bottom: none; }
+.honest-card ul li::before { font-size: 10px; margin-top: 3px; flex-shrink: 0; }
+.honest-card.red-tint   ul li::before { content: '✗'; color: var(--red); }
+.honest-card.green-tint ul li::before { content: '✓'; color: var(--green); }
+
+/* ── ARCHITECTURE DECISION ── */
+.arch-box {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.arch-box strong { color: var(--text); }
+.arch-box code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  background: var(--s3);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--blue);
+}
+
+/* ── SERVICE TABLE ── */
+.svc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 32px;
+  font-size: 12.5px;
+}
+.svc-table thead tr {
+  border-bottom: 1px solid var(--border);
+}
+.svc-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 8px 14px 12px;
+  text-align: left;
+  font-weight: 400;
+}
+.svc-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(35,40,56,0.6);
+  vertical-align: top;
+}
+.svc-table tr:last-child td { border-bottom: none; }
+.svc-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+}
+.svc-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+}
+.svc-tech {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--blue);
+  margin-top: 2px;
+}
+.ai-prompt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--green);
+  background: rgba(6,214,160,0.06);
+  border: 1px solid rgba(6,214,160,0.2);
+  border-radius: 4px;
+  padding: 4px 8px;
+  line-height: 1.5;
+}
+
+/* ── WEEK BLOCKS ── */
+.week-wrapper { margin-bottom: 40px; }
+.week-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.week-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.pill-w1 { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+.pill-w2 { background: rgba(6,214,160,0.15); color: var(--green); border: 1px solid rgba(6,214,160,0.3); }
+.week-theme {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.week-gate {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* day row */
+.day-block {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.day-header {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--s2);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.day-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.day-label.w1 { color: var(--red); }
+.day-label.w2 { color: var(--green); }
+.day-focus {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+.day-hours {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.day-body { padding: 14px 16px; }
+
+/* task item */
+.task {
+  display: grid;
+  grid-template-columns: 90px 1fr 120px 60px;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(35,40,56,0.5);
+  align-items: start;
+  font-size: 12px;
+}
+.task:last-child { border-bottom: none; }
+.task-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--blue);
+  padding-top: 2px;
+}
+.task-title { color: var(--text); font-weight: 600; font-family: 'Syne', sans-serif; font-size: 12.5px; }
+.task-desc  { color: var(--muted); font-size: 11.5px; font-family: 'Lora', serif; margin-top: 2px; line-height: 1.5; }
+.task-who   { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); padding-top: 2px; }
+.task-est   { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--orange); text-align: right; padding-top: 2px; }
+
+/* owner badges */
+.own { display: inline-flex; gap: 3px; flex-wrap: wrap; }
+.ob {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--s3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* ceremony chip */
+.ceremony {
+  background: rgba(124,94,167,0.1);
+  border: 1px solid rgba(124,94,167,0.3);
+  border-radius: 5px;
+  padding: 6px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: #b09fd4;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ceremony::before { content: '◆'; font-size: 8px; color: var(--purple); }
+
+/* ── CODE BLOCK ── */
+.cb {
+  background: #05060a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.75;
+  overflow-x: auto;
+  margin: 12px 0 20px;
+  white-space: pre;
+}
+.cb .kw  { color: #c792ea; }
+.cb .str { color: var(--green); }
+.cb .cmt { color: #4a5275; }
+.cb .val { color: var(--orange); }
+.cb .fn  { color: var(--blue); }
+.cb .hl  { color: var(--red); }
+
+/* ── RISK TABLE ── */
+.risk-row {
+  display: grid;
+  grid-template-columns: 200px 80px 1fr;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(35,40,56,0.5);
+  font-size: 12.5px;
+  align-items: start;
+}
+.risk-row:last-child { border-bottom: none; }
+.risk-name { color: var(--text); font-weight: 600; font-family: 'Syne', sans-serif; font-size: 13px; }
+.risk-level {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+.rl-critical { background: rgba(255,71,87,0.2); color: var(--red); border: 1px solid rgba(255,71,87,0.4); }
+.rl-high     { background: rgba(255,140,66,0.2); color: var(--orange); border: 1px solid rgba(255,140,66,0.4); }
+.rl-med      { background: rgba(255,209,102,0.15); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
+.risk-mit { color: var(--muted); font-size: 12px; }
+
+/* ── AI STRATEGY ── */
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.ai-card {
+  background: var(--s1);
+  border: 1px solid rgba(6,214,160,0.2);
+  border-radius: 8px;
+  padding: 18px;
+}
+.ai-card h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  margin-bottom: 10px;
+}
+.ai-card ul { list-style: none; }
+.ai-card ul li {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(35,40,56,0.4);
+  display: flex; gap: 6px; align-items: flex-start;
+}
+.ai-card ul li:last-child { border-bottom: none; }
+.ai-card ul li::before { content: '▸'; color: var(--green); font-size: 9px; margin-top: 3px; flex-shrink: 0; }
+
+/* ── TEAM LOAD ── */
+.load-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.load-card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+.load-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.load-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.load-bar-wrap {
+  background: var(--s3);
+  border-radius: 4px;
+  height: 6px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.load-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--green), var(--blue));
+}
+.load-bar.over { background: linear-gradient(90deg, var(--orange), var(--red)); }
+.load-hrs {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.load-svcs {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.load-svc {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px;
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: var(--muted);
+}
+
+/* ── DoD STRIP ── */
+.dod-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.dod-item {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex; gap: 8px; align-items: flex-start;
+  font-size: 12px; color: var(--muted);
+}
+.dod-box {
+  width: 14px; height: 14px; flex-shrink: 0;
+  border: 1.5px solid var(--green);
+  border-radius: 3px; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--green);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--s1);
+  border-top: 1px solid var(--border);
+  padding: 18px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<!-- DANGER BANNER -->
+<div class="danger-banner">
+  <span class="blink"></span>
+  CRITICAL TIMELINE — 14 DAYS · FULL STACK · GREENFIELD · PRODUCTION DEPLOY ON AZURE AKS
+  <span class="blink"></span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">EDURA LMS · Team ZYNAPTRIX · 2-Week War Plan</div>
+  <h1>14 Days.<br><em>No Buffer.</em></h1>
+  <p class="hero-sub">All 11 microservices. Full Azure AKS deploy. Client demo for Mr. Dimuthu Prabath. This plan assumes AI-assisted coding, parallel development, and zero wasted days.</p>
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-val red">252h</div>
+      <div class="stat-label">Total Team Hours</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val orange">~380h</div>
+      <div class="stat-label">Estimated Work Required</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val green">~60%</div>
+      <div class="stat-label">Gap Closed by AI Coding</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val blue">Day 10</div>
+      <div class="stat-label">Last Safe Feature Cutoff</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══ SECTION 1: BRUTAL TRUTH ══ -->
+<div class="section-head">
+  <span class="section-num">01 —</span>
+  <h2>What This Plan Requires From Every Member</h2>
+</div>
+
+<div class="honest-grid">
+  <div class="honest-card red-tint">
+    <h3 class="red">What will kill this plan</h3>
+    <ul>
+      <li>Any member going dark for even 1 full day</li>
+      <li>Debugging integration issues alone — always pair on cross-service problems</li>
+      <li>Polishing UI before core APIs are working</li>
+      <li>Trying to set up Azure AKS from scratch in Week 2 — configure it in Week 1 Day 3</li>
+      <li>Writing tests after features — tests and feature code in the same PR</li>
+      <li>Waiting for a perfect architecture — ship working code, refactor later</li>
+      <li>Feature creep — AI assistant, leaderboard gamification are Week 2 only if ahead</li>
+    </ul>
+  </div>
+  <div class="honest-card green-tint">
+    <h3 class="green">What will save this plan</h3>
+    <ul>
+      <li>AI generates the boilerplate — you review, integrate, and test</li>
+      <li>Each member owns 2–3 services end-to-end (schema → API → tests)</li>
+      <li>Shared Docker Compose running from Day 2 so everyone integrates daily</li>
+      <li>Staging deploy live from Day 5 — not Day 13</li>
+      <li>Daily 15-min sync: what's merged, what's blocked, who helps who</li>
+      <li>Feature freeze Day 10 — Days 11–14 are testing, fixes, and demo prep only</li>
+      <li>One person (Nadun) owns infra/CI full-time — never rotates off it</li>
+    </ul>
+  </div>
+</div>
+
+<div class="arch-box">
+  <strong>Architecture decision for speed:</strong> Run all 11 Python services as separate FastAPI apps inside a single <code>edura-backend</code> monorepo. Each service has its own folder, its own PostgreSQL Neon database branch, and its own Docker container — but they share one <code>docker-compose.yml</code> for local dev. This gives you the full microservices architecture your SDS specifies, while eliminating the overhead of 11 separate repositories. AKS deploys each service as a separate pod. <strong>Document this as ADR-08 in your documents repo.</strong>
+</div>
+
+<!-- ══ SECTION 2: TEAM LOAD ══ -->
+<div class="section-head">
+  <span class="section-num">02 —</span>
+  <h2>Team Service Ownership</h2>
+</div>
+
+<div class="load-grid">
+  <div class="load-card">
+    <div class="load-name">Nadun Dananjaya</div>
+    <div class="load-id">SE/2021/047 · @n.dananjaya</div>
+    <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
+    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-svcs">
+      <span class="load-svc">infra-owner</span>
+      <span class="load-svc">auth-svc</span>
+      <span class="load-svc">nginx</span>
+      <span class="load-svc">CI/CD</span>
+      <span class="load-svc">AKS deploy</span>
+    </div>
+  </div>
+  <div class="load-card">
+    <div class="load-name">Imansha Rajapaksha</div>
+    <div class="load-id">SE/2021/029 · @i.rajapaksha</div>
+    <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
+    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-svcs">
+      <span class="load-svc">course-svc</span>
+      <span class="load-svc">content-svc</span>
+      <span class="load-svc">frontend</span>
+      <span class="load-svc">user-svc</span>
+    </div>
+  </div>
+  <div class="load-card">
+    <div class="load-name">Danindu Ransika</div>
+    <div class="load-id">SE/2021/034 · @d.ransika</div>
+    <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
+    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-svcs">
+      <span class="load-svc">payment-svc</span>
+      <span class="load-svc">enroll-svc</span>
+      <span class="load-svc">admin-svc</span>
+      <span class="load-svc">rabbitmq</span>
+    </div>
+  </div>
+  <div class="load-card">
+    <div class="load-name">Thushan Madushanka</div>
+    <div class="load-id">SE/2021/011 · @t.madushanka</div>
+    <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
+    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-svcs">
+      <span class="load-svc">assess-svc</span>
+      <span class="load-svc">progress-svc</span>
+      <span class="load-svc">notif-svc</span>
+      <span class="load-svc">analytics-svc</span>
+      <span class="load-svc">testing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECTION 3: AI STRATEGY ══ -->
+<div class="section-head">
+  <span class="section-num">03 —</span>
+  <h2>AI-Assisted Coding Strategy</h2>
+</div>
+
+<div class="ai-grid">
+  <div class="ai-card">
+    <h4>Use AI to generate (fast)</h4>
+    <ul>
+      <li>Full FastAPI service scaffold per service (models, schemas, router, CRUD)</li>
+      <li>All SQLAlchemy ORM models from your SDS ER diagram</li>
+      <li>All Alembic migration files from ORM models</li>
+      <li>pytest unit test files for each service module</li>
+      <li>Docker Compose service definitions</li>
+      <li>GitHub Actions CI workflow YAML</li>
+      <li>Nginx upstream + location config blocks</li>
+      <li>Next.js page components from SDS wireframes</li>
+    </ul>
+  </div>
+  <div class="ai-card">
+    <h4>You must do yourself (critical)</h4>
+    <ul>
+      <li>Cross-service RabbitMQ event wiring and consumer logic</li>
+      <li>Asgardeo OAuth 2.0 callback + JWT validation flow</li>
+      <li>PayHere HMAC webhook signature verification</li>
+      <li>Azure AKS deployment manifests and secrets config</li>
+      <li>Integration testing — seed data, cleanup, real assertions</li>
+      <li>Code review: every AI output reviewed before merge</li>
+      <li>Performance: Redis caching wiring, query optimization</li>
+    </ul>
+  </div>
+  <div class="ai-card">
+    <h4>Prompt pattern that works</h4>
+    <ul>
+      <li>"Generate a FastAPI service for [SVC] with these SQLAlchemy models: [paste schema]. Include router, CRUD, Pydantic schemas, health endpoint."</li>
+      <li>"Write pytest unit tests for this function using AAA pattern, mock Redis/DB: [paste function]"</li>
+      <li>"Generate Alembic migration for this ORM model: [paste model]"</li>
+      <li>"Write a RabbitMQ consumer in Python (pika) that listens to [event] and calls [function]"</li>
+      <li>Always paste your SDS section as context — AI output is better with constraints</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══ SECTION 4: SERVICE BUILD ORDER ══ -->
+<div class="section-head">
+  <span class="section-num">04 —</span>
+  <h2>Service Build Order (Dependency Graph)</h2>
+</div>
+
+<div class="arch-box">
+  <strong>Build in this order — never skip ahead.</strong> Each tier depends on the previous. Starting Payment Service before Auth is working wastes hours debugging token validation. The order below is the shortest path to a fully integrated system.
+</div>
+
+<table class="svc-table">
+  <thead>
+    <tr>
+      <th style="width:40px">Tier</th>
+      <th style="width:180px">Service</th>
+      <th style="width:100px">Day Target</th>
+      <th style="width:80px">Owner</th>
+      <th>Why this order + AI prompt seed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--red);">T0<br>Infra</td>
+      <td><div class="svc-name">Docker + Nginx + RabbitMQ + Redis</div><div class="svc-tech">infra foundation</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 1–2</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya</td>
+      <td><div class="ai-prompt">"Generate a docker-compose.yml for 11 Python FastAPI services on ports 8001-8011, postgres:16, redis:7, rabbitmq:3-management, nginx. Each service has its own Dockerfile with hot-reload."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">T1<br>Auth</td>
+      <td><div class="svc-name">Auth Service + User Service</div><div class="svc-tech">auth_service · user_service</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 2–4</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya<br>@i.rajapaksha</td>
+      <td><div class="ai-prompt">"FastAPI auth service integrating Asgardeo OAuth 2.0 PKCE flow. Endpoints: /auth/login, /auth/callback, /auth/refresh, /auth/logout. JWT validation middleware. Redis session store. SQLAlchemy models: User, RefreshToken, OtpCode."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yellow);">T2<br>Core</td>
+      <td><div class="svc-name">Course + Content + Enrollment</div><div class="svc-tech">course_service · content_service · enrollment_service</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 4–7</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@i.rajapaksha<br>@d.ransika</td>
+      <td><div class="ai-prompt">"FastAPI course service. Models: Course(id, title, teacher_id, status:ENUM[DRAFT,PUBLISHED,ARCHIVED]), Module, Lesson(youtube_video_id, cloudinary_asset_url). Full CRUD with teacher ownership check. Cloudinary signed URL generation. RabbitMQ publish on course.published."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yellow);">T2<br>Pay</td>
+      <td><div class="svc-name">Payment Service + Admin Service</div><div class="svc-tech">payment_service · admin_service</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 5–8</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@d.ransika</td>
+      <td><div class="ai-prompt">"FastAPI payment service. PayHere checkout init (POST /payments/checkout). Webhook handler (POST /payments/webhook) with HMAC-MD5 verification using merchant_secret. payment_status ENUM(PENDING,SUCCESS,FAILED). Idempotency via transaction_id. Publish payment.success to RabbitMQ."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green);">T3<br>Assess</td>
+      <td><div class="svc-name">Assessment + Progress Tracking</div><div class="svc-tech">assessment_service · progress_service</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 6–9</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@t.madushanka</td>
+      <td><div class="ai-prompt">"FastAPI assessment service. Timed quiz session using Redis (store timer start, auto-submit on expiry). MCQ/True-False auto-grading. Tab-switch detection webhook endpoint. Models: Assessment, Question, Submission, ViolationLog. Publish assessment.graded to RabbitMQ."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green);">T3<br>Support</td>
+      <td><div class="svc-name">Notification + Analytics</div><div class="svc-tech">notification_service · analytics_service</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 8–10</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@t.madushanka<br>@d.ransika</td>
+      <td><div class="ai-prompt">"Python pika RabbitMQ consumer service. Listen to events: auth.otp-requested, payment.success, certificate.issued. Send SMTP emails using Jinja2 templates. No HTTP endpoints — pure consumer."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);">T4<br>UI</td>
+      <td><div class="svc-name">Next.js Frontend</div><div class="svc-tech">edura-frontend · Next.js + Redux</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 5–10</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@i.rajapaksha</td>
+      <td><div class="ai-prompt">"Next.js 14 App Router + Redux Toolkit. Pages: /login, /register, /dashboard, /courses, /courses/[id], /courses/[id]/lesson/[lid], /assessment/[id], /admin, /profile. Use the Figma design as reference. Connect to API Gateway at NEXT_PUBLIC_API_URL."</div></td>
+    </tr>
+    <tr>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);">T5<br>Deploy</td>
+      <td><div class="svc-name">Azure AKS + CI/CD Pipeline</div><div class="svc-tech">infra · .github/workflows</div></td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 3 start → Day 12 production</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya</td>
+      <td><div class="ai-prompt">"GitHub Actions workflow: lint → build → unit tests → docker build + push to ACR → kubectl apply to AKS staging. Trigger on push to develop. Second job: deploy to production on push to main with manual approval."</div></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══ SECTION 5: WEEK 1 ══ -->
+<div class="section-head">
+  <span class="section-num">05 —</span>
+  <h2>Week 1 — Build Everything</h2>
+</div>
+
+<div class="week-wrapper">
+  <div class="week-title-bar">
+    <span class="week-pill pill-w1">Week 1 · Days 1–7</span>
+    <span class="week-theme">Infrastructure → Auth → Core APIs → Staging Live</span>
+    <span class="week-gate">Gate: All services returning 200 on /health in staging by Day 7</span>
+  </div>
+
+  <!-- D1 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 1 · MON</span>
+      <span class="day-focus">Repo setup, Docker Compose, CI scaffold, Sprint Planning</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#01</div>
+        <div><div class="task-title">Create all repos, branch protections, .env.example, README shells</div><div class="task-desc">edura-backend, edura-frontend, edura-infra, edura-tests. develop = default branch. main protected (1 review + CI pass). Commit linter configs (pyproject.toml + .eslintrc) immediately.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">2h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#02</div>
+        <div><div class="task-title">Docker Compose with all 11 services + infra (postgres, redis, rabbitmq, nginx)</div><div class="task-desc">AI-generate the full docker-compose.yml. Each service folder gets a Dockerfile. Test: docker-compose up → all containers start. Nginx health check passes. This is the shared dev environment — everyone pulls and runs it by end of Day 1.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#03</div>
+        <div><div class="task-title">GitHub Actions CI pipeline skeleton (lint + build + unit test stages)</div><div class="task-desc">Must be green on first push. Empty test file is fine — CI must pass. This unblocks everyone from Day 2 onwards. Add pip-audit security stage too.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#04</div>
+        <div><div class="task-title">AI-generate all 11 FastAPI service skeletons (main.py, router, models, schemas, database.py)</div><div class="task-desc">One AI prompt per service. Each gets: GET /health endpoint, SQLAlchemy base setup, Alembic init, empty router. All services committed and building in Docker by end of day.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#05</div>
+        <div><div class="task-title">GitHub Project board: extend SENG 31242 board, Sprint 5 milestone, all labels, columns</div><div class="task-desc">Phase=Development field, 6 Kanban columns, all epic + priority labels. Populate backlog with all 22 issues from this plan before end of Day 1.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">1.5h</div>
+      </div>
+      <div class="ceremony">Sprint Planning (1.5h): Assign all issues. Confirm AI tooling setup (everyone has Claude/Cursor/Copilot ready). Agree: no async debugging — if blocked &gt;30min, ping team immediately.</div>
+    </div>
+  </div>
+
+  <!-- D2 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 2 · TUE</span>
+      <span class="day-focus">All DB schemas + Alembic migrations + RabbitMQ wiring</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#06</div>
+        <div><div class="task-title">All SQLAlchemy ORM models across all 11 services (AI-generated from SDS ER diagram)</div><div class="task-desc">Paste SDS §3.2 ER diagram description into AI. Get all models. Review FK relationships. Commit models.py per service. This is the data foundation everything else builds on — do not skip review step.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#07</div>
+        <div><div class="task-title">All Alembic migration files + pytest fixture verifying migrations run cleanly</div><div class="task-desc">alembic revision --autogenerate per service. One pytest fixture: upgrade head → assert tables exist → downgrade → upgrade. This runs in CI postgres container on every push.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span><span class="ob">@thushan</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#08</div>
+        <div><div class="task-title">RabbitMQ exchanges, queues, and routing keys setup script</div><div class="task-desc">infra/rabbitmq/setup.py: declare edura.events topic exchange, all queues (notification.queue, enrollment.queue, progress.queue). Run on docker-compose startup. Test with simple publish/consume smoke test.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">2.5h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#09</div>
+        <div><div class="task-title">Nginx routing config: all 11 service upstream blocks + location paths</div><div class="task-desc">/api/auth→8001, /api/users→8002, /api/courses→8003, /api/content→8004, /api/enrollments→8005, /api/payments→8006, /api/assessments→8007, /api/progress→8008, /api/admin→8009, /api/analytics→8010. Proxy headers, CORS, rate limit 100/min.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">2h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D3 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 3 · WED</span>
+      <span class="day-focus">Auth Service complete + AKS cluster provisioned</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#10</div>
+        <div><div class="task-title">Auth Service: Asgardeo OAuth flow, JWT middleware, session management, OTP</div><div class="task-desc">All endpoints: /auth/login, /auth/callback, /auth/refresh, /auth/logout, /auth/otp/request, /auth/otp/verify. JWT validation middleware decorator reusable by all other services. Redis session + OTP storage. Unit tests: TokenService (≥90% coverage).</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">5h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#11</div>
+        <div><div class="task-title">User Service: CRUD endpoints + RBAC middleware shared decorator</div><div class="task-desc">GET/PUT /users/{id}, role assignment, resource ownership validation. The @require_role(["TEACHER","ADMIN"]) decorator is shared across all services via a common auth library in edura-backend/shared/. Critical: all other services import this.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#12</div>
+        <div><div class="task-title">Azure AKS cluster provisioned + ACR registry created + kubectl configured</div><div class="task-desc">az aks create, az acr create. Configure GitHub Actions with AKS credentials (GitHub Secrets). Deploy a single hello-world pod to verify cluster is working. Do NOT wait until Week 2 for this — AKS provisioning takes 10–15 min but debugging takes hours.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">3h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D4 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 4 · THU</span>
+      <span class="day-focus">Course + Content + Payment services core APIs</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#13</div>
+        <div><div class="task-title">Course Service: full CRUD, teacher ownership, RabbitMQ publish on publish/unpublish</div><div class="task-desc">POST/GET/PUT/DELETE /courses, /courses/{id}/modules, /courses/{id}/modules/{mid}/lessons. Store youtube_video_id + cloudinary_asset_url (never raw files). Enforce @require_role(["TEACHER","ADMIN"]) on mutating endpoints. Publish course.published event.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">5h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#14</div>
+        <div><div class="task-title">Content Service: Cloudinary signed URL generation + YouTube embed token endpoint</div><div class="task-desc">POST /content/signed-url (generates time-expiring Cloudinary URL for authenticated user). GET /content/lessons/{id}/stream (returns signed embed params). File upload validation: MIME type + magic number. Max sizes enforced.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#15</div>
+        <div><div class="task-title">Payment Service: PayHere checkout init + HMAC webhook handler + manual receipt upload</div><div class="task-desc">POST /payments/checkout (build PayHere payload, return redirect URL). POST /payments/webhook (verify HMAC signature, update payment_status, publish payment.success). POST /payments/receipts (upload to Azure Blob). Idempotency via transaction_id unique constraint.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">5h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D5 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 5 · FRI</span>
+      <span class="day-focus">Enrollment + Assessment services + Staging deploy LIVE</span>
+      <span class="day-hours">Team: ~18h total · Gate: staging URL working</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#16</div>
+        <div><div class="task-title">Enrollment Service: RabbitMQ consumer for payment.success + access grant/revoke</div><div class="task-desc">Listens to payment.success → creates enrollment record + grants course access. Listens to subscription.expired → suspends access (BR-001). GET /enrollments?student_id=X for dashboard. Publish enrollment.activated.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#17</div>
+        <div><div class="task-title">Assessment Service: MCQ/TF quiz CRUD + timed session (Redis) + auto-grade + anti-cheat</div><div class="task-desc">POST /assessments, POST /assessments/{id}/start (Redis timer), POST /assessments/{id}/submit (auto-grade MCQ/TF, flag short-answer for manual). POST /assessments/{id}/violations (tab-switch event from frontend JS). Publish assessment.graded.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">5h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#18</div>
+        <div><div class="task-title">GitHub Actions: build all Docker images, push to ACR, deploy to AKS staging</div><div class="task-desc">Trigger on push to develop. Build matrix: all 11 service images + frontend. Push to ACR. kubectl apply -f k8s/staging/. Verify all pods Running. Add staging URL to README. This must be live by end of Day 5.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="ceremony">End of Day 5 Sync (30 min): Is staging live? Which services are green on /health? What's blocked for Week 1 end? Escalate anything not resolved to supervisor if needed.</div>
+    </div>
+  </div>
+
+  <!-- D6 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 6 · SAT</span>
+      <span class="day-focus">Progress Tracking + Notification + Admin services + Frontend skeleton</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#19</div>
+        <div><div class="task-title">Progress Tracking: watch-status, completion %, certificate eligibility, leaderboard (Redis)</div><div class="task-desc">POST /progress/lessons/{id}/watch (record progress, check 100% completion). GET /progress/courses/{id} (completion %). Cert eligibility: 100% videos AND pass all assessments (BR-004). Leaderboard cache in Redis (sorted set). Listens to assessment.graded, lesson.watched.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#20</div>
+        <div><div class="task-title">Notification Service: RabbitMQ consumer + SMTP email dispatch (OTP, payment, cert)</div><div class="task-desc">Pure consumer — no HTTP endpoints. Jinja2 email templates for: OTP, payment confirmation, certificate ready, violation alert. SMTP via Gmail App Password or SendGrid. Test by triggering auth.otp-requested manually.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#21</div>
+        <div><div class="task-title">Admin Service: receipt verification dashboard endpoints + user management + audit log</div><div class="task-desc">GET/PUT /admin/payments/receipts (approve/reject with audit trail). GET/POST/PUT/DELETE /admin/users. GET /admin/violations. GET /admin/audit-logs. All @require_role(["ADMIN"]).</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#22</div>
+        <div><div class="task-title">Next.js: Login, Register, Student Dashboard, Course Catalog pages (connected to live APIs)</div><div class="task-desc">Wire to staging API Gateway URL. Redux auth slice (login, token refresh). Protected route HOC. Course catalog fetches from course-svc. Student dashboard fetches enrolled courses + progress. Use Figma prototype as visual reference.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">5h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D7 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w1">DAY 7 · SUN</span>
+      <span class="day-focus">Analytics service + Integration smoke test + Week 1 gate check</span>
+      <span class="day-hours">Team: ~18h total · GATE: all /health endpoints 200 on staging</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#23</div>
+        <div><div class="task-title">Analytics Service: aggregation queries + PDF/Excel report endpoints</div><div class="task-desc">GET /analytics/courses/{id}/performance (pass rate, avg score, completion). GET /analytics/revenue (subscription summary). GET /analytics/reports/export?format=pdf|excel. Use materialized views for heavy aggregations. ReportLab for PDF, openpyxl for Excel.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#24</div>
+        <div><div class="task-title">End-to-end smoke test: student register → OTP verify → login → enroll → view course</div><div class="task-desc">httpx script hitting staging URLs. Covers the critical path the demo will walk through. If any step fails here, it means cross-service integration is broken. Fix today — not Day 13.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#25</div>
+        <div><div class="task-title">Week 1 Retrospective + Week 2 re-plan based on actual velocity</div><div class="task-desc">What's done? What's partial? What needs to move to Week 2? Adjust assignments. Update GitHub board. Document retro in documents/retrospectives/sprint5-week1.md. Do NOT skip this — it determines if Week 2 is survivable.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">1h</div>
+      </div>
+      <div class="ceremony">Week 1 Gate Check: Open staging URL and verify every service returns {"status":"ok"} on GET /health. Any service not live = drop Saturday sleep, not Sunday features.</div>
+    </div>
+  </div>
+</div><!-- end week 1 -->
+
+<!-- ══ SECTION 6: WEEK 2 ══ -->
+<div class="section-head">
+  <span class="section-num">06 —</span>
+  <h2>Week 2 — Complete, Test, Deploy, Demo</h2>
+</div>
+
+<div class="week-wrapper">
+  <div class="week-title-bar">
+    <span class="week-pill pill-w2">Week 2 · Days 8–14</span>
+    <span class="week-theme">Frontend complete → Full integration testing → Production deploy → Demo</span>
+    <span class="week-gate">Gate: Feature freeze Day 10. Production live Day 12. Demo-ready Day 13.</span>
+  </div>
+
+  <!-- D8 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 8 · MON</span>
+      <span class="day-focus">Frontend: Course viewer, Assessment, Payment pages</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#26</div>
+        <div><div class="task-title">Course content viewer: YouTube embed + Cloudinary notes + lesson navigation</div><div class="task-desc">Next.js dynamic route /courses/[id]/lesson/[lid]. YouTube IFrame API embed with private video. Signed Cloudinary URL fetch for attachments. Progress tracking call on video completion event. Ref: SDS §6.1.4.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#27</div>
+        <div><div class="task-title">Assessment UI: timed quiz, MCQ interface, submission, results + anti-cheat JS</div><div class="task-desc">Timer countdown from Redis state. Tab-switch detection (visibilitychange + blur events → POST /assessments/{id}/violations). MCQ selection → submit → display score. Ref: SDS §6.1.5.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#28</div>
+        <div><div class="task-title">Payment flow UI: PayHere redirect + manual receipt upload + subscription status</div><div class="task-desc">Course purchase page → PayHere redirect. Upload receipt form (for manual fallback). Subscription status badge on dashboard. POST to /payments/checkout, POST to /payments/receipts. Ref: SDS §6 enrollment flow wireframe.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#29</div>
+        <div><div class="task-title">Integration tests: payment webhook flow (PayHere mock → enrollment.activated → access granted)</div><div class="task-desc">Mock PayHere HMAC payload. POST to /payments/webhook. Assert payment_status=SUCCESS in DB. Assert RabbitMQ published payment.success. Assert enrollment record created. Assert course access granted. This is the most critical cross-service flow.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">3h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D9 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 9 · TUE</span>
+      <span class="day-focus">Admin dashboard + Progress/Leaderboard UI + Integration tests</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#30</div>
+        <div><div class="task-title">Admin dashboard: receipt verification, user management, violation reports, analytics</div><div class="task-desc">Next.js /admin route (ADMIN role guard). Tables: pending receipts (approve/reject buttons), user list (role assignment), violation log, analytics charts using Recharts. Ref: SDS §6.1.7.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#31</div>
+        <div><div class="task-title">Progress dashboard + Leaderboard + Certificate download page</div><div class="task-desc">Student progress: completion % per course, assessment scores. Graphical + numerical dashboard (SDS §6.1.6). Leaderboard with points + badges. Certificate download button (triggers PDF generation from progress-svc).</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#32</div>
+        <div><div class="task-title">Integration tests: full assessment flow (start → timed session → submit → auto-grade → progress update)</div><div class="task-desc">Seed: enrolled student, course with MCQ assessment. Start session → fake timer expiry → auto-submit → assert score in DB → assert assessment.graded published → assert progress updated.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#33</div>
+        <div><div class="task-title">Teacher dashboard: course creation form + module/lesson builder + assessment builder</div><div class="task-desc">Teacher route /teacher/courses. Create course form → add modules → add lessons (YouTube URL + Cloudinary upload). Assessment builder (add questions, set time limit). POST to course-svc and assessment-svc.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">4h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D10 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 10 · WED</span>
+      <span class="day-focus">FEATURE FREEZE — Security hardening + OWASP + coverage push</span>
+      <span class="day-hours">Team: ~18h total · ⚠ No new features after this point</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#34</div>
+        <div><div class="task-title">OWASP Top 10 compliance sweep across all services</div><div class="task-desc">A01: verify @require_role on every mutating endpoint. A02: bcrypt ≥12 on any password storage, JWT RS256. A03: confirm all DB queries use SQLAlchemy ORM (no raw SQL). A05: error responses never expose stack traces in staging. A06: pip-audit CI gate active. Document evidence in documents/security/owasp-checklist.pdf.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span><span class="ob">@danindu</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#35</div>
+        <div><div class="task-title">Push unit test coverage to ≥80% on all services, ≥90% on auth + payment</div><div class="task-desc">Run pytest --cov on each service. Identify gaps. AI-generate missing test cases. Focus: auth token rotation, payment webhook validation, assessment auto-grading, enrollment access grant/revoke. Coverage report saved to documents/testing/.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#36</div>
+        <div><div class="task-title">Gemini AI assistant widget (if ahead of schedule — else skip to Day 11)</div><div class="task-desc">Simple chat widget on student dashboard. POST /ai/query → forwards to Gemini API with LMS context prompt. Stream response back. This is the only optional feature — skip if anything else is not fully tested yet.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="ceremony">Feature Freeze Declaration: All team members agree — no new features from Day 11. Only bug fixes, test coverage, and demo prep. Violations delay production deploy.</div>
+    </div>
+  </div>
+
+  <!-- D11 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 11 · THU</span>
+      <span class="day-focus">Full end-to-end test run + bug fixes + performance check</span>
+      <span class="day-hours">Team: ~18h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#37</div>
+        <div><div class="task-title">Full demo walkthrough on staging — all 5 demo scenarios working end-to-end</div><div class="task-desc">Scenario 1: Student register → OTP → login → browse courses → purchase (PayHere) → access lesson → watch video → take quiz → get certificate. Scenario 2: Teacher creates course + assessment. Scenario 3: Admin verifies manual receipt. Scenario 4: Admin views analytics + exports PDF. Scenario 5: Student views leaderboard. Log every failure as a bug issue.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#38</div>
+        <div><div class="task-title">Fix all P1-Critical bugs found in Day 11 walkthrough</div><div class="task-desc">Triage: P1 (blocks demo) → fix today. P2 (UX issue) → fix Day 12. P3 (cosmetic) → document as known limitation. Each fix = PR → review → merge → staging redeploy. No direct commits to develop.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#39</div>
+        <div><div class="task-title">K8s manifests for production: Deployments, Services, Ingress, ConfigMaps, Secrets</div><div class="task-desc">k8s/production/ directory. One Deployment + Service per microservice. Nginx Ingress for routing. ConfigMaps for non-sensitive env vars. Azure Key Vault or AKS Secrets for ASGARDEO_SECRET, DATABASE_URL, PAYHERE_MERCHANT_SECRET etc. Resource limits set on all pods.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">5h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D12 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 12 · FRI</span>
+      <span class="day-focus">Production deploy + v1.0.0 tag + final bug fixes</span>
+      <span class="day-hours">Team: ~18h total · Gate: production URL live and demo account working</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#40</div>
+        <div><div class="task-title">Production deploy to AKS via GitHub Actions (merge main → manual approval → deploy)</div><div class="task-desc">Merge develop → main after supervisor sign-off. CI runs full pipeline. Manual approval gate (requires supervisor or team lead). kubectl apply k8s/production/. Verify all pods Running. Test production URL with demo account. Tag v1.0.0 on main.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#41</div>
+        <div><div class="task-title">Seed production database with demo data for client demo</div><div class="task-desc">Create: admin account (ICT-Dimuthu), teacher account (Mr. Dimuthu), 2 sample courses with modules + lessons (use test YouTube video IDs), 1 published assessment with 5 MCQ questions, 2 student accounts. Test all logins work on production URL.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">2h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#42</div>
+        <div><div class="task-title">Fix P2 bugs + generate all final deliverable documents</div><div class="task-desc">Coverage report PDF, test register PDF, OWASP checklist PDF, CHANGELOG.md finalized. Submit to supervisor: GitHub Org URL, all repo URLs, production URL, GitHub Project board URL, demo credentials. Deadline: 48h before demo per SENG 34213 §9.3.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D13 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 13 · SAT</span>
+      <span class="day-focus">Demo rehearsal × 2 + final report draft</span>
+      <span class="day-hours">Team: ~16h total</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#43</div>
+        <div><div class="task-title">Demo rehearsal run 1 (full 20-min demo script on production URL)</div><div class="task-desc">Context 2min → Live walkthrough 12min → Architecture 3min → Limitations 2min → Lessons learned 1min. Every member presents their section. Time it. Log anything that doesn't work in production. Fix immediately.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#44</div>
+        <div><div class="task-title">Demo rehearsal run 2 (with Q&A simulation)</div><div class="task-desc">One member plays evaluator, asks hard questions: "How does PayHere webhook prevent replay attacks?" "How does your timed exam auto-submit?" "Show me the CI pipeline run." "What's your test coverage?" Know the answers cold.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">2h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#45</div>
+        <div><div class="task-title">Final Development Report: Chapter 4 (Implementation) + Chapter 5 (Testing) written</div><div class="task-desc">AI-assist the writing. Chapter 4: tech stack justification, module descriptions, CI/CD pipeline description, challenges. Chapter 5: testing strategy, coverage summary, OWASP evidence. Honest limitations section — evaluators respect honesty.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">5h</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- D14 -->
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label w2">DAY 14 · SUN</span>
+      <span class="day-focus">Final demo + submission</span>
+      <span class="day-hours">Demo day — arrive early, test production URL first thing</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#46</div>
+        <div><div class="task-title">Pre-demo: verify production URL 2 hours before panel starts</div><div class="task-desc">Login with all demo accounts. Walk through all 5 demo scenarios once. Check CI pipeline badge is green. Have a hotfix branch ready to deploy if something minor breaks. Have a screen-recorded backup demo ready on localhost as absolute last resort.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">2h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#47</div>
+        <div><div class="task-title">Live demo to panel + Q&A (20 min demo + 15 min Q&A)</div><div class="task-desc">Present on production URL only — not localhost. All 4 members present. Honest about limitations. Show CI pipeline run. Show test coverage report. Show GitHub board with completed issues.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">35min</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#48</div>
+        <div><div class="task-title">Submit final report + peer evaluations within 48 hours of demo</div><div class="task-desc">PeerEval_SE2021047_SENG34213.pdf etc. Final report PDF + hard copy to Teaching Unit. All ratings justified with written comments + evidence (commit logs, CI screenshots). eKelaniya submission link: SENG 34213 → Assessments → Peer Evaluation Submission.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="ceremony">After submission: commit final retrospective to documents/retrospectives/sprint5-final.md. You shipped 11 microservices in 14 days. That's worth documenting properly.</div>
+    </div>
+  </div>
+
+</div><!-- end week 2 -->
+
+<!-- ══ SECTION 7: RISKS ══ -->
+<div class="section-head">
+  <span class="section-num">07 —</span>
+  <h2>Risk Register</h2>
+</div>
+
+<div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:20px 22px;margin-bottom:32px;">
+  <div class="risk-row" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:4px;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);text-transform:uppercase;">Risk</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);text-transform:uppercase;">Level</div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--muted);text-transform:uppercase;">Mitigation</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">Asgardeo OAuth not working</div></div>
+    <div><span class="risk-level rl-critical">CRITICAL</span></div>
+    <div class="risk-mit">Test Asgardeo sandbox connection on Day 1 before writing any auth code. If Asgardeo has registration/config delays, fall back to custom JWT with bcrypt — document as ADR deviation. Do not lose more than 4 hours on this.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">AKS deploy failing in Week 2</div></div>
+    <div><span class="risk-level rl-critical">CRITICAL</span></div>
+    <div class="risk-mit">Provision AKS on Day 3 (Week 1) and deploy a hello-world pod. If AKS is unresolvable by Day 10, use Railway + managed PostgreSQL as fallback — document in ADR. Production deploy on any platform beats no deploy.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">PayHere webhooks not testable locally</div></div>
+    <div><span class="risk-level rl-high">HIGH</span></div>
+    <div class="risk-mit">Use ngrok to expose local webhook endpoint for PayHere sandbox testing. In production, staging URL is already public. Write full mock-based unit tests so webhook logic is proven even without real PayHere calls.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">RabbitMQ cross-service events not firing</div></div>
+    <div><span class="risk-level rl-high">HIGH</span></div>
+    <div class="risk-mit">Test RabbitMQ publish/consume on Day 2 with a simple script before any service depends on it. Use the RabbitMQ management UI (port 15672) to inspect queues and messages during debugging.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">Team member blocked for 1+ full day</div></div>
+    <div><span class="risk-level rl-high">HIGH</span></div>
+    <div class="risk-mit">Each service owner pairs with a backup (see load table). If primary is blocked &gt;4 hours, backup takes over. No single point of failure on any service.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">CI pipeline flaky / slow</div></div>
+    <div><span class="risk-level rl-med">MEDIUM</span></div>
+    <div class="risk-mit">Cache pip dependencies and Docker layers in GitHub Actions. If pipeline takes &gt;8 min, skip integration tests on feature branches — only run on develop. Speed matters more than perfect coverage gating on feature branches.</div>
+  </div>
+  <div class="risk-row">
+    <div><div class="risk-name">Frontend integration with APIs broken</div></div>
+    <div><span class="risk-level rl-med">MEDIUM</span></div>
+    <div class="risk-mit">Imansha builds frontend against staging URL from Day 5 — not localhost mocks. Real integration failures are caught in Week 1, not Week 2. Use FastAPI's auto-generated OpenAPI docs at /docs to verify endpoint contracts.</div>
+  </div>
+</div>
+
+<!-- ══ SECTION 8: DoD ══ -->
+<div class="section-head">
+  <span class="section-num">08 —</span>
+  <h2>Definition of Done (Compressed for 2-Week Timeline)</h2>
+</div>
+
+<div class="dod-strip">
+  <div class="dod-item"><div class="dod-box">✓</div>All BDD acceptance criteria verified on staging</div>
+  <div class="dod-item"><div class="dod-box">✓</div>Linter passes (Ruff/Black · ESLint/Prettier) — zero errors</div>
+  <div class="dod-item"><div class="dod-box">✓</div>Unit tests written + passing; coverage ≥80% new code</div>
+  <div class="dod-item"><div class="dod-box">✓</div>At least 1 integration test per API endpoint</div>
+  <div class="dod-item"><div class="dod-box">✓</div>PR raised against develop with SRS/SDS refs in description</div>
+  <div class="dod-item"><div class="dod-box">✓</div>1 peer code review; all [blocker] comments resolved</div>
+  <div class="dod-item"><div class="dod-box">✓</div>CI pipeline passes all stages (lint + build + test + security)</div>
+  <div class="dod-item"><div class="dod-box">✓</div>No hardcoded secrets anywhere in codebase</div>
+  <div class="dod-item"><div class="dod-box">✓</div>Deployed to staging and smoke-tested manually</div>
+  <div class="dod-item"><div class="dod-box">✓</div>FastAPI /docs OpenAPI endpoint verified for endpoint changes</div>
+  <div class="dod-item"><div class="dod-box">✓</div>CHANGELOG.md updated under [Unreleased]</div>
+  <div class="dod-item"><div class="dod-box">✓</div>GitHub Issue closed with Closes #NN in commit footer</div>
+</div>
+
+<!-- CI pipeline yaml reference -->
+<div class="cb"><span class="kw">name</span>: <span class="str">EDURA CI — 2-Week Build</span>
+<span class="kw">on</span>:
+  <span class="fn">push</span>: { <span class="fn">branches</span>: [develop, main, <span class="str">'feature/**'</span>, <span class="str">'fix/**'</span>] }
+  <span class="fn">pull_request</span>: { <span class="fn">branches</span>: [develop, main] }
+
+<span class="kw">jobs</span>:
+  <span class="fn">lint</span>:         <span class="cmt"># Every push — ruff check + black --check (Python) · eslint + prettier (TS)</span>
+  <span class="fn">build</span>:        <span class="cmt"># Every push — docker build all service images (cached layers)</span>
+  <span class="fn">unit-tests</span>:   <span class="cmt"># Every push — pytest --cov per service, fail if coverage &lt; 80%</span>
+  <span class="fn">integration</span>:  <span class="cmt"># develop + main only — postgres:16 + redis:7 + rabbitmq:3 service containers</span>
+  <span class="fn">security</span>:     <span class="cmt"># develop + main — pip-audit (HIGH/CRITICAL = fail) + npm audit</span>
+  <span class="fn">deploy-staging</span>: <span class="cmt"># merge to develop — build → push ACR → kubectl apply k8s/staging/</span>
+  <span class="fn">deploy-prod</span>:  <span class="cmt"># merge to main — environment: production (manual approval required)</span>
+
+<span class="cmt"># GitHub Secrets required (never commit these):</span>
+<span class="hl">ASGARDEO_CLIENT_ID</span>    ASGARDEO_CLIENT_SECRET    ASGARDEO_TENANT_URL
+<span class="hl">DATABASE_URL</span>           DATABASE_URL_STAGING       REDIS_URL
+<span class="hl">RABBITMQ_URL</span>           PAYHERE_MERCHANT_ID        PAYHERE_MERCHANT_SECRET
+<span class="hl">CLOUDINARY_API_KEY</span>     CLOUDINARY_API_SECRET      CLOUDINARY_CLOUD_NAME
+<span class="hl">GEMINI_API_KEY</span>         AZURE_CLIENT_ID            AZURE_TENANT_ID
+<span class="hl">ACR_LOGIN_SERVER</span>       AKS_CLUSTER_NAME           AKS_RESOURCE_GROUP</div>
+
+</div><!-- end container -->
+
+<footer>
+  <span>EDURA LMS · Team ZYNAPTRIX · 2-Week War Plan · SENG 34213 · University of Kelaniya · 2026</span>
+  <span>Feature Freeze: Day 10 · Production Deploy: Day 12 · Demo: Day 14</span>
+</footer>
+
+</body>
+</html>
