@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDURA — Issues #11 to #30 with Repository Mapping</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0b0d14;
+  --s1: #111420;
+  --s2: #181c2a;
+  --s3: #1f2436;
+  --border: #252c42;
+  --teal: #0d9488;
+  --blue: #3b82f6;
+  --amber: #f59e0b;
+  --green: #10b981;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --orange: #f97316;
+  --cyan: #06b6d4;
+  --text: #e2e8f0;
+  --muted: #64748b;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0d1117 0%, #0a1628 60%, #0d1a1a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 44px 56px 36px;
+}
+.header-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(13,148,136,0.15);
+  border: 1px solid rgba(13,148,136,0.35);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--teal);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.header h1 {
+  font-size: 36px; font-weight: 800; line-height: 1.1; margin-bottom: 10px;
+  background: linear-gradient(135deg, #e2e8f0 0%, var(--teal) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.header p { color: var(--muted); font-size: 14px; max-width: 700px; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 56px 80px; }
+
+.section-head {
+  margin-top: 48px; margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+}
+.section-num {
+  width: 28px; height: 28px;
+  background: var(--teal); border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.section-title { font-size: 18px; font-weight: 700; }
+
+/* MAP TABLE */
+.map-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 32px; }
+.map-table thead tr { border-bottom: 1px solid var(--border); }
+.map-table th {
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted); padding: 8px 14px 12px; text-align: left; font-weight: 400;
+}
+.map-table td {
+  padding: 9px 14px; border-bottom: 1px solid rgba(37,44,66,0.5);
+  vertical-align: middle;
+}
+.map-table tr:last-child td { border-bottom: none; }
+.map-table tr:hover td { background: rgba(255,255,255,0.015); }
+
+.issue-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--blue); font-weight: 600; }
+.issue-title { color: var(--text); font-size: 12px; font-weight: 500; }
+
+.repo-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+  padding: 3px 9px; border-radius: 5px; white-space: nowrap;
+}
+.rb-infra   { background: rgba(249,115,22,0.12); color: var(--orange); border: 1px solid rgba(249,115,22,0.3); }
+.rb-backend { background: rgba(59,130,246,0.12); color: var(--blue);   border: 1px solid rgba(59,130,246,0.3); }
+.rb-frontend{ background: rgba(16,185,129,0.12); color: var(--green);  border: 1px solid rgba(16,185,129,0.3); }
+.rb-tests   { background: rgba(6,182,212,0.12);  color: var(--cyan);   border: 1px solid rgba(6,182,212,0.3); }
+.rb-docs    { background: rgba(100,116,139,0.12);color: var(--muted);  border: 1px solid rgba(100,116,139,0.3); }
+
+.label-badge {
+  display: inline-block; font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 600; white-space: nowrap;
+}
+.lb-teal   { background: rgba(13,148,136,0.12);  color: var(--teal);   border: 1px solid rgba(13,148,136,0.3); }
+.lb-blue   { background: rgba(59,130,246,0.12);  color: var(--blue);   border: 1px solid rgba(59,130,246,0.3); }
+.lb-green  { background: rgba(16,185,129,0.12);  color: var(--green);  border: 1px solid rgba(16,185,129,0.3); }
+.lb-red    { background: rgba(239,68,68,0.12);   color: var(--red);    border: 1px solid rgba(239,68,68,0.3); }
+.lb-amber  { background: rgba(245,158,11,0.12);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.3); }
+.lb-orange { background: rgba(249,115,22,0.12);  color: var(--orange); border: 1px solid rgba(249,115,22,0.3); }
+.lb-purple { background: rgba(139,92,246,0.12);  color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
+.lb-gray   { background: rgba(100,116,139,0.12); color: var(--muted);  border: 1px solid rgba(100,116,139,0.3); }
+
+/* TICKET */
+.ticket {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; margin-bottom: 28px;
+}
+.ticket-top {
+  background: var(--s2); border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+}
+.ticket-top-row1 {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.t-id {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+  background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.35);
+  color: var(--blue); padding: 3px 10px; border-radius: 5px;
+}
+.t-title { font-size: 14px; font-weight: 700; color: var(--text); flex: 1; min-width: 200px; }
+.ticket-top-row2 { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ticket-meta {
+  display: flex; gap: 8px; flex-wrap: wrap; padding: 8px 20px 12px;
+  border-bottom: 1px solid var(--border); font-size: 11.5px;
+}
+.tm { display: flex; align-items: center; gap: 5px; color: var(--muted); }
+.tm strong { color: var(--text); font-size: 11px; }
+.ticket-body {
+  padding: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px; line-height: 1.9; color: #8899b8;
+  white-space: pre-wrap; word-break: break-word;
+}
+.ticket-body .h2  { color: #82b1ff; font-weight: 700; font-size: 12px; }
+.ticket-body .h3  { color: var(--teal); font-weight: 600; }
+.ticket-body .bold{ color: var(--text); font-weight: 600; }
+.ticket-body .cmt { color: #3d4f70; }
+.ticket-body .chk { color: var(--amber); }
+.ticket-body .ref { color: var(--green); }
+
+/* NOTE */
+.note {
+  display: flex; gap: 12px; padding: 13px 18px;
+  border-radius: 8px; margin: 14px 0; font-size: 12.5px;
+}
+.note.info  { background: rgba(59,130,246,0.08);  border: 1px solid rgba(59,130,246,0.2); }
+.note-icon  { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+.note-body  { color: var(--muted); line-height: 1.6; }
+.note-body strong { color: var(--text); }
+
+/* WEEK DIVIDER */
+.week-divider {
+  margin: 40px 0 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.week-pill {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600;
+  padding: 4px 14px; border-radius: 20px; white-space: nowrap;
+}
+.pill-w1 { background: rgba(255,71,87,0.15); color: #ff4757; border: 1px solid rgba(255,71,87,0.3); }
+.pill-w2 { background: rgba(6,214,160,0.15); color: #06d6a0; border: 1px solid rgba(6,214,160,0.3); }
+.week-line { flex: 1; height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">● EDURA LMS · Team ZYNAPTRIX · Issues #11–#30</div>
+  <h1>Repository Mapping &<br>Issues #11–#30 Descriptions</h1>
+  <p>Which repository each issue belongs to, and the complete ready-to-paste description for issues #11 through #30. Continues directly from the Issues #01–#10 document.</p>
+</div>
+
+<div class="container">
+
+<!-- ══ SECTION 1: MAPPING TABLE ══ -->
+<div class="section-head">
+  <div class="section-num">①</div>
+  <div class="section-title">Issues #11–#30 — Repository Assignment at a Glance</div>
+</div>
+
+<table class="map-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Issue Title</th>
+      <th>Repository</th>
+      <th>Why This Repo</th>
+      <th>Epic</th>
+      <th>Priority</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><span class="issue-num">#11</span></td>
+      <td><span class="issue-title">Implement user CRUD endpoints and shared RBAC require_role decorator</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code lives in <code>user_service/</code> and <code>edura-backend/shared/auth.py</code> — Python source in edura-backend.</td>
+      <td><span class="label-badge lb-red">epic:auth</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#12</span></td>
+      <td><span class="issue-title">Provision Azure AKS cluster, ACR registry, and verify with hello-world pod</span></td>
+      <td><span class="repo-badge rb-infra">edura-infra</span></td>
+      <td style="font-size:11px;color:var(--muted);">Azure CLI provisioning scripts and kubectl manifests are infrastructure files — belong in edura-infra.</td>
+      <td><span class="label-badge lb-green">epic:ci-cd</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#13</span></td>
+      <td><span class="issue-title">Implement full CRUD for courses, modules, and lessons with teacher ownership checks</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>course_service/</code> inside edura-backend — FastAPI routers, models, and CRUD logic.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#14</span></td>
+      <td><span class="issue-title">Implement Cloudinary signed URL generation and YouTube embed token endpoints</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>content_service/</code> inside edura-backend — external API integration logic.</td>
+      <td><span class="label-badge lb-amber">epic:integration</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#15</span></td>
+      <td><span class="issue-title">Implement PayHere checkout init, HMAC webhook handler, and manual receipt upload</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>payment_service/</code> inside edura-backend — payment logic and webhook handler.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#16</span></td>
+      <td><span class="issue-title">Consume payment.success RabbitMQ event and grant/revoke course access</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Code is in <code>enrollment_service/</code> inside edura-backend — RabbitMQ consumer and enrollment logic.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#17</span></td>
+      <td><span class="issue-title">Implement timed quiz session with Redis, MCQ auto-grading, and tab-switch detection</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>assessment_service/</code> inside edura-backend — quiz session, grading, and violation logic.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#18</span></td>
+      <td><span class="issue-title">Add GitHub Actions build-push-deploy pipeline to AKS staging on push to develop</span></td>
+      <td><span class="repo-badge rb-infra">edura-infra</span></td>
+      <td style="font-size:11px;color:var(--muted);">CI/CD YAML lives in <code>.github/workflows/</code> inside edura-infra — infrastructure concern.</td>
+      <td><span class="label-badge lb-green">epic:ci-cd</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#19</span></td>
+      <td><span class="issue-title">Implement lesson watch tracking, course completion, certificate eligibility, and leaderboard</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>progress_service/</code> inside edura-backend — progress tracking and Redis leaderboard.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#20</span></td>
+      <td><span class="issue-title">Build RabbitMQ consumer for OTP, payment, and certificate email dispatch via SMTP</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Code is in <code>notification_service/</code> inside edura-backend — pure consumer, no HTTP endpoints.</td>
+      <td><span class="label-badge lb-amber">epic:integration</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#21</span></td>
+      <td><span class="issue-title">Implement receipt verification dashboard, user management, and audit log endpoints</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>admin_service/</code> inside edura-backend — admin REST API endpoints.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#22</span></td>
+      <td><span class="issue-title">Build login, register, and student dashboard pages connected to staging API</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Changes are Next.js pages and Redux slices — frontend source code in edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#23</span></td>
+      <td><span class="issue-title">Implement course performance aggregations, revenue summary, and PDF/Excel export endpoints</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">All code is in <code>analytics_service/</code> inside edura-backend — query aggregation and report generation.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#24</span></td>
+      <td><span class="issue-title">Run end-to-end smoke test: student register → OTP → login → enroll → course view on staging</span></td>
+      <td><span class="repo-badge rb-tests">edura-tests</span></td>
+      <td style="font-size:11px;color:var(--muted);">Cross-service E2E test script that spans multiple services — belongs in edura-tests.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#25</span></td>
+      <td><span class="issue-title">Write Sprint 5 Week 1 retrospective and update GitHub Project board velocity</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Pure documentation — retrospective markdown in edura-documents/retrospectives/.</td>
+      <td><span class="label-badge lb-gray">epic:documentation</span></td>
+      <td><span class="label-badge lb-amber">P3</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#26</span></td>
+      <td><span class="issue-title">Build course content viewer with YouTube embed, Cloudinary notes, and lesson navigation</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js dynamic route page and Redux state — frontend source code in edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#27</span></td>
+      <td><span class="issue-title">Build timed assessment UI with MCQ interface, submission, results, and anti-cheat JS</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js assessment page with client-side timer and tab-switch detection JS — edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#28</span></td>
+      <td><span class="issue-title">Build payment flow UI — PayHere redirect, manual receipt upload, and subscription status badge</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js payment page and upload form component — frontend source code in edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#29</span></td>
+      <td><span class="issue-title">Write integration tests for PayHere webhook flow — mock HMAC → enrollment activated → access granted</span></td>
+      <td><span class="repo-badge rb-tests">edura-tests</span></td>
+      <td style="font-size:11px;color:var(--muted);">Cross-service integration test spanning payment_service → enrollment_service — belongs in edura-tests.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#30</span></td>
+      <td><span class="issue-title">Build admin dashboard with receipt verification table, user management, violation log, and analytics charts</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js /admin route pages and Recharts components — frontend source code in edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ══ SECTION 2: FULL DESCRIPTIONS ══ -->
+<div class="section-head">
+  <div class="section-num">②</div>
+  <div class="section-title">Full Issue Descriptions — Ready to Paste into GitHub</div>
+</div>
+
+<div class="note info">
+  <div class="note-icon">ℹ</div>
+  <div class="note-body"><strong>How to use these:</strong> Go to the correct repository → Issues → New Issue → paste the title into the Title field and the body into the Description field, then set the sidebar fields (assignee, labels, milestone, priority) as shown in the metadata row of each ticket.</div>
+</div>
+
+<!-- WEEK 1 DIVIDER -->
+<div class="week-divider">
+  <span class="week-pill pill-w1">Week 1 · Days 3–7 · Sprint 5 (Week 1)</span>
+  <span class="week-line"></span>
+</div>
+
+<!-- ════════ ISSUE #11 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#11</span>
+      <span class="t-title">feat(user): implement user CRUD endpoints and shared RBAC require_role decorator</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-red">epic:auth</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 3</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As any authenticated user (Student, Teacher, or Administrator), I want the system to enforce role-based access so that each user can only perform actions their role permits across all microservices.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-001 (role-based authentication and authorisation), NFR-010 (modular REST API)</span>
+<span class="ref">- SDS Reference: Section 7.3 (Authorization Levels), Section 7.3.1 (RBAC), Section 7.3.2 (Permission Enforcement), Figure 3 (Class Diagram)</span>
+<span class="cmt">- ADR Reference: ADR-08 (shared/ folder in edura-backend monorepo)</span>
+
+The SDS defines three roles (STUDENT, TEACHER, ADMIN) with explicit permission sets. The <code>require_role</code> decorator stub was created in issue #04 but left empty. This issue finalises it and implements all user_service endpoints. The decorator is the single most-imported utility across all 11 services — it must be correct and well-tested before any other service builds on top of it.
+
+The decorator must work in two ways: as a FastAPI <code>Depends()</code> injection (for route-level protection) and as a standalone function decorator (for internal service calls). User profile data (name, email, role) is owned by user_service; other services reference users only by integer user_id.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: User Profile Retrieval</span>
+<span class="bold">**Given**</span> an authenticated user sends GET /api/users/{id} with a valid JWT
+<span class="bold">**When**</span> the user_id in the JWT matches the requested {id}, or the requester has ADMIN role
+<span class="bold">**Then**</span> the server returns HTTP 200 with the user profile { id, name, email, role, created_at }
+
+<span class="h3">### AC2: Profile Update — Own Record Only</span>
+<span class="bold">**Given**</span> a STUDENT sends PUT /api/users/{id} attempting to change another student's name
+<span class="bold">**When**</span> the user_id in the JWT does not match {id} and the requester is not ADMIN
+<span class="bold">**Then**</span> the server returns HTTP 403 with { "error": "INSUFFICIENT_PERMISSIONS" }
+
+<span class="h3">### AC3: Role Assignment — Admin Only</span>
+<span class="bold">**Given**</span> an ADMIN sends PUT /api/users/{id}/role with { "role": "TEACHER" }
+<span class="bold">**When**</span> the request is authenticated and the target user exists
+<span class="bold">**Then**</span> the server returns HTTP 200 and the user's role is updated in the database
+
+<span class="h3">### AC4: require_role Decorator Blocks Wrong Role</span>
+<span class="bold">**Given**</span> a STUDENT user calls any endpoint decorated with @require_role(["TEACHER", "ADMIN"])
+<span class="bold">**When**</span> the middleware validates the role claim in the JWT
+<span class="bold">**Then**</span> the server returns HTTP 403 with { "error": "INSUFFICIENT_PERMISSIONS" } before the handler runs
+
+<span class="h3">### AC5: require_role Decorator as FastAPI Depends</span>
+<span class="bold">**Given**</span> a route is defined as <code>@router.delete("/courses/{id}", dependencies=[Depends(require_role(["ADMIN"]))])</code>
+<span class="bold">**When**</span> a TEACHER sends a DELETE request to that route
+<span class="bold">**Then**</span> FastAPI rejects the request with HTTP 403 before the route handler executes
+
+<span class="h2">## Technical Notes</span>
+- <code>shared/auth.py</code>: <code>require_role(roles: list[str]) → Callable</code> — reads JWT from <code>Authorization: Bearer &lt;token&gt;</code> header; decodes using Asgardeo public key (from Redis cache, populated by auth_service); raises HTTPException(403) if role not in roles list
+- User model fields: id (PK), email (unique), name, role (ENUM: STUDENT, TEACHER, ADMIN), is_active (bool), created_at, updated_at
+- Endpoints: GET /api/users/{id}, PUT /api/users/{id}, PUT /api/users/{id}/role, GET /api/users/ (admin paginated list), DELETE /api/users/{id} (admin soft-delete via is_active=False)
+- Import pattern for all other services: <code>from shared.auth import require_role</code>
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: require_role(["ADMIN"]) — blocks STUDENT, blocks TEACHER, passes ADMIN
+<span class="chk">- [ ]</span> Unit test: require_role(["TEACHER","ADMIN"]) — passes TEACHER, passes ADMIN, blocks STUDENT
+<span class="chk">- [ ]</span> Unit test: missing Authorization header → HTTP 401 MISSING_TOKEN
+<span class="chk">- [ ]</span> Unit test: expired JWT → HTTP 401 TOKEN_EXPIRED
+<span class="chk">- [ ]</span> Integration test: GET /api/users/{id} — own record → 200; other user's record → 403
+<span class="chk">- [ ]</span> Integration test: PUT /api/users/{id}/role as ADMIN → role updated in DB
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All user_service endpoints implemented in edura-backend/user_service/
+<span class="chk">- [ ]</span> shared/auth.py require_role finalised, importable by all 11 services
+<span class="chk">- [ ]</span> Code coverage on user_service ≥ 80%; shared/auth.py ≥ 90%
+<span class="chk">- [ ]</span> All unit and integration tests passing in CI
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review with security check
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #11 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #04 (service skeleton), #06 (UserProfile ORM model), #07 (migrations), #10 (JWT middleware pattern established by auth_service)</div>
+</div>
+
+<!-- ════════ ISSUE #12 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#12</span>
+      <span class="t-title">ci(deploy): provision Azure AKS cluster, ACR registry, and verify with hello-world pod</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-infra">edura-infra</span>
+      <span class="label-badge lb-green">epic:ci-cd</span>
+      <span class="label-badge lb-teal">ci</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@nadun</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 3</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the infrastructure owner, I want an Azure AKS cluster and ACR registry provisioned and verified on Day 3 so that the team can deploy to a live staging environment from Day 5 without any last-minute infrastructure surprises in Week 2.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 8.1 (Hosting Plan and Infrastructure), Section 8.2 (Hardware and Resource Requirements), Figure 32 (Network Diagram)</span>
+<span class="cmt">- 2-Week Plan: Day 3 is the last safe day to provision AKS — debugging AKS in Week 2 kills the production deploy window</span>
+
+The SDS specifies Azure Kubernetes Service (AKS) for container orchestration and Azure Container Registry (ACR) for Docker image storage. AKS provisioning alone takes 10–15 minutes via the Azure CLI, but configuration issues (RBAC, network policies, ACR pull permissions) can take hours. Provisioning on Day 3 gives the full Week 1 remainder to resolve any Azure-specific issues before staging deploy (issue #18) is due on Day 5. A hello-world pod is the minimal verification that the cluster, kubectl access, and ACR pull permissions are all working end-to-end.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: AKS Cluster Running</span>
+<span class="bold">**Given**</span> the Azure subscription is active and the team has Contributor access
+<span class="bold">**When**</span> <code>az aks create</code> completes
+<span class="bold">**Then**</span> <code>kubectl get nodes</code> returns at least 2 nodes in Ready state in the edura-aks cluster
+
+<span class="h3">### AC2: ACR Registry Created and Linked to AKS</span>
+<span class="bold">**Given**</span> the AKS cluster exists
+<span class="bold">**When**</span> <code>az aks update --attach-acr &lt;acr-name&gt;</code> completes
+<span class="bold">**Then**</span> AKS nodes can pull images from ACR without ImagePullBackOff errors — verified by deploying a test image pushed to ACR
+
+<span class="h3">### AC3: hello-world Pod Running</span>
+<span class="bold">**Given**</span> AKS and ACR are linked
+<span class="bold">**When**</span> a Kubernetes Deployment manifest is applied using a hello-world image from ACR
+<span class="bold">**Then**</span> <code>kubectl get pods</code> shows the pod in Running state and <code>kubectl logs</code> shows the expected output
+
+<span class="h3">### AC4: GitHub Actions Credentials Configured</span>
+<span class="bold">**Given**</span> the cluster is running
+<span class="bold">**When**</span> GitHub Secrets are populated with AZURE_CLIENT_ID, AZURE_TENANT_ID, ACR_LOGIN_SERVER, AKS_CLUSTER_NAME, AKS_RESOURCE_GROUP
+<span class="bold">**Then**</span> a test GitHub Actions job can run <code>kubectl get nodes</code> successfully via the azure/aks-set-context action
+
+<span class="h2">## Technical Notes</span>
+- Resource group: <code>edura-rg</code>; cluster name: <code>edura-aks</code>; location: eastasia (closest to Sri Lanka with AKS support)
+- Node pool: Standard_D4s_v3 × 2 nodes (sufficient for staging; production spec in issue #39)
+- ACR name: <code>eduracr</code> (must be globally unique — use <code>eduracr&lt;team-initials&gt;</code> if taken)
+- Use Workload Identity (not legacy service principal) for AKS-to-ACR authentication
+- Store the kubeconfig in GitHub Secrets as KUBE_CONFIG_DATA (base64 encoded)
+- Commit the provisioning commands as <code>infra/scripts/provision-aks.sh</code> for reproducibility
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: kubectl get nodes → 2 nodes in Ready state
+<span class="chk">- [ ]</span> Manual test: push a test image to ACR → deploy to AKS → pod reaches Running state
+<span class="chk">- [ ]</span> Manual test: GitHub Actions job using azure/aks-set-context runs kubectl get nodes successfully
+<span class="chk">- [ ]</span> Manual test: kubectl delete deployment hello-world → cluster cleans up correctly
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> AKS cluster running with ≥2 Ready nodes
+<span class="chk">- [ ]</span> ACR registry created and linked to AKS with pull permissions
+<span class="chk">- [ ]</span> hello-world pod running successfully using an image pulled from ACR
+<span class="chk">- [ ]</span> All 5 required GitHub Secrets populated and verified
+<span class="chk">- [ ]</span> infra/scripts/provision-aks.sh committed to edura-infra
+<span class="chk">- [ ]</span> README in edura-infra updated with cluster access instructions
+<span class="chk">- [ ]</span> Closes #12 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #03 (CI pipeline must exist to test GitHub Actions AKS integration)</div>
+</div>
+
+<!-- ════════ ISSUE #13 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#13</span>
+      <span class="t-title">feat(course): implement full CRUD for courses, modules, and lessons with teacher ownership checks</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 4</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a Teacher, I want to create courses with structured modules and video lessons so that students can discover, enroll in, and consume my educational content in an organised sequence.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-003 (course and lesson management), FR-010 (progress tracking dependency)</span>
+<span class="ref">- SDS Reference: Section 5.2.2 (Course Creation and Publishing Flow), Section 3.2 (ER Diagram — Course, Module, Lesson entities), Section 7.3.1 (Teacher role permissions)</span>
+
+The SDS specifies a 3-level hierarchy: Course → Module → Lesson. A Course has a status ENUM (DRAFT, PUBLISHED, ARCHIVED). Only PUBLISHED courses are visible to students. Video content is never stored as raw files — only <code>youtube_video_id</code> and <code>cloudinary_asset_url</code> string fields are persisted. When a course is published, a <code>course.published</code> event is sent to RabbitMQ so downstream services (enrollment, analytics) can react. Teacher ownership must be validated on all mutating endpoints — a teacher cannot modify another teacher's course.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Course Creation</span>
+<span class="bold">**Given**</span> an authenticated TEACHER sends POST /api/courses with { title, description, price }
+<span class="bold">**When**</span> the request is processed
+<span class="bold">**Then**</span> the server returns HTTP 201 with the created course { id, title, status: "DRAFT", teacher_id } and the course is visible only in the teacher's own dashboard
+
+<span class="h3">### AC2: Module and Lesson Creation</span>
+<span class="bold">**Given**</span> a TEACHER sends POST /api/courses/{course_id}/modules with { title, order }
+<span class="bold">**When**</span> the teacher_id in the JWT matches the course's teacher_id
+<span class="bold">**Then**</span> the server returns HTTP 201 with the created module; similarly, POST /api/courses/{course_id}/modules/{module_id}/lessons with { title, youtube_video_id, cloudinary_asset_url, order } returns HTTP 201 with the created lesson
+
+<span class="h3">### AC3: Course Publish — Triggers RabbitMQ Event</span>
+<span class="bold">**Given**</span> a TEACHER sends PUT /api/courses/{course_id} with { "status": "PUBLISHED" }
+<span class="bold">**When**</span> the course has at least one module with at least one lesson
+<span class="bold">**Then**</span> the server returns HTTP 200, updates status to PUBLISHED, and publishes a <code>course.published</code> event to RabbitMQ with payload { course_id, teacher_id, title }
+
+<span class="h3">### AC4: Ownership Enforcement</span>
+<span class="bold">**Given**</span> TEACHER A sends PUT /api/courses/{id} where the course belongs to TEACHER B
+<span class="bold">**When**</span> the server validates teacher ownership
+<span class="bold">**Then**</span> the server returns HTTP 403 with { "error": "NOT_COURSE_OWNER" }
+
+<span class="h3">### AC5: Student Course Browse (Public PUBLISHED Only)</span>
+<span class="bold">**Given**</span> any authenticated user sends GET /api/courses?status=PUBLISHED
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> the server returns HTTP 200 with a list of published courses only — DRAFT and ARCHIVED courses are never included
+
+<span class="h2">## Technical Notes</span>
+- Course model: id, title, description, price (Decimal), teacher_id (Integer FK reference), status (ENUM: DRAFT, PUBLISHED, ARCHIVED), created_at, updated_at
+- Module model: id, course_id (FK), title, order (Integer for sequence), created_at
+- Lesson model: id, module_id (FK), title, youtube_video_id (String), cloudinary_asset_url (String, nullable), duration_seconds (Integer), order, created_at
+- Ownership check helper: <code>assert_course_owner(course_id, jwt_user_id)</code> — reusable function called before every mutating operation
+- RabbitMQ publish: use pika with exchange edura.events, routing key course.published
+- Admin role bypasses ownership check and can modify any course
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: POST /api/courses as STUDENT → 403 (TEACHER/ADMIN only)
+<span class="chk">- [ ]</span> Unit test: assert_course_owner() — matching teacher_id passes, mismatched teacher_id raises 403
+<span class="chk">- [ ]</span> Integration test: POST /api/courses → 201; GET /api/courses/{id} → 200 with created data
+<span class="chk">- [ ]</span> Integration test: POST module → POST lesson → PUT status=PUBLISHED → assert course.published on RabbitMQ queue
+<span class="chk">- [ ]</span> Integration test: TEACHER A attempts PUT on TEACHER B's course → 403 NOT_COURSE_OWNER
+<span class="chk">- [ ]</span> Integration test: GET /api/courses (unauthenticated) → only PUBLISHED courses returned
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All CRUD endpoints implemented in edura-backend/course_service/
+<span class="chk">- [ ]</span> Teacher ownership check applied to all mutating endpoints
+<span class="chk">- [ ]</span> RabbitMQ course.published event published on status change to PUBLISHED
+<span class="chk">- [ ]</span> Code coverage on course_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review completed; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #13 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (Course, Module, Lesson ORM models), #07 (migrations), #08 (RabbitMQ setup), #11 (require_role decorator)</div>
+</div>
+
+<!-- ════════ ISSUE #14 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#14</span>
+      <span class="t-title">feat(content): implement Cloudinary signed URL generation and YouTube embed token endpoints</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-amber">epic:integration</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 4</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As an authenticated student with an active enrollment, I want to access lesson video content through a secure, time-expiring URL so that private course materials cannot be shared or accessed by unenrolled users.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-003 (content delivery), NFR-008 (no raw card/media data on EDURA servers)</span>
+<span class="ref">- SDS Reference: Section 5.2.8 (Content Streaming Flow), Section 20.1 Risk: Unauthorized Content Distribution (mitigation: signed URLs + domain restrictions)</span>
+
+The SDS risk register explicitly identifies unauthorised video sharing as a HIGH/HIGH risk and mandates time-expiring signed URLs for Cloudinary assets and domain-restricted embedding for YouTube. The content_service has no own database tables — it generates secure access tokens on demand using the Cloudinary SDK and returns embed parameters for YouTube. Signed URLs must expire after 1 hour to limit the damage if a URL is shared.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Cloudinary Signed URL Generated for Enrolled Students</span>
+<span class="bold">**Given**</span> an authenticated student with an active enrollment sends POST /api/content/signed-url with { cloudinary_asset_url }
+<span class="bold">**When**</span> the server verifies the enrollment status by calling enrollment_service
+<span class="bold">**Then**</span> the server returns HTTP 200 with { signed_url, expires_at } where signed_url is valid for 3600 seconds
+
+<span class="h3">### AC2: Unenrolled Student is Rejected</span>
+<span class="bold">**Given**</span> an authenticated student WITHOUT an active enrollment sends POST /api/content/signed-url
+<span class="bold">**When**</span> the enrollment check returns no active enrollment for that student+course combination
+<span class="bold">**Then**</span> the server returns HTTP 403 with { "error": "NOT_ENROLLED" }
+
+<span class="h3">### AC3: YouTube Embed Parameters Returned</span>
+<span class="bold">**Given**</span> an authenticated enrolled student sends GET /api/content/lessons/{lesson_id}/stream
+<span class="bold">**When**</span> the lesson exists and the student is enrolled
+<span class="bold">**Then**</span> the server returns HTTP 200 with { youtube_video_id, embed_url, allow_origin: "https://edura.lk" } — never the raw YouTube watch URL
+
+<span class="h3">### AC4: File Upload Validation</span>
+<span class="bold">**Given**</span> a TEACHER sends a POST to upload supplementary notes
+<span class="bold">**When**</span> the uploaded file has an invalid MIME type (not PDF/PNG/JPG) or exceeds 25MB
+<span class="bold">**Then**</span> the server returns HTTP 400 with { "error": "INVALID_FILE", "details": "..." } before touching Cloudinary
+
+<span class="h2">## Technical Notes</span>
+- Cloudinary signed URL: use <code>cloudinary.utils.cloudinary_url(public_id, sign_url=True, expires_at=int(time.time())+3600)</code>
+- Cloudinary credentials: CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME — from environment variables only
+- Enrollment verification: HTTP GET to enrollment_service GET /api/enrollments?student_id={id}&course_id={id} — check response for status=ACTIVE
+- File validation order: (1) size check, (2) MIME type whitelist (application/pdf, image/png, image/jpeg), (3) python-magic byte signature check
+- embed_url format: <code>https://www.youtube-nocookie.com/embed/{youtube_video_id}?rel=0&modestbranding=1</code>
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: signed URL generation — returns URL with expiry timestamp ~3600s from now
+<span class="chk">- [ ]</span> Unit test: file MIME validation — PDF passes, .exe fails, image/jpeg passes, >25MB fails
+<span class="chk">- [ ]</span> Integration test: enrolled student POST signed-url → 200 with valid signed_url
+<span class="chk">- [ ]</span> Integration test: unenrolled student POST signed-url → 403 NOT_ENROLLED
+<span class="chk">- [ ]</span> Integration test: GET /api/content/lessons/{id}/stream as enrolled → 200 with embed_url
+<span class="chk">- [ ]</span> Negative test: Cloudinary API key missing from env → service returns 503, not 500 stack trace
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All endpoints implemented in edura-backend/content_service/
+<span class="chk">- [ ]</span> No Cloudinary credentials hardcoded — read from environment only
+<span class="chk">- [ ]</span> Code coverage on content_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review completed; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #14 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #04 (content_service skeleton), #11 (require_role), #16 (enrollment_service must expose enrollment status endpoint)</div>
+</div>
+
+<!-- ════════ ISSUE #15 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#15</span>
+      <span class="t-title">feat(payment): implement PayHere checkout init, HMAC webhook handler, and manual receipt upload</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 4</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want to pay for a course subscription through the PayHere gateway or upload a manual receipt so that I can gain immediate access to course content upon payment confirmation.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-006, FR-007, FR-008, FR-009, NFR-004 (webhook reconciliation), NFR-008 (no PAN/CVV storage), BR-001 (subscription access rule)</span>
+<span class="ref">- SDS Reference: Section 5.2.3 (Student Enrollment and Payment Processing Flow), Section 7.4.1 (Data Classification), Section 20.1 (Risk: webhook failure reconciliation)</span>
+<span class="cmt">- ADR Reference: ADR-05 (Hybrid payment — PayHere automated + manual fallback)</span>
+
+The SDS specifies a hybrid payment model. The automated path constructs a signed PayHere checkout payload and redirects the student to PayHere's hosted page. After the transaction, PayHere sends an HMAC-MD5 signed server-to-server webhook. The EDURA server verifies this signature before updating payment_status. The manual path accepts a receipt image (stored in Azure Blob Storage) flagged as PENDING until an admin approves. Idempotency is enforced via a unique constraint on transaction_id to handle PayHere's retry mechanism.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Automated Checkout Initiation</span>
+<span class="bold">**Given**</span> an authenticated student sends POST /api/payments/checkout with { course_id }
+<span class="bold">**When**</span> the server builds the PayHere payload
+<span class="bold">**Then**</span> the server returns HTTP 200 with { redirect_url, order_id } and creates a Payment record with status PENDING
+
+<span class="h3">### AC2: Successful Webhook Processing</span>
+<span class="bold">**Given**</span> PayHere sends POST /api/payments/webhook with status_code=2 and a valid HMAC-MD5 signature
+<span class="bold">**When**</span> the server verifies the signature
+<span class="bold">**Then**</span> HTTP 200 is returned, payment_status is updated to SUCCESS, and a payment.success event is published to RabbitMQ with { student_id, course_id, order_id }
+
+<span class="h3">### AC3: Invalid Webhook Signature Rejected</span>
+<span class="bold">**Given**</span> a POST arrives at /api/payments/webhook with an invalid HMAC signature
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> the server returns HTTP 400 and does NOT update payment_status or publish any event
+
+<span class="h3">### AC4: Manual Receipt Upload</span>
+<span class="bold">**Given**</span> a student sends POST /api/payments/receipts with a JPEG/PNG/PDF ≤ 2MB
+<span class="bold">**When**</span> the file passes validation
+<span class="bold">**Then**</span> the file is stored in Azure Blob Storage, a Payment record is created with payment_method=MANUAL and status=PENDING, and HTTP 201 is returned
+
+<span class="h3">### AC5: Idempotency on Duplicate Webhook</span>
+<span class="bold">**Given**</span> the same webhook is received twice due to PayHere's retry logic
+<span class="bold">**When**</span> the server processes the duplicate
+<span class="bold">**Then**</span> the second request returns HTTP 200 silently and no duplicate enrollment or payment record is created
+
+<span class="h2">## Technical Notes</span>
+- HMAC verification formula: <code>md5(merchant_id + order_id + amount + currency + status_code + md5(merchant_secret).upper()).upper()</code> — must match md5sig in payload
+- Unique constraint on transaction_id enforces AC5 at the database level
+- Store only Azure Blob URL for receipts — never raw binary on app server (NFR-008)
+- Publish to exchange: edura.events, routing key: payment.success
+- Use ngrok for local webhook testing against PayHere sandbox
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: verify_hmac() — valid signature, invalid signature, wrong merchant_secret
+<span class="chk">- [ ]</span> Unit test: build_checkout_payload() — all required PayHere fields present
+<span class="chk">- [ ]</span> Integration test: POST /api/payments/checkout → 200, PENDING record created
+<span class="chk">- [ ]</span> Integration test: valid webhook → SUCCESS status, payment.success published to RabbitMQ
+<span class="chk">- [ ]</span> Integration test: invalid HMAC webhook → 400, no DB update
+<span class="chk">- [ ]</span> Integration test: duplicate webhook → second call idempotent (no duplicate record)
+<span class="chk">- [ ]</span> Integration test: POST /api/payments/receipts valid file → 201 PENDING record
+<span class="chk">- [ ]</span> Negative test: receipt with invalid MIME type → 400
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All endpoints implemented in edura-backend/payment_service/
+<span class="chk">- [ ]</span> HMAC secret stored in AKS Secret, never hardcoded
+<span class="chk">- [ ]</span> Code coverage on payment_service ≥ 90%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review completed; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #15 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (Payment ORM model), #07 (migrations), #08 (RabbitMQ queues), #10 (JWT middleware)</div>
+</div>
+
+<!-- ════════ ISSUE #16 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#16</span>
+      <span class="t-title">feat(enrollment): consume payment.success RabbitMQ event and grant/revoke course access</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 5</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student who has just paid for a course, I want my enrollment to be automatically activated without any manual intervention so that I can start learning immediately after payment confirmation.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-009 (automatic course access on payment success), BR-001 (subscription access rule — lapsed access must be suspended)</span>
+<span class="ref">- SDS Reference: Section 5.2.3 (Student Enrollment and Payment Processing Flow), Figure 6 (Student Enrollment and Payment Processing Flow Diagram)</span>
+
+The enrollment_service is a downstream consumer in the event-driven flow. It does NOT call payment_service directly — it listens to the payment.success event on enrollment.queue (configured in issue #08). Upon receiving the event, it creates an Enrollment record with status ACTIVE and a calculated expiry date (30 days from activation). It also listens to subscription.expired events (when a scheduled job fires) to set status to SUSPENDED per BR-001.
+
+The enrollment status endpoint GET /api/enrollments must be queryable by other services (specifically content_service in issue #14) to verify whether a student has active access to a course.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Enrollment Auto-Activated on payment.success</span>
+<span class="bold">**Given**</span> a payment.success RabbitMQ event is received with { student_id, course_id, order_id }
+<span class="bold">**When**</span> the enrollment_service consumer processes the message
+<span class="bold">**Then**</span> an Enrollment record is created with status ACTIVE, enrolled_at = now(), expires_at = now() + 30 days, and enrollment.activated is published to RabbitMQ within 5 seconds
+
+<span class="h3">### AC2: Enrollment Status Query</span>
+<span class="bold">**Given**</span> any authenticated service or user sends GET /api/enrollments?student_id={id}&course_id={id}
+<span class="bold">**When**</span> an active enrollment exists
+<span class="bold">**Then**</span> the server returns HTTP 200 with { enrollment_id, student_id, course_id, status: "ACTIVE", expires_at }
+
+<span class="h3">### AC3: Access Suspended on Subscription Expiry</span>
+<span class="bold">**Given**</span> a subscription.expired event is received for a student+course combination
+<span class="bold">**When**</span> the consumer processes the event
+<span class="bold">**Then**</span> the corresponding Enrollment record is updated to status SUSPENDED and the student loses access to content_service signed URLs
+
+<span class="h3">### AC4: No Duplicate Enrollments</span>
+<span class="bold">**Given**</span> a payment.success event is received for a student+course combination that already has an ACTIVE enrollment
+<span class="bold">**When**</span> the consumer processes the event
+<span class="bold">**Then**</span> the existing enrollment's expires_at is extended by 30 days — no duplicate Enrollment record is created
+
+<span class="h2">## Technical Notes</span>
+- Enrollment model: id, student_id (Integer), course_id (Integer), status (ENUM: ACTIVE, SUSPENDED, EXPIRED), enrolled_at, expires_at, updated_at
+- Unique constraint: (student_id, course_id) — enforces AC4 at DB level; use INSERT ... ON CONFLICT DO UPDATE
+- RabbitMQ consumer: pika BasicConsume on enrollment.queue, binding key payment.success
+- Publish enrollment.activated to edura.events exchange with routing key enrollment.activated
+- Expose GET /api/enrollments as an HTTP endpoint so other services can query enrollment status synchronously
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Integration test: publish mock payment.success to RabbitMQ → assert ACTIVE Enrollment record created in DB within 5s
+<span class="chk">- [ ]</span> Integration test: GET /api/enrollments?student_id=1&course_id=1 → 200 ACTIVE
+<span class="chk">- [ ]</span> Integration test: publish payment.success twice → assert only one Enrollment record; expires_at extended
+<span class="chk">- [ ]</span> Integration test: publish subscription.expired → assert enrollment status updated to SUSPENDED
+<span class="chk">- [ ]</span> Negative test: GET /api/enrollments for unenrolled student → 404
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> RabbitMQ consumer implemented and running in enrollment_service
+<span class="chk">- [ ]</span> GET /api/enrollments query endpoint implemented and accessible
+<span class="chk">- [ ]</span> enrollment.activated published on successful enrollment creation
+<span class="chk">- [ ]</span> Code coverage on enrollment_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #16 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (Enrollment ORM model), #07 (migrations), #08 (RabbitMQ queues), #15 (payment.success event published)</div>
+</div>
+
+<!-- ════════ ISSUE #17 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#17</span>
+      <span class="t-title">feat(assessment): implement timed quiz session with Redis, MCQ auto-grading, and tab-switch detection</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 5</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want to take a timed quiz that automatically submits when the timer expires and grades my MCQ and True/False answers instantly so that I receive immediate feedback on my performance without waiting for manual grading.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-004 (assessment types), FR-005 (auto-grading), FR-013 (anti-cheat), BR-002 (MCQ/TF only for auto-grade), BR-003 (auto-submit on expiry), BR-006 (anti-cheating enforcement)</span>
+<span class="ref">- SDS Reference: Section 5.2.4 (Assessment Taking and Automated Grading Flow), Section 7.5 (Input Validation and Sanitization)</span>
+
+The SDS specifies Redis for timed session management. When a student starts an assessment, the server records the start time in Redis with key <code>session:assessment:{session_id}</code> and TTL equal to the time limit. Auto-submit is triggered either by client submission or when the Redis key expires (checked on every submit attempt). Tab-switch violations are recorded via a POST endpoint called by frontend JavaScript (see issue #27) and stored in ViolationLog. Auto-grading applies only to MCQ and True/False — Short Answer questions are flagged for manual review per BR-002.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Session Start and Timer Initialisation</span>
+<span class="bold">**Given**</span> an enrolled student sends POST /api/assessments/{id}/start
+<span class="bold">**When**</span> no active session exists for this student+assessment
+<span class="bold">**Then**</span> the server returns HTTP 200 with { session_id, questions (shuffled), time_remaining_seconds } and stores session state in Redis with TTL = assessment.time_limit_seconds
+
+<span class="h3">### AC2: MCQ/TF Auto-Grading on Submit</span>
+<span class="bold">**Given**</span> a student sends POST /api/assessments/{id}/submit with { session_id, answers: [{question_id, selected_option}] }
+<span class="bold">**When**</span> the session is still valid and all answers are present
+<span class="bold">**Then**</span> the server calculates the score (correct answers / total questions × 100), creates a Submission record, returns HTTP 200 with { score, passed, correct_count, total_questions }, and publishes assessment.graded to RabbitMQ
+
+<span class="h3">### AC3: Auto-Submit on Timer Expiry</span>
+<span class="bold">**Given**</span> a student sends POST /api/assessments/{id}/submit after the Redis TTL has expired
+<span class="bold">**When**</span> the server checks the session
+<span class="bold">**Then**</span> the server grades whatever answers were submitted (or scores 0 if none) and returns HTTP 200 with { score, auto_submitted: true }
+
+<span class="h3">### AC4: Violation Logging</span>
+<span class="bold">**Given**</span> the frontend detects a tab-switch and sends POST /api/assessments/{id}/violations with { session_id, violation_type: "TAB_SWITCH", timestamp }
+<span class="bold">**When**</span> the session is active
+<span class="bold">**Then**</span> the server returns HTTP 204 and creates a ViolationLog record with student_id, assessment_id, violation_type, and timestamp
+
+<span class="h3">### AC5: Duplicate Session Blocked</span>
+<span class="bold">**Given**</span> a student already has an active Redis session for an assessment
+<span class="bold">**When**</span> the student sends POST /api/assessments/{id}/start again
+<span class="bold">**Then**</span> the server returns HTTP 409 with { "error": "SESSION_ALREADY_ACTIVE", "time_remaining_seconds": N }
+
+<span class="h2">## Technical Notes</span>
+- Redis session key: <code>session:assessment:{session_id}</code> → JSON { student_id, assessment_id, started_at, answers_draft }; TTL = time_limit_seconds
+- Auto-grading: compare selected_option_id against Question.correct_option_id for MCQ; Question.is_true for True/False
+- Short answer questions: set Submission.requires_manual_review = True; score contributes 0 until manually graded
+- ViolationLog model: id, student_id, assessment_id, session_id, violation_type (ENUM: TAB_SWITCH, FOCUS_LOST), timestamp
+- RabbitMQ publish: exchange edura.events, routing key assessment.graded, payload { student_id, assessment_id, score, passed }
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: auto_grade(answers, questions) — all correct → 100, all wrong → 0, partial → correct %
+<span class="chk">- [ ]</span> Unit test: session expiry check — active session passes, expired Redis key triggers auto-submit flag
+<span class="chk">- [ ]</span> Integration test: POST /start → Redis key created with correct TTL; GET session → time_remaining_seconds decreasing
+<span class="chk">- [ ]</span> Integration test: POST /submit within time → 200, correct score, assessment.graded published
+<span class="chk">- [ ]</span> Integration test: POST /submit after expiry → 200 auto_submitted:true, score graded from partial answers
+<span class="chk">- [ ]</span> Integration test: POST /violations → 204, ViolationLog record created in DB
+<span class="chk">- [ ]</span> Integration test: POST /start when session active → 409 SESSION_ALREADY_ACTIVE
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All assessment endpoints implemented in edura-backend/assessment_service/
+<span class="chk">- [ ]</span> Redis session management working with correct TTL
+<span class="chk">- [ ]</span> assessment.graded published to RabbitMQ on every submission
+<span class="chk">- [ ]</span> Code coverage on assessment_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #17 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (Assessment, Question, Submission, ViolationLog ORM models), #07 (migrations), #08 (RabbitMQ), #11 (require_role), #16 (enrollment check for access)</div>
+</div>
+
+<!-- ════════ ISSUE #18 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#18</span>
+      <span class="t-title">ci(deploy): add GitHub Actions build-push-deploy pipeline to AKS staging on push to develop</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-infra">edura-infra</span>
+      <span class="label-badge lb-green">epic:ci-cd</span>
+      <span class="label-badge lb-teal">ci</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@nadun</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 5</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a developer, I want every push to the develop branch to automatically build all Docker images, push them to ACR, and deploy to AKS staging so that the team always has a live staging URL to test against without manual deployment steps.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 8.5 (CI/CD Pipeline Overview), Section 8.4 (Environment Specifications — Staging mirrors production)</span>
+<span class="cmt">- 2-Week Plan gate: staging URL must be live by end of Day 5 — this is the single most critical infrastructure milestone of Week 1</span>
+
+This issue extends the CI skeleton from issue #03 with the actual deployment stage. The pipeline must build all 11 service Docker images and the frontend image using a matrix strategy, push them to ACR with the git commit SHA as the image tag, apply the k8s/staging/ manifests, and verify all pods reach Running state. A failed deployment must not block the main CI stages — deploy is a separate job with <code>needs: [unit-tests]</code>.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Images Built and Pushed to ACR on develop Push</span>
+<span class="bold">**Given**</span> a developer merges a PR into develop
+<span class="bold">**When**</span> the GitHub Actions deploy-staging job runs
+<span class="bold">**Then**</span> all 12 Docker images (11 services + frontend) are built, tagged with the git SHA, and pushed to ACR within 10 minutes
+
+<span class="h3">### AC2: All Pods Reach Running State in Staging</span>
+<span class="bold">**Given**</span> the images are pushed to ACR
+<span class="bold">**When**</span> <code>kubectl apply -f k8s/staging/</code> runs
+<span class="bold">**Then**</span> <code>kubectl rollout status deployment/&lt;service&gt;</code> succeeds for all 11 services and the frontend, and all pods are in Running state within 5 minutes
+
+<span class="h3">### AC3: Staging URL Health Check Passes</span>
+<span class="bold">**Given**</span> all pods are Running
+<span class="bold">**When**</span> the pipeline runs <code>curl https://staging.edura.lk/api/auth/health</code>
+<span class="bold">**Then**</span> HTTP 200 is returned with { "status": "ok" } and the pipeline job completes successfully
+
+<span class="h3">### AC4: Feature Branch Pushes Do NOT Trigger Staging Deploy</span>
+<span class="bold">**Given**</span> a developer pushes to a branch named feature/13-course-crud
+<span class="bold">**When**</span> GitHub Actions runs
+<span class="bold">**Then**</span> only the lint, build, and unit-test jobs run — deploy-staging is skipped
+
+<span class="h2">## Technical Notes</span>
+- Use <code>strategy.matrix</code> to build all 12 images in parallel — reduces build time from ~20min serial to ~4min parallel
+- Image tag: <code>${{ github.sha }}</code> — pinned, not latest, for reproducible deploys
+- k8s/staging/ manifests: one Deployment + Service per microservice; image field uses ACR URL with SHA tag
+- Use <code>azure/aks-set-context@v3</code> action to authenticate to AKS
+- Add staging URL to README and the GitHub Actions job summary on success
+- Cache Docker layers using <code>actions/cache</code> with key based on requirements.txt hash
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Integration test: push to develop branch → confirm all 12 images appear in ACR with SHA tag
+<span class="chk">- [ ]</span> Integration test: kubectl get pods in staging namespace → all Running after deploy
+<span class="chk">- [ ]</span> Integration test: curl staging health endpoints → all 11 return 200
+<span class="chk">- [ ]</span> Negative test: push to feature branch → confirm deploy-staging job is not triggered
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> deploy-staging job added to .github/workflows/ci.yml in edura-infra
+<span class="chk">- [ ]</span> k8s/staging/ manifests committed for all 12 services
+<span class="chk">- [ ]</span> All 11 service pods + frontend pod Running in staging after first successful deploy
+<span class="chk">- [ ]</span> Staging URL documented in edura-infra README and shared with team
+<span class="chk">- [ ]</span> PR raised against develop; CI passes on the PR itself
+<span class="chk">- [ ]</span> Closes #18 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #03 (CI skeleton), #04 (service Dockerfiles), #12 (AKS cluster and ACR must be provisioned)</div>
+</div>
+
+<!-- ════════ ISSUE #19 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#19</span>
+      <span class="t-title">feat(progress): implement lesson watch tracking, course completion, certificate eligibility, and leaderboard</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 6</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want the system to automatically track which lessons I have watched and calculate my course completion percentage so that I know exactly how close I am to earning my certificate.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-010 (progress tracking), FR-014 (gamification — leaderboard), FR-015 (digital certificates), BR-004 (certification eligibility: 100% videos + pass all assessments)</span>
+<span class="ref">- SDS Reference: Section 5.2.5 (Progress Tracking and Certificate Generation Flow), Section 3.2 (ER Diagram — LessonProgress, CourseProgress, Certificate, LeaderboardEntry)</span>
+
+progress_service listens to two RabbitMQ events: <code>lesson.watched</code> (published by the frontend via content_service when a video completes) and <code>assessment.graded</code> (published by assessment_service). When 100% of lessons are watched AND all assessments are passed, the service marks the student as certificate-eligible and publishes <code>certificate.issued</code>. The leaderboard is a Redis sorted set keyed by course_id, scored by total points, updated on each grading event.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Lesson Watch Progress Recorded</span>
+<span class="bold">**Given**</span> a lesson.watched event is received with { student_id, course_id, lesson_id }
+<span class="bold">**When**</span> the consumer processes it
+<span class="bold">**Then**</span> a LessonProgress record is created or updated with watched_at = now(), and the CourseProgress.completion_percentage is recalculated as (watched_lessons / total_lessons) × 100
+
+<span class="h3">### AC2: Certificate Eligibility Check</span>
+<span class="bold">**Given**</span> an assessment.graded event arrives and the student now has 100% lesson completion and all assessments passed
+<span class="bold">**When**</span> the eligibility check runs
+<span class="bold">**Then**</span> a Certificate record is created with issued_at = now() and a certificate.issued event is published to RabbitMQ
+
+<span class="h3">### AC3: Progress Dashboard Endpoint</span>
+<span class="bold">**Given**</span> an authenticated student sends GET /api/progress/courses/{course_id}
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned with { completion_percentage, watched_lessons, total_lessons, assessment_scores: [{assessment_id, score, passed}], certificate_issued: bool }
+
+<span class="h3">### AC4: Leaderboard Returns Top 10</span>
+<span class="bold">**Given**</span> multiple students have completed assessments for a course
+<span class="bold">**When**</span> any authenticated user sends GET /api/progress/courses/{course_id}/leaderboard
+<span class="bold">**Then**</span> HTTP 200 is returned with the top 10 students sorted by total points descending, served from Redis cache
+
+<span class="h2">## Technical Notes</span>
+- Leaderboard Redis key: <code>leaderboard:course:{course_id}</code> — sorted set, score = total assessment points, member = student_id
+- Points calculation: assessment score (0–100) contributes directly; bonus +10 for 100% completion
+- Certificate PDF generation is deferred to analytics_service or a separate generation step; this service only creates the Certificate DB record and publishes the event
+- Listen on queues: progress.queue bound to lesson.watched and assessment.graded routing keys
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: completion_percentage calculation — 3 of 5 lessons watched → 60%
+<span class="chk">- [ ]</span> Unit test: certificate eligibility — 100% lessons + all passed → eligible; 100% lessons + 1 failed → not eligible
+<span class="chk">- [ ]</span> Integration test: publish lesson.watched × N (all lessons) → completion_percentage = 100%
+<span class="chk">- [ ]</span> Integration test: eligibility met → Certificate record created + certificate.issued published
+<span class="chk">- [ ]</span> Integration test: GET /api/progress/courses/{id} → correct completion_percentage and assessment_scores
+<span class="chk">- [ ]</span> Integration test: GET leaderboard → top 10 students from Redis, sorted correctly
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All progress endpoints and RabbitMQ consumers implemented in edura-backend/progress_service/
+<span class="chk">- [ ]</span> Leaderboard served from Redis sorted set
+<span class="chk">- [ ]</span> certificate.issued published when eligibility is met
+<span class="chk">- [ ]</span> Code coverage on progress_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #19 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (LessonProgress, CourseProgress, Certificate, LeaderboardEntry ORM models), #07 (migrations), #08 (RabbitMQ), #17 (assessment.graded event published)</div>
+</div>
+
+<!-- ════════ ISSUE #20 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#20</span>
+      <span class="t-title">feat(notification): build RabbitMQ consumer for OTP, payment, and certificate email dispatch via SMTP</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-amber">epic:integration</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 6</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student or administrator, I want to receive automatic email notifications for key events (OTP verification, payment confirmation, and certificate issuance) so that I am always kept informed without any manual admin effort.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-002 (OTP email verification), FR-006 (manual receipt notification), FR-009 (access confirmation)</span>
+<span class="ref">- SDS Reference: Section 2.1 (Notification Service — pure consumer, no HTTP), Section 16.3 (SMTP interface requirement)</span>
+
+notification_service is unique among the 11 services: it has NO HTTP router and NO database of its own. It is a pure RabbitMQ consumer running a blocking pika connection. It listens to events on notification.queue, renders a Jinja2 HTML email template for each event type, and dispatches via SMTP. A NotificationLog record is written to track delivery status. The service must not crash on SMTP failures — it should catch the exception, log it, and nack the message for retry.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: OTP Email Dispatched on auth.otp-requested</span>
+<span class="bold">**Given**</span> an auth.otp-requested event arrives with { email, otp_code, expires_in_minutes: 5 }
+<span class="bold">**When**</span> the notification_service consumer processes the message
+<span class="bold">**Then**</span> an HTML email is sent to the student's email address with the 6-digit OTP and a "valid for 5 minutes" note, within 10 seconds of the event being consumed
+
+<span class="h3">### AC2: Payment Confirmation Email on payment.success</span>
+<span class="bold">**Given**</span> a payment.success event arrives with { student_email, course_title, amount, order_id }
+<span class="bold">**When**</span> the consumer processes the message
+<span class="bold">**Then**</span> an HTML payment confirmation email is sent with the course name, amount, and order ID; a NotificationLog record is created with status SENT
+
+<span class="h3">### AC3: Certificate Ready Email on certificate.issued</span>
+<span class="bold">**Given**</span> a certificate.issued event arrives with { student_email, student_name, course_title, issued_at }
+<span class="bold">**When**</span> the consumer processes the message
+<span class="bold">**Then**</span> an HTML congratulations email is sent with the certificate details and a download link; NotificationLog status SENT
+
+<span class="h3">### AC4: SMTP Failure Does Not Crash Consumer</span>
+<span class="bold">**Given**</span> the SMTP server is unreachable or returns an error
+<span class="bold">**When**</span> the consumer attempts to send an email
+<span class="bold">**Then**</span> the exception is caught and logged, a NotificationLog record is created with status FAILED, and the RabbitMQ message is nacked with requeue=True for retry — the consumer loop continues without crashing
+
+<span class="h2">## Technical Notes</span>
+- Use Python's <code>smtplib</code> + <code>email.mime.multipart</code> for SMTP; or SendGrid SDK if Gmail App Password proves unreliable
+- Jinja2 templates stored in notification_service/templates/: otp_email.html, payment_confirm.html, cert_issued.html, violation_alert.html
+- SMTP env vars: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD — never hardcoded
+- NotificationLog model: id, event_type, recipient_email, status (ENUM: SENT, FAILED), sent_at, error_message (nullable)
+- Consumer entrypoint: <code>notification_service/consumer.py</code> — called by Docker CMD, NOT uvicorn
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: render_otp_email(otp_code) → HTML contains the 6-digit code
+<span class="chk">- [ ]</span> Unit test: render_payment_email(order_id, course_title) → HTML contains order_id and course_title
+<span class="chk">- [ ]</span> Integration test: publish auth.otp-requested to RabbitMQ → SMTP send called with correct recipient (use mock SMTP)
+<span class="chk">- [ ]</span> Integration test: SMTP mock raises exception → NotificationLog status=FAILED, consumer does not crash
+<span class="chk">- [ ]</span> Integration test: publish payment.success → NotificationLog record created with status SENT
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Consumer implemented in edura-backend/notification_service/consumer.py
+<span class="chk">- [ ]</span> All 4 Jinja2 email templates created and rendering correctly
+<span class="chk">- [ ]</span> NotificationLog written for every delivery attempt
+<span class="chk">- [ ]</span> No SMTP credentials hardcoded — read from environment
+<span class="chk">- [ ]</span> Code coverage on notification_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #20 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (NotificationLog ORM model), #07 (migrations), #08 (RabbitMQ queues — notification.queue), #10 (auth.otp-requested event published by auth_service), #15 (payment.success event), #19 (certificate.issued event)</div>
+</div>
+
+<!-- ════════ ISSUE #21 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#21</span>
+      <span class="t-title">feat(admin): implement receipt verification dashboard, user management, and audit log endpoints</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 6</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a system administrator, I want a dedicated admin API to manage users, verify payment receipts, and view audit logs so that I can operate the institute's digital platform without needing direct database access.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-006 (manual receipt verification), UC-002 (Upload Subscription Receipt), Use Case 14.2</span>
+<span class="ref">- SDS Reference: Section 7.3.1 (Administrator role — full system access), Section 6.1.7 (Admin Dashboard wireframe)</span>
+
+admin_service provides ADMIN-only endpoints that aggregate data from other services. Receipt verification (approve/reject) triggers the same enrollment flow as an automated payment — when an admin approves a receipt, admin_service publishes <code>payment.success</code> to RabbitMQ so enrollment_service auto-grants access. Every admin action is written to AuditLog with actor_id, action, target_id, and timestamp to maintain a tamper-evident trail.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: List Pending Receipts</span>
+<span class="bold">**Given**</span> an ADMIN sends GET /api/admin/payments/receipts?status=PENDING
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned with a paginated list of pending payment receipts { receipt_id, student_name, course_title, uploaded_at, receipt_url }
+
+<span class="h3">### AC2: Approve Receipt — Triggers Enrollment</span>
+<span class="bold">**Given**</span> an ADMIN sends PUT /api/admin/payments/receipts/{id} with { "action": "APPROVE" }
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned, the payment record is updated to status SUCCESS, a payment.success event is published to RabbitMQ, and an AuditLog entry is created with action=RECEIPT_APPROVED
+
+<span class="h3">### AC3: Reject Receipt — With Reason</span>
+<span class="bold">**Given**</span> an ADMIN sends PUT /api/admin/payments/receipts/{id} with { "action": "REJECT", "reason": "Invalid receipt" }
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned, payment status updated to FAILED, student notified via RabbitMQ event, and AuditLog entry created with action=RECEIPT_REJECTED and reason
+
+<span class="h3">### AC4: User Management</span>
+<span class="bold">**Given**</span> an ADMIN sends GET /api/admin/users (with optional filters ?role=STUDENT&is_active=true)
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned with a paginated list of users; ADMIN can also PUT /api/admin/users/{id}/role and DELETE /api/admin/users/{id} (soft-delete via is_active=False)
+
+<span class="h3">### AC5: Audit Log Queryable</span>
+<span class="bold">**Given**</span> an ADMIN sends GET /api/admin/audit-logs?actor_id={id}&from={date}
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned with a filtered, paginated list of audit events sorted newest-first
+
+<span class="h2">## Technical Notes</span>
+- AuditLog model: id, actor_id (admin user_id), action (String), target_type (String), target_id (Integer), details (JSON), created_at
+- All endpoints decorated with @require_role(["ADMIN"]) — non-admins receive 403 immediately
+- Receipt approval publishes to edura.events, routing key payment.success (same payload as PayHere webhook)
+- Pagination: use page and page_size query params; default page_size=20
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: all admin endpoints reject STUDENT and TEACHER roles with 403
+<span class="chk">- [ ]</span> Integration test: ADMIN approves receipt → payment.success published → enrollment ACTIVE
+<span class="chk">- [ ]</span> Integration test: ADMIN rejects receipt → payment status FAILED, AuditLog RECEIPT_REJECTED
+<span class="chk">- [ ]</span> Integration test: GET /api/admin/users → correct pagination, filterable by role
+<span class="chk">- [ ]</span> Integration test: GET /api/admin/audit-logs → events sorted newest-first
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All admin endpoints implemented in edura-backend/admin_service/
+<span class="chk">- [ ]</span> AuditLog written for every mutating admin action
+<span class="chk">- [ ]</span> Code coverage on admin_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #21 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (AuditLog ORM model), #07 (migrations), #08 (RabbitMQ), #11 (require_role), #15 (Payment records exist)</div>
+</div>
+
+<!-- ════════ ISSUE #22 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#22</span>
+      <span class="t-title">feat(ui-frontend): build login, register, and student dashboard pages connected to staging API</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 6</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want to register, log in with OTP verification, and see my personalised dashboard showing enrolled courses and progress so that I can start using EDURA from a web browser on any device.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 6.1.1 (Authentication Interfaces), Section 6.1.2 (Student Dashboard), Figure 12 (Sign-in Interface), Figure 14 (Student Dashboard Interface), Section 6.2 (User Flow Diagrams — Student Registration and Onboarding Flow)</span>
+<span class="ref">- Prototype: Figma screens — Register, Login, OTP Verification, Student Dashboard</span>
+
+The frontend must connect to the live staging API URL (NEXT_PUBLIC_API_URL) from Day 6 onwards — no local mocks after this point. Redux Toolkit manages auth state: a dedicated authSlice stores the access_token, refresh_token, and user role in memory (not localStorage — use HttpOnly cookie for refresh token). A protected route HOC wraps all authenticated pages and redirects unauthenticated users to /login. The visual design must match the Figma prototype's color palette (Teal-600 primary, Inter font family, clean card-based layout).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Registration Flow Complete</span>
+<span class="bold">**Given**</span> an unregistered user visits /register and submits { name, email, password }
+<span class="bold">**When**</span> the form is submitted and auth_service returns 201
+<span class="bold">**Then**</span> the user is redirected to /verify-otp where they enter the 6-digit code from their email
+
+<span class="h3">### AC2: Login with OTP Verification</span>
+<span class="bold">**Given**</span> a registered user visits /login and submits valid credentials
+<span class="bold">**When**</span> auth_service returns 200 with the access token and an OTP is sent to their email
+<span class="bold">**Then**</span> the user is shown the OTP entry screen; upon correct OTP entry, the access token is stored in Redux state and the user is redirected to /dashboard
+
+<span class="h3">### AC3: Student Dashboard Shows Live Data</span>
+<span class="bold">**Given**</span> an authenticated student visits /dashboard
+<span class="bold">**When**</span> the page loads
+<span class="bold">**Then**</span> the dashboard fetches and displays: enrolled courses with progress bars (from progress_service), gamification badges (static placeholders acceptable for now), and a course catalog teaser — all data served from the staging API, not hardcoded
+
+<span class="h3">### AC4: Protected Route Redirects Unauthenticated Users</span>
+<span class="bold">**Given**</span> an unauthenticated user attempts to access /dashboard directly
+<span class="bold">**When**</span> the HOC checks Redux state for an access token
+<span class="bold">**Then**</span> the user is immediately redirected to /login with a <code>?redirect=/dashboard</code> query param
+
+<span class="h3">### AC5: Token Refresh on 401</span>
+<span class="bold">**Given**</span> an API call returns HTTP 401 (expired access token)
+<span class="bold">**When**</span> the axios interceptor handles the error
+<span class="bold">**Then**</span> a POST /api/auth/refresh is made automatically; on success the original request is retried; on failure the user is logged out and redirected to /login
+
+<span class="h2">## Technical Notes</span>
+- Use Next.js 14 App Router; /app/dashboard/page.tsx with <code>'use client'</code> where needed
+- Redux Toolkit: authSlice (login, logout, setTokens actions); configure RTK Query for API calls
+- Axios instance with base URL NEXT_PUBLIC_API_URL; request interceptor adds Bearer token; response interceptor handles 401 refresh
+- Design tokens: primary teal #0D9488, background white/gray-50, font Inter — matches Figma prototype
+- Course catalog on dashboard: GET /api/courses?status=PUBLISHED&limit=4 — show 4 cards max
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: authSlice login action → state contains access_token and role
+<span class="chk">- [ ]</span> Unit test: protected route HOC → redirects to /login when no token in state
+<span class="chk">- [ ]</span> Integration test: submit login form → POST /api/auth/login called with correct body
+<span class="chk">- [ ]</span> Integration test: 401 response → refresh called → original request retried
+<span class="chk">- [ ]</span> Manual test: full register → OTP → login → dashboard flow on staging URL
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /register, /login, /verify-otp, /dashboard pages implemented in edura-frontend
+<span class="chk">- [ ]</span> All pages connected to staging API — no hardcoded mock data
+<span class="chk">- [ ]</span> Protected route HOC applied to /dashboard and all authenticated routes
+<span class="chk">- [ ]</span> Token refresh interceptor working correctly
+<span class="chk">- [ ]</span> Responsive layout verified on mobile and desktop
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #22 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #10 (auth_service must be live on staging), #18 (staging deploy must be live), #19 (progress_service must expose GET /api/progress/courses/{id})</div>
+</div>
+
+<!-- ════════ ISSUE #23 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#23</span>
+      <span class="t-title">feat(analytics): implement course performance aggregations, revenue summary, and PDF/Excel export endpoints</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 7</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a teacher or administrator, I want to view real-time course performance analytics and export reports as PDF or Excel so that I can identify struggling students and make data-driven decisions about the course content.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-012 (analytics and exportable reports), NFR-001 (response time — heavy aggregations must be cached)</span>
+<span class="ref">- SDS Reference: Section 5.2.6 (Analytics Report Generation Flow), Section 3.3 (Database Normalization — materialized views for analytics), Section 6.1.6 (Progress and Analytics Dashboard)</span>
+<span class="ref">- Client feedback: analytics dashboard specifically commended by client as highest-value feature (Section 4.2.2)</span>
+
+analytics_service reads directly from other services' databases (with read-only connection strings) to aggregate data. Heavy aggregations (pass rate, average score) are stored in PostgreSQL materialized views refreshed every 30 minutes, so the API response time stays under the NFR-001 2-second target. For PDF export, ReportLab is used; for Excel, openpyxl. Export endpoints return a streaming file response, not a JSON body.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Course Performance Aggregation</span>
+<span class="bold">**Given**</span> a TEACHER or ADMIN sends GET /api/analytics/courses/{course_id}/performance
+<span class="bold">**When**</span> the server processes the request
+<span class="bold">**Then**</span> HTTP 200 is returned with { enrolled_count, avg_completion_percentage, pass_rate, avg_score, assessment_breakdown: [{assessment_id, title, avg_score, pass_rate}] } within 2 seconds
+
+<span class="h3">### AC2: Revenue Summary</span>
+<span class="bold">**Given**</span> an ADMIN sends GET /api/analytics/revenue?month=2026-06
+<span class="bold">**When**</span> the server queries payment records
+<span class="bold">**Then**</span> HTTP 200 is returned with { total_revenue, successful_payments, manual_payments, payhere_payments, breakdown_by_course: [{course_id, title, revenue}] }
+
+<span class="h3">### AC3: PDF Export</span>
+<span class="bold">**Given**</span> a TEACHER sends GET /api/analytics/reports/export?course_id={id}&format=pdf
+<span class="bold">**When**</span> the server generates the report
+<span class="bold">**Then**</span> HTTP 200 is returned with Content-Type: application/pdf and a downloadable PDF containing course performance tables and student score distribution
+
+<span class="h3">### AC4: Excel Export</span>
+<span class="bold">**Given**</span> an ADMIN sends GET /api/analytics/reports/export?format=excel
+<span class="bold">**When**</span> the server generates the report
+<span class="bold">**Then**</span> HTTP 200 is returned with Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet and a downloadable .xlsx file with student data in tabular format
+
+<span class="h2">## Technical Notes</span>
+- Materialized view: <code>mv_course_performance</code> — refreshed via a scheduled pg_cron job every 30 minutes
+- ReportLab: <code>pip install reportlab</code>; use SimpleDocTemplate + Table for structured reports
+- openpyxl: <code>pip install openpyxl</code>; use Workbook() → add_sheet() → iter_rows() pattern
+- Use FastAPI StreamingResponse with io.BytesIO for file downloads (avoids writing temp files to disk)
+- Only TEACHER (own courses) and ADMIN (all courses) can access analytics endpoints
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: generate_pdf_report(data) → returns bytes object with valid PDF header (%PDF)
+<span class="chk">- [ ]</span> Unit test: generate_excel_report(data) → returns bytes with valid xlsx header
+<span class="chk">- [ ]</span> Integration test: GET /analytics/courses/{id}/performance → correct pass_rate and avg_score
+<span class="chk">- [ ]</span> Integration test: GET /analytics/revenue → totals match seeded payment records
+<span class="chk">- [ ]</span> Integration test: GET /analytics/reports/export?format=pdf → Content-Type: application/pdf
+<span class="chk">- [ ]</span> Negative test: STUDENT requests analytics → 403
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All analytics endpoints implemented in edura-backend/analytics_service/
+<span class="chk">- [ ]</span> Materialized view SQL committed to migrations/
+<span class="chk">- [ ]</span> PDF and Excel export working and downloadable
+<span class="chk">- [ ]</span> Code coverage on analytics_service ≥ 80%
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #23 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #06 (all ORM models — analytics reads cross-service), #07 (migrations), #11 (require_role), #15 (payment records), #17 (submission records)</div>
+</div>
+
+<!-- ════════ ISSUE #24 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#24</span>
+      <span class="t-title">test(infra): run E2E smoke test covering student register → OTP → login → enroll → course view on staging</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-tests">edura-tests</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 7</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want an automated end-to-end smoke test that walks the critical student path on the staging URL so that integration failures between services are caught on Day 7 rather than the day before the demo.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-001, FR-002, FR-007, FR-009 (the complete critical path)</span>
+<span class="ref">- 2-Week Plan: Day 7 gate — "end-to-end smoke test" is the explicit week-end gate condition</span>
+
+This is a cross-service httpx script in edura-tests that hits the live staging URL end-to-end. It tests the critical path the client demo will walk through. Any failure here is a P1 bug to fix on Day 7 — not Day 13. The test uses a dedicated test account (not seeded demo data) and cleans up after itself. It is NOT a pytest unit test — it is a standalone integration script that is also wired into the CI pipeline as a post-deploy smoke test (runs after deploy-staging succeeds).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Full Critical Path Passes</span>
+<span class="bold">**Given**</span> the staging environment is live
+<span class="bold">**When**</span> the smoke test script runs
+<span class="bold">**Then**</span> all of the following steps complete without errors:
+1. POST /api/auth/register → 201 (new test account)
+2. POST /api/auth/otp/verify → 200 (OTP from email or mocked)
+3. POST /api/auth/login → 200, access token received
+4. GET /api/courses → 200, at least one PUBLISHED course visible
+5. POST /api/payments/checkout for the first course → 200, redirect_url returned
+6. (Mock webhook) POST /api/payments/webhook with valid HMAC → 200
+7. GET /api/enrollments → 200, enrollment status ACTIVE
+8. GET /api/content/lessons/{id}/stream → 200, embed_url returned
+9. POST /api/assessments/{id}/start → 200, session created
+10. GET /api/progress/courses/{id} → 200, completion_percentage returned
+
+<span class="h3">### AC2: Test Cleans Up After Itself</span>
+<span class="bold">**Given**</span> the smoke test has completed (pass or fail)
+<span class="bold">**When**</span> the cleanup function runs
+<span class="bold">**Then**</span> the test account, enrollment, and payment records created during the test are deleted via admin API endpoints
+
+<span class="h3">### AC3: Failures Report Clearly Which Step Failed</span>
+<span class="bold">**Given**</span> any step in AC1 fails
+<span class="bold">**When**</span> the script exits
+<span class="bold">**Then**</span> the exit code is non-zero and stdout clearly shows which step number failed with the HTTP status and response body
+
+<span class="h2">## Technical Notes</span>
+- Use <code>httpx</code> (sync client) for all HTTP calls; set timeout=30s per request
+- OTP mocking: either (a) read from a test Redis key injected by auth_service in test mode, or (b) use a fixed test OTP env var SMOKE_TEST_OTP
+- HMAC mock: use test PAYHERE_MERCHANT_SECRET from environment to build a valid signature
+- Staging URL: read from STAGING_API_URL environment variable
+- Run script: <code>python edura-tests/smoke/critical_path.py</code>; exit 0 = pass, exit 1 = fail
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Smoke test: all 10 steps pass against staging URL
+<span class="chk">- [ ]</span> Cleanup: test account and data removed after run
+<span class="chk">- [ ]</span> CI: smoke test runs automatically after deploy-staging succeeds
+<span class="chk">- [ ]</span> Failure reporting: non-zero exit code and clear step-specific error message on any failure
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> edura-tests/smoke/critical_path.py committed and passing against staging
+<span class="chk">- [ ]</span> Script wired into CI as a post-deploy step in .github/workflows/ci.yml
+<span class="chk">- [ ]</span> All 10 critical path steps passing on Day 7 staging
+<span class="chk">- [ ]</span> Cleanup function verified — no orphaned test data after run
+<span class="chk">- [ ]</span> Closes #24 in commit messages in edura-tests
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #10 (auth), #13 (course), #15 (payment), #16 (enrollment), #17 (assessment), #18 (staging live), #19 (progress), #14 (content)</div>
+</div>
+
+<!-- ════════ ISSUE #25 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#25</span>
+      <span class="t-title">docs(infra): write Sprint 5 Week 1 retrospective and update GitHub Project board velocity</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-gray">epic:documentation</span>
+      <span class="label-badge lb-gray">docs</span>
+      <span class="label-badge lb-amber">P3-Medium</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 1</strong></div>
+    <div class="tm">Estimate: <strong>1h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 7</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a team, we want to formally document what was completed, what slipped, and what we are adjusting for Week 2 so that our supervisor can see evidence of Agile self-management and we can enter Week 2 with a realistic, updated plan.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: §6.1 (Retrospective documentation requirement), §4.1 (GitHub Project board must reflect actual velocity)</span>
+
+The SENG 34213 guideline awards marks for documented retrospectives that demonstrate real self-correction — not just templates. This retrospective must record actual velocity (issues completed vs planned), identify specific blockers, and document concrete changes to Week 2 scope or assignments. It feeds directly into the final development report's "Project Management" section. The GitHub Project board must also be updated to reflect completed issues.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Retrospective Document Written</span>
+<span class="bold">**Given**</span> the team reviews the Week 1 outcome
+<span class="bold">**When**</span> this issue is closed
+<span class="bold">**Then**</span> documents/retrospectives/sprint5-week1.md exists in edura-documents with: (a) velocity table — planned vs completed issues, (b) what went well, (c) what blocked us, (d) changes made for Week 2, (e) updated risk log
+
+<span class="h3">### AC2: GitHub Project Board Updated</span>
+<span class="bold">**Given**</span> Week 1 issues are reviewed
+<span class="bold">**When**</span> this issue is closed
+<span class="bold">**Then**</span> all completed issues are in the Done column, all in-progress issues are in the correct column, and any scope changes are reflected as new or re-estimated issues
+
+<span class="h3">### AC3: Week 2 Scope Adjusted if Needed</span>
+<span class="bold">**Given**</span> the actual velocity from Week 1
+<span class="bold">**When**</span> the team reviews what was not completed
+<span class="bold">**Then**</span> any unfinished Week 1 issues are re-prioritised for Week 2 by updating their milestone to Sprint 5 (Week 2) and any Week 2 P4 issues are moved to a "Deferred" milestone if the team is behind schedule
+
+<span class="h2">## Technical Notes</span>
+- Retrospective format: use the 4Ls format — Liked, Learned, Lacked, Longed For — in the markdown document
+- Velocity table: | Issue # | Estimated Hours | Actual Hours | Status | Owner | Notes
+- Risk log update: mark any triggered risks from the Week 1 risk register in the war plan
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: sprint5-week1.md exists in edura-documents/retrospectives/
+<span class="chk">- [ ]</span> Manual check: GitHub Project board Done column matches actual completed issues
+<span class="chk">- [ ]</span> Manual check: all in-flight issues have correct milestone (Week 1 or Week 2)
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> documents/retrospectives/sprint5-week1.md committed to edura-documents
+<span class="chk">- [ ]</span> GitHub Project board updated to reflect actual end-of-Week-1 state
+<span class="chk">- [ ]</span> Week 2 scope adjustments made if any Week 1 items slipped
+<span class="chk">- [ ]</span> Retrospective shared with supervisor (link in team WhatsApp/email)
+<span class="chk">- [ ]</span> Closes #25 in commit messages in edura-documents
+
+<span class="h2">## Estimate</span>
+Estimated: 1 hour
+
+<span class="h2">## Dependencies</span>
+Blocked by: #24 (smoke test results must be known before writing retro)</div>
+</div>
+
+<!-- WEEK 2 DIVIDER -->
+<div class="week-divider">
+  <span class="week-pill pill-w2">Week 2 · Days 8–9 · Sprint 5 (Week 2)</span>
+  <span class="week-line"></span>
+</div>
+
+<!-- ════════ ISSUE #26 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#26</span>
+      <span class="t-title">feat(ui-frontend): build course content viewer with YouTube embed, Cloudinary notes, and lesson navigation</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 8</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As an enrolled student, I want to watch private lesson videos embedded securely in the platform and navigate between lessons in a module so that I can progress through a course in order without leaving the EDURA site.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 6.1.4 (Course Content Viewer wireframes — Figures 60 and 61), Section 5.2.8 (Content Streaming Flow)</span>
+<span class="ref">- SRS Reference: FR-003 (video content integration), FR-010 (progress tracking — video completion events)</span>
+
+The content viewer at /courses/[id]/lesson/[lid] fetches a signed Cloudinary URL and YouTube embed parameters from content_service (issue #14). The YouTube IFrame Player API is used so the frontend can listen for the onStateChange event — when the video reaches 100% playback, the frontend dispatches a lesson.watched event to progress_service. Lesson navigation sidebar shows all modules and lessons; completed lessons are visually marked. Access is blocked and redirected to the course purchase page if enrollment check returns 403.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Video Loads via Secure Embed</span>
+<span class="bold">**Given**</span> an enrolled student navigates to /courses/{id}/lesson/{lid}
+<span class="bold">**When**</span> the page loads
+<span class="bold">**Then**</span> the YouTube IFrame embed loads the correct private video using the embed_url from GET /api/content/lessons/{lid}/stream — never the raw YouTube watch URL
+
+<span class="h3">### AC2: Progress Marked on Video Completion</span>
+<span class="bold">**Given**</span> the YouTube IFrame Player fires onStateChange with state YT.PlayerState.ENDED
+<span class="bold">**When**</span> the event handler runs
+<span class="bold">**Then**</span> a POST to /api/progress/lessons/{lid}/watch is made and the lesson is visually marked as completed in the sidebar
+
+<span class="h3">### AC3: Cloudinary Attachment Available</span>
+<span class="bold">**Given**</span> the lesson has a cloudinary_asset_url
+<span class="bold">**When**</span> the page loads
+<span class="bold">**Then**</span> a "Download Notes" button is visible; clicking it opens the signed URL from POST /api/content/signed-url in a new tab
+
+<span class="h3">### AC4: Unenrolled Access Redirected</span>
+<span class="bold">**Given**</span> a student without an active enrollment navigates to /courses/{id}/lesson/{lid}
+<span class="bold">**When**</span> content_service returns 403 NOT_ENROLLED
+<span class="bold">**Then**</span> the user is redirected to /courses/{id} (course purchase page) with a toast: "Enroll to access this lesson"
+
+<span class="h3">### AC5: Lesson Sidebar Navigation</span>
+<span class="bold">**Given**</span> a student is on any lesson page
+<span class="bold">**When**</span> they view the sidebar
+<span class="bold">**Then**</span> all modules and their lessons are listed; completed lessons show a green checkmark; clicking any lesson navigates to that lesson's URL
+
+<span class="h2">## Technical Notes</span>
+- YouTube IFrame API: load via <code>window.YT.Player</code> in useEffect; listen for onStateChange event
+- Progress POST: send POST /api/progress/lessons/{lid}/watch on video end; handle 409 (already watched) silently
+- Signed URL fetch: POST /api/content/signed-url on "Download Notes" button click — not on page load (lazy fetch)
+- Next.js dynamic route: /app/courses/[courseId]/lesson/[lessonId]/page.tsx
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: onVideoEnd handler → POST /progress/lessons/{lid}/watch called
+<span class="chk">- [ ]</span> Unit test: 403 on content fetch → redirect to /courses/{id}
+<span class="chk">- [ ]</span> Integration test: lesson page loads with correct embed_url from staging API
+<span class="chk">- [ ]</span> Manual test: play video to end → lesson marked complete in sidebar; refresh → still marked complete
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /courses/[id]/lesson/[lid] page implemented in edura-frontend
+<span class="chk">- [ ]</span> YouTube IFrame API integrated and progress event firing correctly
+<span class="chk">- [ ]</span> Lesson sidebar showing all lessons with completion state
+<span class="chk">- [ ]</span> Responsive layout on mobile and desktop
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #26 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #14 (content_service signed-url endpoint), #19 (progress watch endpoint), #22 (auth HOC and staging API connection)</div>
+</div>
+
+<!-- ════════ ISSUE #27 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#27</span>
+      <span class="t-title">feat(ui-frontend): build timed assessment UI with MCQ interface, submission, results, and anti-cheat JS</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 8</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want to take a timed multiple-choice quiz with a visible countdown timer and receive my score immediately after submission so that I can measure my understanding of the lesson material in a controlled, fair environment.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 6.1.5 (Assessment Interface — Figure 62), Section 6.2 (Assessment Flow — Figure 70), BR-003 (auto-submit on expiry), BR-006 (anti-cheat: tab-switch detection)</span>
+<span class="ref">- SRS Reference: FR-004, FR-005, FR-013 (anti-cheating with tab-switching detection)</span>
+
+The assessment page at /assessment/[id] first calls POST /api/assessments/{id}/start to get the session_id and time_remaining_seconds. A client-side countdown timer is derived from this value and decremented every second via setInterval. When the timer reaches 0, the frontend auto-submits whatever answers have been selected. The anti-cheat mechanism uses the browser's visibilitychange and blur events — on each trigger, the frontend POSTs to /api/assessments/{id}/violations. Results page shows score, pass/fail badge, and a review of correct vs selected answers.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Timer Starts and Counts Down</span>
+<span class="bold">**Given**</span> a student navigates to /assessment/{id} and clicks "Start Quiz"
+<span class="bold">**When**</span> POST /api/assessments/{id}/start returns { time_remaining_seconds, questions, session_id }
+<span class="bold">**Then**</span> a visible countdown timer (MM:SS format) starts counting down from time_remaining_seconds; the timer turns red in the last 60 seconds
+
+<span class="h3">### AC2: MCQ Selection and Manual Submit</span>
+<span class="bold">**Given**</span> the student selects answers for each MCQ question
+<span class="bold">**When**</span> they click "Submit Quiz"
+<span class="bold">**Then**</span> POST /api/assessments/{id}/submit is called with { session_id, answers } and the student is shown the results immediately
+
+<span class="h3">### AC3: Auto-Submit on Timer Expiry</span>
+<span class="bold">**Given**</span> the client-side countdown reaches 0 before the student clicks Submit
+<span class="bold">**When**</span> the timer fires
+<span class="bold">**Then**</span> the currently selected answers are submitted automatically and the results page is shown with a "Time expired — auto-submitted" notice
+
+<span class="h3">### AC4: Tab-Switch Violation Reported</span>
+<span class="bold">**Given**</span> the student switches to another browser tab or window during the quiz
+<span class="bold">**When**</span> the visibilitychange or blur event fires
+<span class="bold">**Then**</span> POST /api/assessments/{id}/violations is called with { session_id, violation_type: "TAB_SWITCH" } and a warning banner appears: "Tab switching detected and recorded"
+
+<span class="h3">### AC5: Results Page Shows Score and Answer Review</span>
+<span class="bold">**Given**</span> the quiz is submitted (manually or auto)
+<span class="bold">**When**</span> the results page loads
+<span class="bold">**Then**</span> the student sees: total score (%), PASSED/FAILED badge, and a question-by-question review showing their answer vs the correct answer (for MCQ only)
+
+<span class="h2">## Technical Notes</span>
+- Timer: use setInterval(1000) decrementing a state variable; clear interval on unmount and on submit
+- Timer sync: on page reload/refresh, re-call GET /api/assessments/{id}/session to get remaining time — never trust client-side only
+- Anti-cheat: <code>document.addEventListener('visibilitychange', handler)</code> and <code>window.addEventListener('blur', handler)</code>; debounce to avoid double-firing
+- Prevent Back Navigation: use Next.js router.beforePopState to block back navigation during active quiz
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: timer component — counts down correctly; triggers auto-submit callback at 0
+<span class="chk">- [ ]</span> Unit test: visibilitychange handler → POST /violations called with correct payload
+<span class="chk">- [ ]</span> Integration test: start quiz → select all answers → submit → results page shows score
+<span class="chk">- [ ]</span> Manual test: tab-switch during quiz → warning banner appears; check ViolationLog in DB
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /assessment/[id] page implemented in edura-frontend
+<span class="chk">- [ ]</span> Timer, MCQ interface, auto-submit, and results all working on staging
+<span class="chk">- [ ]</span> Tab-switch detection reporting violations to assessment_service
+<span class="chk">- [ ]</span> Responsive layout on mobile and desktop
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #27 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #17 (assessment_service start/submit/violations endpoints on staging), #22 (auth HOC)</div>
+</div>
+
+<!-- ════════ ISSUE #28 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#28</span>
+      <span class="t-title">feat(ui-frontend): build payment flow UI — PayHere redirect, manual receipt upload, and subscription status badge</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 8</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want to pay for a course through the PayHere gateway or upload a manual receipt, and see my subscription status on my dashboard, so that I always know whether my access is active or pending.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 6.2 (Course Enrollment Flow — Figure 68), Section 6.1.2 (Student Dashboard — subscription status), Figure 28 (Admin Payment Verification Flow)</span>
+<span class="ref">- SRS Reference: FR-006, FR-007, UC-002 (Upload Subscription Receipt), UC-005 (Automated Subscription Payment via PayHere)</span>
+<span class="ref">- Client feedback: manual receipt path specifically confirmed as essential (Section 4.2.2)</span>
+
+The course purchase page at /courses/[id]/purchase shows two payment options: (1) "Pay via PayHere" — calls POST /api/payments/checkout and redirects window.location to redirect_url; (2) "Upload Manual Receipt" — shows a file upload form posting to POST /api/payments/receipts with multipart/form-data. After PayHere redirect back, the return URL is /courses/[id]/payment-return which polls enrollment status. The subscription status badge on the dashboard shows ACTIVE (green), PENDING (amber), or SUSPENDED (red) based on GET /api/enrollments?.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: PayHere Redirect Flow</span>
+<span class="bold">**Given**</span> a student clicks "Pay via PayHere" on a course purchase page
+<span class="bold">**When**</span> POST /api/payments/checkout returns { redirect_url }
+<span class="bold">**Then**</span> window.location.href is set to redirect_url, taking the student to PayHere's hosted checkout page
+
+<span class="h3">### AC2: PayHere Return Handling</span>
+<span class="bold">**Given**</span> PayHere redirects the student back to /courses/{id}/payment-return after a transaction
+<span class="bold">**When**</span> the return page loads
+<span class="bold">**Then**</span> the page polls GET /api/enrollments?course_id={id} every 2 seconds for up to 30 seconds; on ACTIVE status, redirects to /courses/{id}/lesson/1 with a success toast; on timeout, shows "Payment processing — check back shortly"
+
+<span class="h3">### AC3: Manual Receipt Upload</span>
+<span class="bold">**Given**</span> a student selects the "Upload Manual Receipt" option and uploads a JPEG/PNG/PDF ≤ 2MB
+<span class="bold">**When**</span> POST /api/payments/receipts succeeds
+<span class="bold">**Then**</span> HTTP 201 is returned, a success message is shown ("Receipt submitted — pending admin verification"), and the subscription status badge shows PENDING
+
+<span class="h3">### AC4: Subscription Status Badge on Dashboard</span>
+<span class="bold">**Given**</span> an authenticated student views their dashboard
+<span class="bold">**When**</span> GET /api/enrollments returns enrollment records
+<span class="bold">**Then**</span> each enrolled course card shows a badge: "Active" (green) for ACTIVE, "Pending Verification" (amber) for PENDING manual receipts, "Subscription Expired" (red) for SUSPENDED
+
+<span class="h2">## Technical Notes</span>
+- PayHere redirect: use window.location.href — do NOT use Next.js router.push (must cause a full page navigation)
+- Polling: use setInterval(2000) with a 30s cutoff; clear interval on component unmount
+- File upload: use multipart/form-data with FormData(); do NOT use JSON body for file upload
+- Accepted file types: enforce in the <input accept=".jpg,.jpeg,.png,.pdf"> and re-validate on the server
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: PayHere checkout button → POST /payments/checkout called → window.location set to redirect_url
+<span class="chk">- [ ]</span> Unit test: receipt upload form → FormData contains file and course_id
+<span class="chk">- [ ]</span> Integration test: submit receipt → 201 → PENDING badge shown on dashboard
+<span class="chk">- [ ]</span> Manual test: full PayHere sandbox flow on staging → enrollment status becomes ACTIVE after webhook
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /courses/[id]/purchase and /courses/[id]/payment-return pages implemented
+<span class="chk">- [ ]</span> Subscription status badge shown on dashboard for all enrolled courses
+<span class="chk">- [ ]</span> Manual receipt upload form working on staging
+<span class="chk">- [ ]</span> Responsive layout on mobile and desktop
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #28 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #15 (payment_service endpoints on staging), #16 (enrollment status queryable), #22 (dashboard base page exists)</div>
+</div>
+
+<!-- ════════ ISSUE #29 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#29</span>
+      <span class="t-title">test(payment): write integration tests for PayHere webhook flow — mock HMAC → enrollment activated → access granted</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-tests">edura-tests</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 8</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want a full integration test for the PayHere → enrollment → content access chain so that we can prove the most critical business flow works correctly before the client demo.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-007, FR-008, FR-009, BR-001 (the core payment-to-access flow)</span>
+<span class="ref">- SDS Reference: Section 5.2.3 (Student Enrollment and Payment Processing Flow Diagram)</span>
+<span class="ref">- 2-Week Plan: "the most critical cross-service flow" — must be proven by Day 8</span>
+
+This test in edura-tests spans three services: payment_service, enrollment_service, and content_service. It seeds a student account and a published course, sends a mock PayHere webhook with a valid HMAC signature, then asserts the entire downstream chain fired correctly. It uses httpx against the staging API URL and verifies DB state via admin API endpoints. The test must clean up all seeded data after running.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Webhook to Enrollment Chain Verified</span>
+<span class="bold">**Given**</span> a seeded student and course on staging
+<span class="bold">**When**</span> a mock PayHere webhook POST is sent with a valid HMAC signature and status_code=2
+<span class="bold">**Then**</span> within 10 seconds: payment_status = SUCCESS in payment DB, enrollment status = ACTIVE in enrollment DB, and GET /api/enrollments returns ACTIVE for that student+course pair
+
+<span class="h3">### AC2: Content Access Granted After Enrollment</span>
+<span class="bold">**Given**</span> the enrollment is now ACTIVE (from AC1)
+<span class="bold">**When**</span> the student sends POST /api/content/signed-url for a lesson in that course
+<span class="bold">**Then**</span> HTTP 200 is returned with a valid signed_url — confirming content access is now unlocked
+
+<span class="h3">### AC3: Invalid HMAC Blocks Enrollment</span>
+<span class="bold">**Given**</span> a webhook POST with an invalid HMAC signature
+<span class="bold">**When**</span> payment_service processes it
+<span class="bold">**Then**</span> HTTP 400 is returned and NO enrollment record is created — verified by GET /api/enrollments returning 404
+
+<span class="h3">### AC4: Duplicate Webhook is Idempotent</span>
+<span class="bold">**Given**</span> a valid webhook has already been processed (AC1)
+<span class="bold">**When**</span> the same webhook is sent a second time
+<span class="bold">**Then**</span> HTTP 200 is returned, payment_status remains SUCCESS (not duplicated), and enrollment count for that student+course is still exactly 1
+
+<span class="h2">## Technical Notes</span>
+- Use httpx.Client(base_url=STAGING_API_URL) for all requests
+- HMAC computation: import the same verify_hmac logic or recompute using test PAYHERE_MERCHANT_SECRET from environment
+- Seed data: create test student and course via admin API; record their IDs for cleanup
+- Cleanup: DELETE test student, payment, and enrollment records via admin API after test completes (pass or fail — use try/finally)
+- Test file: edura-tests/integration/test_payment_enrollment_flow.py
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Integration test AC1: valid webhook → payment SUCCESS + enrollment ACTIVE within 10s
+<span class="chk">- [ ]</span> Integration test AC2: content signed-url returns 200 after enrollment active
+<span class="chk">- [ ]</span> Integration test AC3: invalid HMAC → 400, no enrollment created
+<span class="chk">- [ ]</span> Integration test AC4: duplicate webhook → idempotent, no duplicate records
+<span class="chk">- [ ]</span> Cleanup: all seeded test data removed in try/finally block
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> edura-tests/integration/test_payment_enrollment_flow.py committed and all 4 ACs passing
+<span class="chk">- [ ]</span> Test runs automatically in CI integration stage (develop + main only)
+<span class="chk">- [ ]</span> All seeded test data cleaned up after each test run
+<span class="chk">- [ ]</span> PR raised against develop in edura-tests; 1 peer review; CI passes
+<span class="chk">- [ ]</span> Closes #29 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #15 (payment_service on staging), #16 (enrollment_service on staging), #14 (content_service on staging), #18 (staging deploy live)</div>
+</div>
+
+<!-- ════════ ISSUE #30 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#30</span>
+      <span class="t-title">feat(ui-frontend): build admin dashboard with receipt verification table, user management, violation log, and analytics charts</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 9</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a system administrator, I want a dedicated admin dashboard to manage pending receipts, view user accounts, review violation reports, and see revenue analytics charts so that I can operate the institute's platform efficiently from a single screen.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 6.1.7 (Admin Dashboard wireframe — Figure 65), Section 7.3.1 (Administrator role permissions)</span>
+<span class="ref">- SRS Reference: FR-006 (receipt verification), UC-002, Section 14.2</span>
+<span class="ref">- Client feedback: payment verification dashboard was specifically reviewed and confirmed during the client demo session (Section 4.2.1)</span>
+
+The /admin route is protected by the ADMIN role guard — any non-admin user who navigates here is redirected to /dashboard with a toast error. The admin dashboard has four tabs: (1) Pending Receipts, (2) User Management, (3) Violation Log, (4) Analytics. Recharts is used for the analytics tab (bar chart for revenue by month, line chart for enrollment trends). All data is fetched from the staging admin_service and analytics_service APIs.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: ADMIN Route Guard</span>
+<span class="bold">**Given**</span> a STUDENT or TEACHER navigates to /admin
+<span class="bold">**When**</span> the route guard checks the role in Redux state
+<span class="bold">**Then**</span> the user is redirected to /dashboard with toast: "Access denied — Administrator only"
+
+<span class="h3">### AC2: Receipt Verification Table</span>
+<span class="bold">**Given**</span> an ADMIN views the Pending Receipts tab
+<span class="bold">**When**</span> the tab loads
+<span class="bold">**Then**</span> a table shows all PENDING receipts with columns: Student Name, Course, Upload Date, Receipt Preview (thumbnail link), Approve button, Reject button; clicking Approve sends PUT /api/admin/payments/receipts/{id} with action=APPROVE
+
+<span class="h3">### AC3: User Management Table</span>
+<span class="bold">**Given**</span> an ADMIN views the User Management tab
+<span class="bold">**When**</span> the tab loads
+<span class="bold">**Then**</span> a searchable, filterable table shows all users with columns: Name, Email, Role (editable dropdown), Status (Active/Inactive), Actions (Deactivate); role changes send PUT /api/admin/users/{id}/role
+
+<span class="h3">### AC4: Analytics Charts</span>
+<span class="bold">**Given**</span> an ADMIN views the Analytics tab
+<span class="bold">**When**</span> the tab loads
+<span class="bold">**Then**</span> a monthly revenue bar chart (Recharts BarChart) and an enrollment trend line chart (Recharts LineChart) are rendered with data from GET /api/analytics/revenue and GET /api/analytics/courses
+
+<span class="h3">### AC5: Violation Log Table</span>
+<span class="bold">**Given**</span> an ADMIN views the Violation Log tab
+<span class="bold">**When**</span> the tab loads
+<span class="bold">**Then**</span> a table shows all violation records with columns: Student Name, Assessment Title, Violation Type, Timestamp; sortable by Timestamp descending
+
+<span class="h2">## Technical Notes</span>
+- Use tab-based navigation (not separate routes) for the 4 admin sections — URL remains /admin
+- Recharts: import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts'
+- Receipt thumbnail: render as a clickable <img> tag using the Azure Blob URL from the receipt record
+- Optimistic UI for approve/reject: immediately remove from Pending table on click; roll back on API error
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: ADMIN route guard → STUDENT role redirects to /dashboard
+<span class="chk">- [ ]</span> Unit test: approve receipt button → PUT /admin/payments/receipts/{id} called with action=APPROVE
+<span class="chk">- [ ]</span> Integration test: ADMIN views Pending Receipts tab → table populated from staging admin_service
+<span class="chk">- [ ]</span> Integration test: Analytics tab → Recharts renders with data from staging analytics_service
+<span class="chk">- [ ]</span> Manual test: approve a pending receipt → enrollment becomes ACTIVE for that student
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /admin page with all 4 tabs implemented in edura-frontend
+<span class="chk">- [ ]</span> ADMIN role guard blocking non-admin users
+<span class="chk">- [ ]</span> All tables and charts populated from staging API data
+<span class="chk">- [ ]</span> Responsive layout on desktop (admin dashboard is desktop-primary)
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #30 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #21 (admin_service endpoints on staging), #23 (analytics_service on staging), #22 (auth HOC and role in Redux state)</div>
+</div>
+
+</div><!-- end container -->
+</body>
+</html>
