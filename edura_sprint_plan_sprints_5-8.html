@@ -856,7 +856,7 @@ footer {
   </tr></thead>
   <tbody>
     <tr><td><div class="svc-name">Sprint 5</div></td><td>1–4</td><td>Jun 16 – Jul 13</td><td>4 weeks</td><td>Foundation &amp; Infrastructure</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#01 – #12, #18, #25</td></tr>
-    <tr><td><div class="svc-name">Sprint 6</div></td><td>5–8</td><td>Jul 14 – Aug 10</td><td>4 weeks</td><td>Core Features</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#13 – #17, #19 – #23</td></tr>
+    <tr><td><div class="svc-name">Sprint 6</div></td><td>5–8</td><td>Jul 14 – Aug 10</td><td>4 weeks</td><td>Core Features</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#13 – #17, #19 – #23, #49</td></tr>
     <tr><td><div class="svc-name">Sprint 7</div></td><td>9–12</td><td>Aug 11 – Sep 7</td><td>4 weeks</td><td>Integration &amp; UX</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#24, #26 – #33, #36</td></tr>
     <tr><td><div class="svc-name">Sprint 8</div></td><td>13–16</td><td>Sep 28 – Oct 23</td><td>4 weeks</td><td>Quality &amp; Release</td><td>Final panel demo</td><td class="svc-tech">DDP-#34, #35, #37 – #48</td></tr>
   </tbody>
@@ -869,7 +869,7 @@ footer {
   <tbody>
     <tr><td>1</td><td><div class="svc-name">Development Kick-Off</div></td><td>✓ Repo setup</td><td>Add code repos, set up CI scaffold, agree coding standards</td><td>Jun 16 – Jun 22</td><td class="svc-tech">DDP-#01 – #05</td></tr>
     <tr><td>1–4</td><td><div class="svc-name">Sprint 5 – Core Foundation</div></td><td>Sprint 5 Review</td><td>Data layer, auth, core domain models, CI pipeline live</td><td>Jun 16 – Jul 13</td><td class="svc-tech">14 tasks</td></tr>
-    <tr><td>5–8</td><td><div class="svc-name">Sprint 6 – Feature Development</div></td><td>Sprint 6 Review</td><td>Primary features implemented and unit-tested</td><td>Jul 14 – Aug 10</td><td class="svc-tech">10 tasks</td></tr>
+    <tr><td>5–8</td><td><div class="svc-name">Sprint 6 – Feature Development</div></td><td>Sprint 6 Review</td><td>Primary features implemented and unit-tested</td><td>Jul 14 – Aug 10</td><td class="svc-tech">11 tasks</td></tr>
     <tr><td>9–12</td><td><div class="svc-name">Sprint 7 – Integration &amp; Polish</div></td><td>Sprint 7 Review</td><td>Integration testing, API contracts, UI completion</td><td>Aug 11 – Sep 7</td><td class="svc-tech">10 tasks</td></tr>
     <tr><td>13–14</td><td><div class="svc-name">Sprint 8 – Testing &amp; Hardening</div></td><td>Test coverage gate</td><td>Full test suite, performance testing, security review</td><td>Sep 28 – Oct 11</td><td class="svc-tech">6 tasks</td></tr>
     <tr><td>15</td><td><div class="svc-name">Pre-Demo Staging</div></td><td>Supervisor sign-off</td><td>Staged deployment; end-to-end demo rehearsal</td><td>Oct 12 – Oct 18</td><td class="svc-tech">5 tasks</td></tr>
@@ -1108,7 +1108,7 @@ footer {
     <div class="day-header">
       <span class="day-label s6">WEEK 8</span>
       <span class="day-focus">Frontend skeleton (login, dashboard, catalog) + Analytics service</span>
-      <span class="day-hours">Aug 4 – Aug 10 · ~9h of tasks</span>
+      <span class="day-hours">Aug 4 – Aug 10 · ~10h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
@@ -1122,6 +1122,12 @@ footer {
         <div><div class="task-title">Analytics Service: aggregation queries + PDF/Excel report endpoints</div><div class="task-desc">GET /analytics/courses/{id}/performance (pass rate, avg score, completion). GET /analytics/revenue (subscription summary). GET /analytics/reports/export?format=pdf|excel. Use materialized views for heavy aggregations. ReportLab for PDF, openpyxl for Excel.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#49<span class="orig">Sprint 6</span></div>
+        <div><div class="task-title">Sprint 6 Retrospective: document Sprint 6 outcome, metrics, and update GitHub Project board velocity</div><div class="task-desc">Review Sprint 6 velocity (planned vs. completed), document what went well and what to improve across core service APIs, record test coverage and CI pass rate, update risk log, and re-plan Sprint 7. Create documents/retrospectives/sprint-6.md.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">1h</div>
       </div>
       <div class="ceremony">Sprint 6 Review (Demo + retrospective) — Gate check: open the staging URL and verify every service returns {"status":"ok"} on GET /health. Any service not live is fixed before Sprint 7 starts.</div>
     </div>
