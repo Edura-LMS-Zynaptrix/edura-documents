@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDURA — Issues #31 to #48 with Repository Mapping</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{--bg:#0b0d14;--s1:#111420;--s2:#181c2a;--s3:#1f2436;--border:#252c42;--teal:#0d9488;--blue:#3b82f6;--amber:#f59e0b;--green:#10b981;--red:#ef4444;--purple:#8b5cf6;--orange:#f97316;--cyan:#06b6d4;--text:#e2e8f0;--muted:#64748b}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.7}
+code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--s3);border:1px solid var(--border);padding:1px 5px;border-radius:3px;color:var(--blue)}
+.header{background:linear-gradient(135deg,#0d1117 0%,#0a1628 60%,#0d1a1a 100%);border-bottom:1px solid var(--border);padding:44px 56px 36px}
+.header-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(13,148,136,.15);border:1px solid rgba(13,148,136,.35);border-radius:20px;padding:4px 14px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px}
+.header h1{font-size:36px;font-weight:800;line-height:1.1;margin-bottom:10px;background:linear-gradient(135deg,#e2e8f0 0%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.header p{color:var(--muted);font-size:14px;max-width:700px}
+.container{max-width:1100px;margin:0 auto;padding:0 56px 80px}
+.section-head{margin-top:48px;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.section-num{width:28px;height:28px;background:var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.section-title{font-size:18px;font-weight:700}
+.repo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0 28px}
+.repo-card{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:3px solid var(--border)}
+.rc-infra{border-top-color:var(--orange)}.rc-backend{border-top-color:var(--blue)}.rc-frontend{border-top-color:var(--green)}.rc-tests{border-top-color:var(--cyan)}.rc-docs{border-top-color:var(--muted)}
+.repo-name{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;margin-bottom:6px}
+.rc-infra .repo-name{color:var(--orange)}.rc-backend .repo-name{color:var(--blue)}.rc-frontend .repo-name{color:var(--green)}.rc-tests .repo-name{color:var(--cyan)}.rc-docs .repo-name{color:var(--muted)}
+.repo-desc{font-size:11px;color:var(--muted)}
+.map-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:32px}
+.map-table thead tr{border-bottom:1px solid var(--border)}
+.map-table th{font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:8px 14px 12px;text-align:left;font-weight:400}
+.map-table td{padding:9px 14px;border-bottom:1px solid rgba(37,44,66,.5);vertical-align:middle}
+.map-table tr:last-child td{border-bottom:none}
+.issue-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);font-weight:600}
+.issue-title{color:var(--text);font-size:12px;font-weight:500}
+.repo-badge{display:inline-flex;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:3px 9px;border-radius:5px;white-space:nowrap}
+.rb-infra{background:rgba(249,115,22,.12);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
+.rb-backend{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
+.rb-frontend{background:rgba(16,185,129,.12);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.rb-tests{background:rgba(6,182,212,.12);color:var(--cyan);border:1px solid rgba(6,182,212,.3)}
+.rb-docs{background:rgba(100,116,139,.12);color:var(--muted);border:1px solid rgba(100,116,139,.3)}
+.label-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:600;white-space:nowrap}
+.lb-teal{background:rgba(13,148,136,.12);color:var(--teal);border:1px solid rgba(13,148,136,.3)}
+.lb-blue{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
+.lb-green{background:rgba(16,185,129,.12);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.lb-red{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.lb-amber{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.lb-orange{background:rgba(249,115,22,.12);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
+.lb-purple{background:rgba(139,92,246,.12);color:var(--purple);border:1px solid rgba(139,92,246,.3)}
+.lb-gray{background:rgba(100,116,139,.12);color:var(--muted);border:1px solid rgba(100,116,139,.3)}
+.note{display:flex;gap:12px;padding:13px 18px;border-radius:8px;margin:14px 0;font-size:12.5px}
+.note.info{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2)}
+.note.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25)}
+.note-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.note-body{color:var(--muted);line-height:1.7}
+.note-body strong{color:var(--text)}
+.ticket{background:var(--s1);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px}
+.ticket-top{background:var(--s2);border-bottom:1px solid var(--border);padding:14px 20px}
+.ticket-top-row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.t-id{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.35);color:var(--blue);padding:3px 10px;border-radius:5px}
+.t-title{font-size:14px;font-weight:700;color:var(--text);flex:1;min-width:200px}
+.ticket-top-row2{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ticket-meta{display:flex;gap:14px;flex-wrap:wrap;padding:8px 20px 12px;border-bottom:1px solid var(--border);font-size:11.5px}
+.tm{display:flex;align-items:center;gap:5px;color:var(--muted)}
+.tm strong{color:var(--text);font-size:11px}
+.ticket-body{padding:20px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;color:#8899b8;white-space:pre-wrap;word-break:break-word}
+.ticket-body .h2{color:#82b1ff;font-weight:700;font-size:12px}
+.ticket-body .h3{color:var(--teal);font-weight:600}
+.ticket-body .bold{color:var(--text);font-weight:600}
+.ticket-body .chk{color:var(--amber)}
+.ticket-body .ref{color:var(--green)}
+.week-divider{margin:40px 0 16px;display:flex;align-items:center;gap:14px}
+.week-pill{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.pill-w2{background:rgba(6,214,160,.15);color:#06d6a0;border:1px solid rgba(6,214,160,.3)}
+.week-line{flex:1;height:1px;background:var(--border)}
+@media(max-width:800px){.container{padding:0 16px 60px}.header{padding:32px 16px}.repo-grid{grid-template-columns:1fr 1fr}.map-table{display:block;overflow-x:auto}}
+
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-badge">● EDURA LMS · Team ZYNAPTRIX · Issues #31–#48</div>
+  <h1>Repository Mapping &amp;<br>Issues #31–#48 Descriptions</h1>
+  <p>The final 18 issues of the 48-issue backlog — Days 9–14: remaining UI, integration tests, security and coverage, production deployment, rehearsals, final report, and submission. Continues directly from the #11–#30 document.</p>
+</div>
+<div class="container">
+
+<div class="section-head"><div class="section-num">①</div><div class="section-title">Issues #31–#48 — Repository Assignment at a Glance</div></div>
+<div class="repo-grid"><div class="repo-card rc-frontend"><div class="repo-name">edura-frontend</div><div class="repo-desc">3 of issues #31–#48</div></div><div class="repo-card rc-backend"><div class="repo-name">edura-backend</div><div class="repo-desc">2 of issues #31–#48</div></div><div class="repo-card rc-infra"><div class="repo-name">edura-infra</div><div class="repo-desc">3 of issues #31–#48</div></div><div class="repo-card rc-tests"><div class="repo-name">edura-tests</div><div class="repo-desc">2 of issues #31–#48</div></div><div class="repo-card rc-docs"><div class="repo-name">edura-documents</div><div class="repo-desc">8 of issues #31–#48</div></div></div>
+
+<table class="map-table">
+  <thead><tr><th>#</th><th>Issue Title</th><th>Repository</th><th>Why This Repo</th><th>Epic</th><th>Priority</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><span class="issue-num">#31</span></td>
+      <td><span class="issue-title">Build student progress dashboard, leaderboard, and certificate download page</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js pages and Recharts components — frontend source code in edura-frontend. The small certificate-PDF endpoint it needs is a linked backend PR (see Technical Notes).</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#32</span></td>
+      <td><span class="issue-title">Integration tests for full assessment flow (start → expire → grade → progress)</span></td>
+      <td><span class="repo-badge rb-tests">edura-tests</span></td>
+      <td style="font-size:11px;color:var(--muted);">Cross-service test spanning assessment_service, progress_service, and the admin API — belongs in edura-tests.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#33</span></td>
+      <td><span class="issue-title">Build teacher dashboard with course, module/lesson, and assessment builders</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Next.js /teacher routes, forms, and Redux state — frontend source code in edura-frontend.</td>
+      <td><span class="label-badge lb-green">epic:ui-frontend</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#34</span></td>
+      <td><span class="issue-title">OWASP Top 10 compliance sweep across all services</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Audit tests and fixes land in the service code and shared/ library in edura-backend; the evidence PDF is committed to edura-documents in a linked PR.</td>
+      <td><span class="label-badge lb-purple">epic:security</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#35</span></td>
+      <td><span class="issue-title">Push unit test coverage to ≥80% (≥90% auth and payment)</span></td>
+      <td><span class="repo-badge rb-backend">edura-backend</span></td>
+      <td style="font-size:11px;color:var(--muted);">Unit tests live in each service folder under edura-backend/&lt;service&gt;/tests/; the coverage report is committed to edura-documents in a linked PR.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#36</span></td>
+      <td><span class="issue-title">Integrate Gemini AI assistant widget (optional)</span></td>
+      <td><span class="repo-badge rb-frontend">edura-frontend</span></td>
+      <td style="font-size:11px;color:var(--muted);">A chat widget plus a thin server-side Next.js route handler that holds the API key — all in edura-frontend, which avoids creating a 12th microservice.</td>
+      <td><span class="label-badge lb-amber">epic:integration</span></td>
+      <td><span class="label-badge lb-gray">P4</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#37</span></td>
+      <td><span class="issue-title">Run full 5-scenario demo walkthrough on staging</span></td>
+      <td><span class="repo-badge rb-tests">edura-tests</span></td>
+      <td style="font-size:11px;color:var(--muted);">The scripted scenarios and the walkthrough log (documents/demo-scenarios.md plus a result log) live in edura-tests.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#38</span></td>
+      <td><span class="issue-title">Resolve all P1-Critical bugs from the Day 11 walkthrough</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Tracking issue only — the individual bug-fix issues and PRs live in the repo that owns each defect; this record lives in edura-documents like #01 and #05.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#39</span></td>
+      <td><span class="issue-title">Create production Kubernetes manifests</span></td>
+      <td><span class="repo-badge rb-infra">edura-infra</span></td>
+      <td style="font-size:11px;color:var(--muted);">Kubernetes manifests live under k8s/production/ in edura-infra alongside the staging manifests from #18.</td>
+      <td><span class="label-badge lb-green">epic:ci-cd</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#40</span></td>
+      <td><span class="issue-title">Execute production deploy to AKS and tag v1.0.0</span></td>
+      <td><span class="repo-badge rb-infra">edura-infra</span></td>
+      <td style="font-size:11px;color:var(--muted);">The deploy-prod job, environment protection, and release tagging are configured and run from edura-infra; the tag is also applied in the other repos.</td>
+      <td><span class="label-badge lb-green">epic:ci-cd</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#41</span></td>
+      <td><span class="issue-title">Seed production database with demo accounts and content</span></td>
+      <td><span class="repo-badge rb-infra">edura-infra</span></td>
+      <td style="font-size:11px;color:var(--muted);">An idempotent seed script (infra/scripts/seed_production.py) and its runbook — operational tooling that belongs with deployment code in edura-infra.</td>
+      <td><span class="label-badge lb-teal">epic:dev-setup</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#42</span></td>
+      <td><span class="issue-title">Resolve P2-High bugs and assemble final deliverables</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Tracking issue and deliverable pack — the documents (coverage, test register, OWASP, submission list) are committed to edura-documents; individual P2 fixes live in their owning repos.</td>
+      <td><span class="label-badge lb-orange">epic:core-features</span></td>
+      <td><span class="label-badge lb-orange">P2</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#43</span></td>
+      <td><span class="issue-title">First full 20-minute demo rehearsal on production</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Demo script, timing log, and rehearsal notes are documentation — documents/demo/ in edura-documents.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#44</span></td>
+      <td><span class="issue-title">Second rehearsal with Q&amp;A simulation</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Question bank and prepared answers are documentation — documents/demo/qa-prep.md in edura-documents.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#45</span></td>
+      <td><span class="issue-title">Write final development report Chapters 4 and 5</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Report chapters are documentation — documents/final-report/ in edura-documents.</td>
+      <td><span class="label-badge lb-gray">epic:documentation</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#46</span></td>
+      <td><span class="issue-title">Pre-demo verification of production and demo accounts</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">A repeatable checklist and the day-of results log — documents/demo/pre-demo-checklist.md in edura-documents.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#47</span></td>
+      <td><span class="issue-title">Live panel demonstration and Q&amp;A</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Event-tracking issue with the demo-day run sheet — lives in edura-documents with the other process records.</td>
+      <td><span class="label-badge lb-blue">epic:testing</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+    <tr>
+      <td><span class="issue-num">#48</span></td>
+      <td><span class="issue-title">Submit final report and peer evaluations; final retrospective</span></td>
+      <td><span class="repo-badge rb-docs">edura-documents</span></td>
+      <td style="font-size:11px;color:var(--muted);">Submission records, the final retrospective, and peer-evaluation tracking — all documentation in edura-documents.</td>
+      <td><span class="label-badge lb-gray">epic:documentation</span></td>
+      <td><span class="label-badge lb-red">P1</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="section-head"><div class="section-num">②</div><div class="section-title">Gaps Found While Writing These Tickets</div></div>
+<div class="note warn"><div class="note-icon">⚠</div><div class="note-body">
+<strong>Cross-ticket gaps to resolve before or during Day 9–10.</strong> These come from comparing issues #01–#30, the war plan, and the SRS/SDS — none of them has its own ticket yet.<br><br>
+<strong>1. Admin violations list endpoint.</strong> The admin dashboard (#30) and the assessment flow test (#32) need <code>GET /api/admin/violations</code>, but #21's acceptance criteria do not include it. Add it to #21.<br>
+<strong>2. Assessment creation endpoints.</strong> The teacher dashboard (#33) needs <code>POST /api/assessments</code> with questions. #17 only specifies start / submit / violations. Add creation to #17.<br>
+<strong>3. Certificate PDF download.</strong> #19 only writes the Certificate record; the download button in #31 needs a PDF endpoint in progress_service. #31 includes this as a linked backend PR.<br>
+<strong>4. PayHere webhook reconciliation (NFR-004).</strong> The SRS requires missed webhooks to be reconciled by polling within 15 minutes; no ticket implements it. Either add it to #15 or list it honestly as a limitation (#44, #45).<br>
+<strong>5. Production Redis / RabbitMQ.</strong> The SDS names Azure Cache for Redis but does not say where RabbitMQ runs in production. #39 assumes a StatefulSet; record the choice in an ADR.<br>
+<strong>6. Milestone date.</strong> #48 happens after the Day 14 demo, so the "Sprint 5 — Week 2" due date should allow 48 extra hours.
+</div></div>
+
+<div class="section-head"><div class="section-num">③</div><div class="section-title">Full Issue Descriptions — Ready to Paste into GitHub</div></div>
+<div class="note info"><div class="note-icon">ℹ</div><div class="note-body"><strong>How to use these:</strong> Go to the correct repository → Issues → New Issue → paste the title into the Title field and the body into the Description field, then set the sidebar fields (assignee, labels, milestone, priority) as shown in each ticket's metadata row. Issues in <strong>edura-documents</strong> (#38, #42–#48) are tracking or documentation records; child bug issues for #38 and #42 go in the repo that owns the defect.</div></div>
+
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 9</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#31</span>
+      <span class="t-title">feat(ui-frontend): build student progress dashboard, leaderboard, and certificate download page</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 9</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want a graphical and numerical view of my course progress, a leaderboard of top performers, and a certificate download button so that I can see how close I am to finishing and stay motivated.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-010 (progress tracking), FR-014 (gamification), FR-015 (digital certificates), BR-004 (certificate eligibility)</span>
+<span class="ref">- SDS Reference: Section 6.1.6 (Progress and Analytics Dashboard — Figures 63 and 64), Section 5.2.5 (Progress Tracking and Certificate Generation Flow)</span>
+<span class="ref">- Prototype: Figma screens — Graphical Dashboard, Numerical Dashboard, Logged-in User Leader Board, Visitor Leader Board</span>
+
+The prototype defines two dashboard views (graphical and numerical) and a leaderboard. All data comes from progress_service (issue #19): GET /api/progress/courses/{course_id} for completion and assessment scores, and GET /api/progress/courses/{course_id}/leaderboard for the Redis-backed top 10. The certificate button is only enabled once certificate_issued is true (BR-004).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Graphical Dashboard</span>
+<span class="bold">**Given**</span> an authenticated student with at least one enrolled course visits /progress
+<span class="bold">**When**</span> the page loads and the "Graphical" tab is active
+<span class="bold">**Then**</span> each enrolled course shows a Recharts completion chart (completion_percentage) and a bar chart of assessment scores, using live data from GET /api/progress/courses/{course_id}
+
+<span class="h3">### AC2: Numerical Dashboard</span>
+<span class="bold">**Given**</span> the student switches to the "Numerical" tab
+<span class="bold">**When**</span> the view renders
+<span class="bold">**Then**</span> a table shows per course: lessons watched / total lessons, completion %, each assessment score, and a PASSED/FAILED badge — the same data as AC1, no extra API calls
+
+<span class="h3">### AC3: Leaderboard Top 10</span>
+<span class="bold">**Given**</span> a student opens /leaderboard and picks a course
+<span class="bold">**When**</span> GET /api/progress/courses/{course_id}/leaderboard returns
+<span class="bold">**Then**</span> the top 10 students are listed with rank, name, and points; the current student's row is highlighted if present; an unauthenticated visitor is shown a login prompt instead of the data
+
+<span class="h3">### AC4: Certificate Download</span>
+<span class="bold">**Given**</span> progress data returns certificate_issued = true for a course
+<span class="bold">**When**</span> the student clicks "Download Certificate"
+<span class="bold">**Then**</span> a PDF is downloaded; if certificate_issued = false the button is disabled with the tooltip "Complete all lessons and pass all assessments to unlock"
+
+<span class="h3">### AC5: Loading, Empty, and Error States</span>
+<span class="bold">**Given**</span> the API is slow, returns no enrollments, or returns an error
+<span class="bold">**When**</span> the page renders
+<span class="bold">**Then**</span> a skeleton loader, an "Enroll in a course to see your progress" empty state, or a retry banner is shown — the page never crashes or shows raw error text
+
+<span class="h2">## Technical Notes</span>
+- Routes: /app/progress/page.tsx and /app/leaderboard/page.tsx; both wrapped in the protected route HOC from #22
+- Use Recharts (BarChart, RadialBarChart) — the same library as the admin dashboard (#30)
+- GAP TO CLOSE: issue #19 only creates the Certificate DB record. A download endpoint GET /api/progress/certificates/{certificate_id}/download (ReportLab PDF via StreamingResponse, student must own the certificate) must be added to progress_service. Raise a companion PR in edura-backend that references DDP-#31
+- Use RTK Query for the three endpoints; cache per course_id
+- Gamification badges: render from points thresholds on the client (static thresholds are acceptable for the demo)
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: completion chart receives correct data from a mocked progress response
+<span class="chk">- [ ]</span> Unit test: certificate button disabled when certificate_issued = false, enabled when true
+<span class="chk">- [ ]</span> Integration test: /progress renders live data from staging for a seeded student
+<span class="chk">- [ ]</span> Integration test: leaderboard highlights the current student's row
+<span class="chk">- [ ]</span> Negative test: API 500 → retry banner shown, no uncaught exception
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> /progress and /leaderboard pages implemented in edura-frontend
+<span class="chk">- [ ]</span> Certificate download works end-to-end on staging (including the linked backend endpoint)
+<span class="chk">- [ ]</span> Responsive layout verified on mobile and desktop
+<span class="chk">- [ ]</span> No new ESLint errors; CI passes
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review completed
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #31 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #19 (progress endpoints), #22 (auth HOC and API client), #18 (staging live)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#32</span>
+      <span class="t-title">test(assessment): write integration tests for full assessment flow — start timed session → auto-submit → grade → progress update</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-tests">edura-tests</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 9</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want an automated integration test for the assessment-to-progress chain so that we can prove timed quizzes, grading, anti-cheat logging, and certificate eligibility work together before the client demo.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-004, FR-005, FR-010, FR-013, BR-002, BR-003, BR-004, BR-006</span>
+<span class="ref">- SDS Reference: Section 5.2.4 (Assessment Taking and Automated Grading Flow), Section 5.2.5 (Progress Tracking and Certificate Generation Flow)</span>
+
+The test lives in edura-tests and drives the staging API with httpx. It seeds an enrolled student and a course with a 5-question assessment (MCQ + True/False + one short-answer) with a very short time limit variant for the expiry test. It then verifies the downstream effects through public and admin API endpoints rather than direct DB access. All seeded data is removed in a try/finally cleanup.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Start → Submit → Grade → Progress Updated</span>
+<span class="bold">**Given**</span> a seeded enrolled student and a published assessment
+<span class="bold">**When**</span> the student calls POST /api/assessments/{id}/start then POST /api/assessments/{id}/submit with all answers
+<span class="bold">**Then**</span> the submit response contains the correct score, and within 10 seconds GET /api/progress/courses/{course_id} shows the assessment score and updated leaderboard points (assessment.graded consumed by progress_service)
+
+<span class="h3">### AC2: Auto-Submit on Timer Expiry</span>
+<span class="bold">**Given**</span> an assessment with time_limit_seconds = 5 and a started session with partial answers
+<span class="bold">**When**</span> the test waits 7 seconds and then calls POST /api/assessments/{id}/submit
+<span class="bold">**Then**</span> HTTP 200 is returned with auto_submitted = true and the score reflects only the answers sent
+
+<span class="h3">### AC3: Violation Logging</span>
+<span class="bold">**Given**</span> an active session
+<span class="bold">**When**</span> the test POSTs /api/assessments/{id}/violations with violation_type = TAB_SWITCH
+<span class="bold">**Then**</span> HTTP 204 is returned and GET /api/admin/violations (as ADMIN) lists the new record for that student and assessment
+
+<span class="h3">### AC4: Duplicate Session Blocked</span>
+<span class="bold">**Given**</span> an active session already exists
+<span class="bold">**When**</span> POST /api/assessments/{id}/start is called again
+<span class="bold">**Then**</span> HTTP 409 SESSION_ALREADY_ACTIVE is returned with time_remaining_seconds
+
+<span class="h3">### AC5: Short-Answer Flagged for Manual Review</span>
+<span class="bold">**Given**</span> an assessment containing one short-answer question
+<span class="bold">**When**</span> the student submits
+<span class="bold">**Then**</span> the objective questions are graded, the submission is flagged requires_manual_review = true, and the short-answer question contributes 0 to the score (BR-002)
+
+<span class="h3">### AC6: Certificate Eligibility Chain</span>
+<span class="bold">**Given**</span> a student who has watched all lessons (lesson.watched sent for each) and then passes the final assessment
+<span class="bold">**When**</span> assessment.graded is consumed
+<span class="bold">**Then**</span> GET /api/progress/courses/{course_id} returns certificate_issued = true
+
+<span class="h2">## Technical Notes</span>
+- Test file: edura-tests/integration/test_assessment_flow.py; run with pytest + httpx.Client(base_url=STAGING_API_URL), timeout 30s
+- Seed through the teacher/admin APIs; keep created IDs in a fixture and delete in teardown (try/finally)
+- Event-driven assertions use polling with a 10-second ceiling (poll every 500ms) — never a fixed sleep except the deliberate expiry wait in AC2
+- The violations list endpoint (GET /api/admin/violations) is needed by the admin dashboard too (#30). If it is not in the admin_service implementation from #21, add it in that service before this test can pass
+- Do not call RabbitMQ directly; verify its effects through progress_service responses
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Integration test AC1: full happy path with score and progress asserted
+<span class="chk">- [ ]</span> Integration test AC2: expiry → auto_submitted true
+<span class="chk">- [ ]</span> Integration test AC3: violation recorded and visible to ADMIN
+<span class="chk">- [ ]</span> Integration test AC4: second start → 409
+<span class="chk">- [ ]</span> Integration test AC5: short-answer flagged for manual review
+<span class="chk">- [ ]</span> Integration test AC6: certificate eligibility reached
+<span class="chk">- [ ]</span> Cleanup: all seeded data removed even when assertions fail
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> test_assessment_flow.py committed to edura-tests and all 6 ACs passing against staging
+<span class="chk">- [ ]</span> Runs in the CI integration stage (develop + main only)
+<span class="chk">- [ ]</span> No orphaned test data after a run
+<span class="chk">- [ ]</span> PR raised against develop in edura-tests; 1 peer review; CI passes
+<span class="chk">- [ ]</span> Closes #32 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #17 (assessment_service), #19 (progress_service), #21 (admin_service violations list), #18 (staging live)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#33</span>
+      <span class="t-title">feat(ui-frontend): build teacher dashboard with course creation form, module/lesson builder, and assessment builder</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-green">epic:ui-frontend</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 9</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a teacher, I want to create courses, add modules and video lessons, and build timed assessments from one dashboard so that I can publish learning content without developer help.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-003 (lesson management), FR-004 (assessment creation), FR-012 (exportable reports), UC-003 (Create Educational Module)</span>
+<span class="ref">- SDS Reference: Section 6.2 (Teacher Course Creation Flow — Figure 71), Section 5.2.2 (Course Creation and Publishing Flow), Section 7.3.1 (Teacher role)</span>
+<span class="ref">- Prototype: Figma screens — Admin Dashboard, Edit Courses, Create a Course</span>
+
+The /teacher/courses area is protected for TEACHER and ADMIN. It talks to course_service (#13), content_service (#14), assessment_service (#17), and analytics_service (#23). Video content is entered as a YouTube URL or ID (the page extracts and stores youtube_video_id) plus an optional Cloudinary-hosted note file — raw video is never uploaded.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Role Guard</span>
+<span class="bold">**Given**</span> a STUDENT navigates to /teacher/courses
+<span class="bold">**When**</span> the guard checks the role in Redux state
+<span class="bold">**Then**</span> the user is redirected to /dashboard with a toast "Access denied — Teachers only"
+
+<span class="h3">### AC2: Course Creation and Listing</span>
+<span class="bold">**Given**</span> a TEACHER opens /teacher/courses and submits the "Create Course" form with { title, description, price }
+<span class="bold">**When**</span> POST /api/courses returns 201
+<span class="bold">**Then**</span> the new course appears in the teacher's list with a DRAFT badge; only that teacher's own courses are listed
+
+<span class="h3">### AC3: Module and Lesson Builder</span>
+<span class="bold">**Given**</span> a TEACHER opens a course
+<span class="bold">**When**</span> they add a module (title, order) and then a lesson (title, YouTube URL, optional notes file)
+<span class="bold">**Then**</span> the YouTube video ID is extracted client-side, POST /modules and POST /lessons succeed, a file failing validation (type or size) is rejected inline before upload, and the lesson appears in the correct order
+
+<span class="h3">### AC4: Publish Guard</span>
+<span class="bold">**Given**</span> a TEACHER clicks "Publish" on a course
+<span class="bold">**When**</span> the course has no module or no lesson
+<span class="bold">**Then**</span> the button action is blocked with an inline message; otherwise PUT status = PUBLISHED is sent and the badge becomes PUBLISHED
+
+<span class="h3">### AC5: Assessment Builder</span>
+<span class="bold">**Given**</span> a TEACHER opens "Add Assessment" on a course
+<span class="bold">**When**</span> they add MCQ, True/False, or short-answer questions, set the correct answers and a time limit (minutes), and save
+<span class="bold">**Then**</span> the assessment is created via assessment_service; short-answer questions display a note "Requires manual grading"
+
+<span class="h3">### AC6: Performance Export</span>
+<span class="bold">**Given**</span> a TEACHER views a course's performance panel
+<span class="bold">**When**</span> they click "Export PDF" or "Export Excel"
+<span class="bold">**Then**</span> the file downloads from GET /api/analytics/reports/export (client request for exportable results, Section 4.2.2)
+
+<span class="h2">## Technical Notes</span>
+- Routes: /app/teacher/courses/page.tsx, /app/teacher/courses/[id]/page.tsx, /app/teacher/courses/[id]/assessment/new/page.tsx
+- YouTube ID extraction: handle watch?v=, youtu.be/, and embed/ URL forms plus a bare 11-character ID
+- Use react-hook-form + zod for validation; use an &lt;input accept&gt; filter and re-validate on the server
+- Reorder lessons with simple up/down buttons — drag-and-drop is out of scope
+- Confirm that issue #17 includes assessment creation endpoints (POST /api/assessments with questions); if not, add them there before this page can save
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: YouTube ID extractor — all URL forms and invalid input
+<span class="chk">- [ ]</span> Unit test: publish button blocked when course has no lessons
+<span class="chk">- [ ]</span> Integration test: create course → module → lesson → publish on staging
+<span class="chk">- [ ]</span> Integration test: build a 5-question assessment and see it listed
+<span class="chk">- [ ]</span> Negative test: STUDENT hitting /teacher/courses is redirected
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Teacher pages implemented in edura-frontend and working against staging
+<span class="chk">- [ ]</span> Role guard applied; ownership errors (403 NOT_COURSE_OWNER) surfaced as toasts
+<span class="chk">- [ ]</span> Responsive layout verified
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #33 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #13 (course CRUD), #14 (content upload), #17 (assessment endpoints), #22 (auth HOC). Optional for AC6: #23</div>
+</div>
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 10 · Feature Freeze</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#34</span>
+      <span class="t-title">test(security): conduct OWASP Top 10 compliance sweep — verify RBAC, bcrypt, parameterised queries, and error responses</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-purple">epic:security</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@nadun @danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 10</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the development team, we want to systematically verify every service against the OWASP Top 10 so that we can show the client and evaluators documented security evidence rather than assumptions.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: NFR-006 (bcrypt), NFR-007 (OTP expiry), NFR-008 (no card data), BR-006</span>
+<span class="ref">- SDS Reference: Section 7.1–7.6 (Security Design), Section 7.5 (Input Validation), Reference [6] OWASP ASVS 4.0</span>
+
+This is the feature-freeze day. The sweep checks the implemented system against the security design and fixes small gaps in place. Anything too large to fix is recorded honestly as a limitation in the report (#45). Passwords are handled by Asgardeo, so the bcrypt check only applies to any credential EDURA itself stores.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: A01 Broken Access Control</span>
+<span class="bold">**Given**</span> the FastAPI route tables of all 11 services
+<span class="bold">**When**</span> an automated test enumerates every POST/PUT/PATCH/DELETE route
+<span class="bold">**Then**</span> each one has a require_role dependency or is on an explicit allow-list (payment webhook, health, auth login/callback/otp); the test fails on any unlisted unprotected route
+
+<span class="h3">### AC2: A02 Cryptographic Failures and Secrets</span>
+<span class="bold">**Given**</span> the three code repositories and their CI history
+<span class="bold">**When**</span> a secret scanner (gitleaks) runs
+<span class="bold">**Then**</span> zero findings are reported; JWTs are verified as RS256 against the Asgardeo JWKS; any local credential hashing uses bcrypt with work factor ≥ 12
+
+<span class="h3">### AC3: A03 Injection</span>
+<span class="bold">**Given**</span> all database access code
+<span class="bold">**When**</span> the sweep searches for text(), string-formatted SQL, and f-string queries
+<span class="bold">**Then**</span> every query goes through the SQLAlchemy ORM or bound parameters, and a negative test sending payloads such as ' OR 1=1-- to list endpoints returns 400/422 or empty results — never a 500
+
+<span class="h3">### AC4: A05 Security Misconfiguration</span>
+<span class="bold">**Given**</span> the staging environment
+<span class="bold">**When**</span> a request triggers an unhandled error in any service
+<span class="bold">**Then**</span> the response is a generic JSON error with no stack trace, debug is disabled, CORS only allows the staging frontend origin, and responses carry HSTS, X-Content-Type-Options, and a basic CSP header
+
+<span class="h3">### AC5: A06 Vulnerable Components</span>
+<span class="bold">**Given**</span> the CI security stage (from #03)
+<span class="bold">**When**</span> pip-audit and npm audit run on develop
+<span class="bold">**Then**</span> zero HIGH or CRITICAL findings are reported; any accepted exception is listed with justification in the checklist
+
+<span class="h3">### AC6: A07 Authentication Failures</span>
+<span class="bold">**Given**</span> the auth endpoints
+<span class="bold">**When**</span> the sweep sends repeated bad logins and more than 3 OTP requests in an hour
+<span class="bold">**Then**</span> Nginx rate limiting (100 req/min) applies, OTP generation is capped at 3 per hour per user (SDS 7.2.4), OTP expires at 5 minutes, and refresh token reuse returns 401 REFRESH_TOKEN_REUSE
+
+<span class="h3">### AC7: Evidence Checklist Produced</span>
+<span class="bold">**Given**</span> AC1–AC6 are complete
+<span class="bold">**When**</span> results are compiled
+<span class="bold">**Then**</span> documents/security/owasp-checklist.pdf in edura-documents lists each OWASP category with PASS / FIXED / ACCEPTED-LIMITATION, the evidence (test name, command output, screenshot), and the commit that fixed it
+
+<span class="h2">## Technical Notes</span>
+- Route audit test: shared/tests/test_route_protection.py — import each service's FastAPI app and walk app.routes
+- Tools: gitleaks, pip-audit, npm audit, optionally semgrep with the p/python and p/owasp-top-ten rulesets (run locally, no new CI stage required)
+- Security headers can be added at the Nginx / Ingress layer — coordinate with #39 so production matches
+- Not in scope for this sweep, and to be recorded as limitations if not implemented: mTLS between services, field-level AES-256-GCM encryption, virus scanning of uploads (all described in the SDS)
+- Do not add features today — fixes only (feature freeze)
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Automated test: every mutating route is protected or allow-listed
+<span class="chk">- [ ]</span> Negative test: injection payloads never produce a 500 or leak data
+<span class="chk">- [ ]</span> Negative test: forced error returns no stack trace
+<span class="chk">- [ ]</span> Negative test: rate limit and OTP cap enforced
+<span class="chk">- [ ]</span> CI: gitleaks and audit tools report zero HIGH/CRITICAL
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Route-protection test committed to edura-backend and passing in CI
+<span class="chk">- [ ]</span> All AC1–AC6 findings fixed or documented as accepted limitations
+<span class="chk">- [ ]</span> owasp-checklist.pdf committed to edura-documents/security/ (linked PR)
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review with security focus; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #34 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #10, #11, #15 (auth, RBAC, payment implemented), #18 (staging live for header and error checks)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#35</span>
+      <span class="t-title">test(testing): push unit test coverage to ≥80% across all services and ≥90% on auth and payment</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-backend">edura-backend</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@thushan</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 10</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want measured, enforced test coverage on every service so that we can demonstrate code quality with evidence and prevent untested code from reaching production.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: NFR-010, NFR-011 (maintainability and standards)</span>
+<span class="ref">- SDS Reference: Section 8.5 (CI/CD — unit tests run on every commit)</span>
+- Team DoD: coverage ≥ 80% on new code; ≥ 90% on auth and payment
+
+Services were built under time pressure, and some endpoints and consumers have thin tests. This issue measures the real numbers, closes the gaps (using AI-assisted generation, reviewed by a human), and makes the CI gate enforce the thresholds. Effort is focused on the highest-risk logic: token rotation, webhook verification, auto-grading, and enrollment access.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Coverage Measured for Every Service</span>
+<span class="bold">**Given**</span> the 11 service folders in edura-backend
+<span class="bold">**When**</span> pytest --cov=&lt;service&gt; --cov-report=xml runs for each
+<span class="bold">**Then**</span> a coverage figure exists for every service and is published in the CI job summary
+
+<span class="h3">### AC2: Overall Threshold Met</span>
+<span class="bold">**Given**</span> the report from AC1
+<span class="bold">**When**</span> each service is compared with the threshold
+<span class="bold">**Then**</span> every service has ≥ 80% line coverage, and auth_service and payment_service have ≥ 90%
+
+<span class="h3">### AC3: High-Risk Logic Explicitly Tested</span>
+<span class="bold">**Given**</span> the risk list for this system
+<span class="bold">**When**</span> the test suite runs
+<span class="bold">**Then**</span> it contains passing unit tests for: refresh-token rotation and reuse detection, OTP expiry, HMAC verification (valid / invalid / wrong secret), webhook idempotency, MCQ/TF auto-grading edge cases, and enrollment grant / extend / suspend
+
+<span class="h3">### AC4: CI Gate Enforced</span>
+<span class="bold">**Given**</span> the unit-test stage in CI
+<span class="bold">**When**</span> a service falls below its threshold
+<span class="bold">**Then**</span> the job fails with a message naming the service and its coverage
+
+<span class="h3">### AC5: Evidence Committed</span>
+<span class="bold">**Given**</span> the final coverage run on develop
+<span class="bold">**When**</span> the results are exported
+<span class="bold">**Then**</span> an HTML/PDF coverage report is committed to edura-documents/testing/ and a per-service summary table (service, %, threshold, status) is added for the test register in #42
+
+<span class="h2">## Technical Notes</span>
+- Use pytest-cov with fail_under set per service in pyproject.toml / .coveragerc (80, and 90 for auth and payment)
+- Exclude only generated code (alembic/versions, __init__.py) from coverage — never exclude business logic to pass the gate
+- Mock Redis (fakeredis), RabbitMQ (pika channel mock), SMTP, PayHere, Cloudinary — unit tests must run without network
+- AI-generated tests must assert real behaviour (specific values / status codes), not just execute lines; reviewers reject tests with no assertions
+- Frontend (Jest) coverage is reported in the same document but is not gated
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Per-service coverage run passes the thresholds
+<span class="chk">- [ ]</span> Mutation spot-check: temporarily break verify_hmac and one grading rule — tests must fail
+<span class="chk">- [ ]</span> CI gate verified by lowering a threshold artificially on a throwaway branch
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All 11 services ≥ 80%; auth_service and payment_service ≥ 90%
+<span class="chk">- [ ]</span> Coverage thresholds enforced in CI
+<span class="chk">- [ ]</span> Coverage report committed to edura-documents/testing/ (linked PR)
+<span class="chk">- [ ]</span> No test depends on a live network or external service
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> Closes #35 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #10, #11, #13–#17, #19–#21, #23 (all services implemented), #03 (CI pipeline)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#36</span>
+      <span class="t-title">feat(integration): integrate Gemini AI assistant widget on student dashboard (optional — if ahead of schedule)</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-frontend">edura-frontend</span>
+      <span class="label-badge lb-amber">epic:integration</span>
+      <span class="label-badge lb-green">feat</span>
+      <span class="label-badge lb-gray">P4-Low</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@imansha</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 10</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a student, I want a simple AI assistant on my dashboard that answers questions about using EDURA and the course material so that I can get help without waiting for a teacher.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-011 (Google Gemini AI assistant), Section 16.3 (Google Gemini AI API interface)</span>
+<span class="ref">- SDS Reference: Section 5.2.7 (AI Assistant Interaction Flow — Figure 54)</span>
+<span class="ref">- Client demo: AI assistance was shown at concept level only (Report Section 5.3 limitation)</span>
+
+CONDITIONAL TICKET. Start only if every P1 issue up to #35 is merged and green. If not, move to the Deferred milestone and list it as future work in the report. The assistant is deliberately small: a chat panel, a server-side proxy to Gemini, and a fixed system prompt restricting answers to LMS help.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Widget on Dashboard</span>
+<span class="bold">**Given**</span> an authenticated student on /dashboard
+<span class="bold">**When**</span> they click the assistant button
+<span class="bold">**Then**</span> a chat panel opens with a greeting and an input; messages and replies are shown in order
+
+<span class="h3">### AC2: Server-Side Gemini Call</span>
+<span class="bold">**Given**</span> the student sends a message
+<span class="bold">**When**</span> the client POSTs to the frontend route /assistant/query
+<span class="bold">**Then**</span> the route handler validates the user's JWT, calls the Gemini API with the system prompt plus the message, and returns the reply (streamed if supported) — GEMINI_API_KEY never reaches the browser
+
+<span class="h3">### AC3: Scope Restriction</span>
+<span class="bold">**Given**</span> the system prompt restricts the assistant to EDURA usage and course learning support
+<span class="bold">**When**</span> a student asks something unrelated (for example for exam answers or off-topic content)
+<span class="bold">**Then**</span> the assistant politely declines and redirects to course help
+
+<span class="h3">### AC4: Abuse and Failure Handling</span>
+<span class="bold">**Given**</span> a user sends more than 10 messages per minute, or Gemini is unavailable
+<span class="bold">**When**</span> the route handles the request
+<span class="bold">**Then**</span> it returns HTTP 429 (rate limit) or 503 with a friendly "Assistant temporarily unavailable" message; the dashboard stays fully functional
+
+<span class="h2">## Technical Notes</span>
+- Route handler: /app/assistant/query/route.ts. Use a path that does not start with /api/ so Ingress sends it to the frontend instead of the microservice gateway. Record the deviation from the SDS in a short ADR
+- JWT validation: verify the Bearer token against the Asgardeo JWKS (jose library); reject missing / invalid tokens with 401
+- Model name and key come from environment variables (GEMINI_MODEL, GEMINI_API_KEY); do not hard-code
+- Rate limiting: in-memory per-user counter is acceptable for the demo; note the limitation
+- Do not send personal data (email, name) to Gemini; send only the message and a generic course title if needed
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Unit test: route handler returns 401 without a valid JWT
+<span class="chk">- [ ]</span> Unit test: rate limiter returns 429 after 10 requests in a minute
+<span class="chk">- [ ]</span> Integration test: valid request returns a reply (Gemini mocked in CI)
+<span class="chk">- [ ]</span> Negative test: Gemini timeout → 503 with friendly message
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Widget and route handler implemented in edura-frontend
+<span class="chk">- [ ]</span> GEMINI_API_KEY stored as a secret, never committed
+<span class="chk">- [ ]</span> ADR written for the proxy approach
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> CHANGELOG.md updated under [Unreleased]
+<span class="chk">- [ ]</span> Closes #36 in commit messages — or issue moved to Deferred with a note if not started
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours (optional)
+
+<span class="h2">## Dependencies</span>
+Blocked by: #22 (dashboard). Start condition: #34 and #35 complete</div>
+</div>
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 11</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#37</span>
+      <span class="t-title">test(infra): run full 5-scenario demo walkthrough on staging and log all failures as bug issues</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-tests">edura-tests</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 11</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want to walk through every client demo scenario on staging, exactly as the panel will see it, so that all failures are found and triaged four days before the demo.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-001 to FR-015 (all demo-visible functionality), UC-001 to UC-005</span>
+<span class="ref">- Client Report: demo session agenda (Section 4.2.1) and feedback table (Section 4.2.2)</span>
+<span class="ref">- 2-Week Plan: Day 11 — full end-to-end run, then bug triage</span>
+
+Feature freeze began on Day 10. This walkthrough is a manual, role-played run with a screen recorder on, performed by two people (one driver, one observer) per scenario. Every failure becomes a GitHub issue labelled fix with a priority and is tracked by #38.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Scenario 1 — Student Journey</span>
+<span class="bold">**Given**</span> a fresh student on staging
+<span class="bold">**When**</span> they register → verify OTP → log in → browse courses → purchase (PayHere sandbox) → open a lesson → watch to the end → take the quiz → view progress → download the certificate
+<span class="bold">**Then**</span> every step completes without error, the lesson is marked complete, and the certificate is downloadable once eligibility is met
+
+<span class="h3">### AC2: Scenario 2 — Teacher Creates Content</span>
+<span class="bold">**Given**</span> the teacher account
+<span class="bold">**When**</span> they create a course, add a module and lesson (YouTube ID), build a 5-question timed assessment, and publish
+<span class="bold">**Then**</span> the course appears in the student catalog and the assessment is takeable by a student
+
+<span class="h3">### AC3: Scenario 3 — Admin Verifies Manual Receipt</span>
+<span class="bold">**Given**</span> a student has uploaded a manual receipt
+<span class="bold">**When**</span> the admin opens Pending Receipts and approves it
+<span class="bold">**Then**</span> the student's enrollment becomes ACTIVE, an email is sent, and an audit-log entry exists; a second receipt is rejected with a reason and the student is notified
+
+<span class="h3">### AC4: Scenario 4 — Analytics and Export</span>
+<span class="bold">**Given**</span> completed assessments exist
+<span class="bold">**When**</span> the admin opens Analytics and exports a PDF and an Excel report
+<span class="bold">**Then**</span> charts render from live data and both files download and open correctly
+
+<span class="h3">### AC5: Scenario 5 — Leaderboard and Anti-Cheat</span>
+<span class="bold">**Given**</span> at least 3 students with scores
+<span class="bold">**When**</span> a student opens the leaderboard, and separately switches tabs during a quiz
+<span class="bold">**Then**</span> the leaderboard is ranked correctly and the violation appears in the admin Violation Log
+
+<span class="h3">### AC6: Failures Logged and Triaged</span>
+<span class="bold">**Given**</span> any step above fails or behaves unexpectedly
+<span class="bold">**When**</span> the observer records it
+<span class="bold">**Then**</span> a GitHub issue is created in the owning repo with: scenario and step, expected vs actual, screenshot/recording timestamp, label fix, and priority — P1 (blocks demo), P2 (UX), or P3 (cosmetic)
+
+<span class="h2">## Technical Notes</span>
+- Record the run with OBS or the OS screen recorder; this recording becomes the first cut of the backup demo video
+- Use fresh accounts on staging (not the production demo accounts from #41)
+- Walkthrough log: edura-tests/docs/walkthrough-day11.md — table of scenario, step, result, issue link
+- Run on a different network or device than the developers' usual one to catch environment assumptions
+- Time the run; the live-walkthrough segment of the demo must fit 12 minutes
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: scenarios 1–5 executed end to end on staging
+<span class="chk">- [ ]</span> Automated: smoke test (#24) and payment flow test (#29) re-run and passing before starting
+<span class="chk">- [ ]</span> Every failure has a linked, prioritised bug issue
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> walkthrough-day11.md committed to edura-tests with results for all five scenarios
+<span class="chk">- [ ]</span> All failures logged as issues with priority labels
+<span class="chk">- [ ]</span> P1 list handed to #38; P2 list handed to #42; P3 recorded as known limitations
+<span class="chk">- [ ]</span> Screen recording saved for use in rehearsal and backup video
+<span class="chk">- [ ]</span> Closes #37 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #24, #29, #32 (automated tests green), #22, #26–#28, #30, #31, #33 (all UI complete)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#38</span>
+      <span class="t-title">fix(infra): resolve all P1-Critical bugs identified in Day 11 demo walkthrough</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-red">fix</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 11</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want every demo-blocking bug found on Day 11 fixed and re-verified the same day so that production deploy on Day 12 starts from a clean, demonstrably working build.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- 2-Week Plan: Day 11 — "Fix all P1-Critical bugs found in walkthrough"; P2 → Day 12; P3 → documented limitation</span>
+<span class="ref">- Guideline Reference: Definition of Done (PR + review + CI) applies to bug fixes too</span>
+
+This is a tracking issue. For each P1 bug raised by #37, a child issue is opened in the repo that owns the code (label fix, branch fix/&lt;n&gt;-&lt;slug&gt;), and referenced here with "Refs #38". Because this issue lives in edura-documents, close it only when every child issue is closed. No direct commits to develop — each fix is a PR with a regression test.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Every P1 Bug Has a Child Issue</span>
+<span class="bold">**Given**</span> the list of P1 failures from #37
+<span class="bold">**When**</span> the team starts Day 11 afternoon
+<span class="bold">**Then**</span> each has a fix-labelled issue in the correct repo, an owner, and a link from this issue
+
+<span class="h3">### AC2: Each Fix Is Tested and Reviewed</span>
+<span class="bold">**Given**</span> a P1 fix PR
+<span class="bold">**When**</span> it is raised against develop
+<span class="bold">**Then**</span> it contains a regression test that fails without the fix, passes CI, and has 1 peer review before merge
+
+<span class="h3">### AC3: Staging Re-Verified</span>
+<span class="bold">**Given**</span> all P1 PRs are merged and staging redeployed
+<span class="bold">**When**</span> the smoke test (#24), payment flow test (#29), and assessment flow test (#32) are re-run, and the affected demo scenarios are repeated manually
+<span class="bold">**Then**</span> all pass and the previously failing steps are confirmed fixed
+
+<span class="h3">### AC4: P2 and P3 Triaged</span>
+<span class="bold">**Given**</span> the remaining bugs
+<span class="bold">**When**</span> triage finishes
+<span class="bold">**Then**</span> P2 items are moved to #42 for Day 12, and P3 items are added to documents/known-limitations.md with a one-line explanation each
+
+<span class="h2">## Technical Notes</span>
+- Prefer the smallest possible fix; do not refactor during bug-fix day
+- If a fix changes an API contract, update the OpenAPI docs and the consuming frontend in the same hour
+- If a P1 cannot be fixed by end of Day 11, decide explicitly: workaround in the demo script (documented) or remove that step from the live demo — record the decision here
+- Keep a running list in the issue comments: bug, owner, PR, status
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Each P1 fix has a regression test
+<span class="chk">- [ ]</span> Smoke, payment-flow, and assessment-flow integration tests green after the last merge
+<span class="chk">- [ ]</span> Manual re-run of every scenario step that failed
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> All P1 child issues closed with merged, reviewed PRs
+<span class="chk">- [ ]</span> Staging redeployed from the final develop commit and re-verified
+<span class="chk">- [ ]</span> documents/known-limitations.md created with P3 items
+<span class="chk">- [ ]</span> P2 list handed to #42
+<span class="chk">- [ ]</span> Closes #38 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours (team total; scales with bug count)
+
+<span class="h2">## Dependencies</span>
+Blocked by: #37 (bug list)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#39</span>
+      <span class="t-title">ci(deploy): create Kubernetes manifests for production — Deployments, Services, Ingress, ConfigMaps, and AKS Secrets</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-infra">edura-infra</span>
+      <span class="label-badge lb-green">epic:ci-cd</span>
+      <span class="label-badge lb-teal">ci</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@nadun</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 11</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the infrastructure owner, I want complete, reviewed Kubernetes manifests for production so that the production deploy on Day 12 is a repeatable pipeline run rather than a manual, error-prone setup.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 8.1 (Hosting Plan), Section 8.2 (Resource Requirements), Section 8.3 (Network Diagram), Section 8.4 (Production environment), Section 7.6.3 (Key Management — Azure Key Vault)</span>
+<span class="ref">- ADR Reference: ADR-08 (monorepo, one deployment per service)</span>
+<span class="ref">- Related: #09 (Nginx config is replaced by Ingress in AKS)</span>
+
+Staging manifests from #18 are the starting point. Production differs in: replica counts, resource limits, TLS and domain, secrets sourced from Azure Key Vault instead of plain files, and stricter probes. Production secrets are never committed — only templates and references.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: One Deployment and Service per Component</span>
+<span class="bold">**Given**</span> the 11 services and the frontend
+<span class="bold">**When**</span> k8s/production/ is inspected
+<span class="bold">**Then**</span> each has a Deployment and a ClusterIP Service (notification_service has a Deployment only — it has no HTTP port), all in the namespace edura-production, with images referenced by ACR URL and a tag substituted by the pipeline (git SHA)
+
+<span class="h3">### AC2: Resource Limits and Probes</span>
+<span class="bold">**Given**</span> any production Deployment
+<span class="bold">**When**</span> its spec is read
+<span class="bold">**Then**</span> it sets CPU/memory requests and limits, a readiness probe and a liveness probe on /health (HTTP services), and runs with replicas ≥ 2 for auth, payment, assessment, and course services and ≥ 1 for the rest
+
+<span class="h3">### AC3: Ingress Routing and TLS</span>
+<span class="bold">**Given**</span> the NGINX Ingress Controller is installed on AKS
+<span class="bold">**When**</span> the Ingress manifest is applied
+<span class="bold">**Then**</span> the path routing matches the table in issue #09 (/api/auth → auth_service … /api/admin → admin_service), the root path routes to the frontend, TLS is terminated with a Let's Encrypt certificate (cert-manager), HTTP redirects to HTTPS, and a 100 req/min rate limit annotation is set
+
+<span class="h3">### AC4: Config and Secrets Separated</span>
+<span class="bold">**Given**</span> application configuration
+<span class="bold">**When**</span> manifests are reviewed
+<span class="bold">**Then**</span> non-sensitive values (service URLs, ports, feature flags) are in ConfigMaps, while ASGARDEO_CLIENT_SECRET, DATABASE_URL (per service), PAYHERE_MERCHANT_SECRET, CLOUDINARY_*, SMTP_*, GEMINI_API_KEY, and RABBITMQ_URL come from Azure Key Vault via the Secrets Store CSI driver (or AKS Secrets if Key Vault is not ready), and a grep of the repo finds no secret values
+
+<span class="h3">### AC5: Stateful Dependencies Defined</span>
+<span class="bold">**Given**</span> the SDS specifies Azure Cache for Redis and per-service Neon databases
+<span class="bold">**When**</span> the manifests are reviewed
+<span class="bold">**Then**</span> REDIS_URL and each DATABASE_URL point to the managed services; RabbitMQ runs as a StatefulSet with a persistent volume (or the managed alternative chosen in the ADR), and the topology setup script from #08 runs as a Kubernetes Job before services start
+
+<span class="h3">### AC6: Manifests Validated in CI</span>
+<span class="bold">**Given**</span> a PR changes k8s/production/
+<span class="bold">**When**</span> CI runs
+<span class="bold">**Then**</span> kubeconform (or kubectl --dry-run=server) validates every manifest and the job fails on any error
+
+<span class="h2">## Technical Notes</span>
+- Directory layout: k8s/production/{namespace,configmaps,secrets-template,deployments,services,ingress,jobs}/
+- Use kustomize overlays (base = staging manifests, overlay = production) to avoid duplication
+- Node sizing from the SDS (Standard_D8s_v3 backend) may exceed the student subscription budget — if so, document the actual node SKU in the ADR and the report
+- Canary deployment (SDS 8.5) is NOT planned in this sprint; the pipeline uses a rolling update with a manual approval gate. Record as a limitation
+- Rollback: kubectl rollout undo deployment/&lt;name&gt; — document in infra/README.md
+- Secrets-template files contain keys only, no values
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> CI: kubeconform passes on all production manifests
+<span class="chk">- [ ]</span> Manual test: kubectl apply --dry-run=server -f k8s/production/ succeeds against the real cluster
+<span class="chk">- [ ]</span> Manual test: secret scan (gitleaks) shows zero findings in edura-infra
+<span class="chk">- [ ]</span> Manual test: Ingress routes /api/auth/health and / correctly on a test host before Day 12
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> k8s/production/ committed with all components, Ingress, ConfigMaps, and secret templates
+<span class="chk">- [ ]</span> Resource limits and probes set on every Deployment
+<span class="chk">- [ ]</span> Key Vault (or AKS Secrets) populated with all required values — verified by a test pod
+<span class="chk">- [ ]</span> Rollback and secret-rotation steps added to edura-infra README
+<span class="chk">- [ ]</span> PR raised against develop in edura-infra; 1 peer review; CI passes
+<span class="chk">- [ ]</span> Closes #39 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #12 (AKS + ACR), #18 (staging manifests and pipeline), #09 (routing table), #08 (RabbitMQ setup script)</div>
+</div>
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 12 · Production</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#40</span>
+      <span class="t-title">ci(deploy): execute production deploy to AKS via GitHub Actions with manual approval gate and tag v1.0.0</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-infra">edura-infra</span>
+      <span class="label-badge lb-green">epic:ci-cd</span>
+      <span class="label-badge lb-teal">ci</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@nadun</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>4h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 12</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want a controlled production release through the pipeline so that the client demo runs on a real, secured, versioned deployment — not on localhost.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SDS Reference: Section 8.4 (Production environment), Section 8.5 (CD — production requires manual approval)</span>
+<span class="ref">- Guideline Reference: Section 7 (CI/CD requirements), semantic versioning and release tagging</span>
+<span class="ref">- 2-Week Plan: Day 12 gate — "production URL live and demo account working"</span>
+
+All P1 bugs are fixed (#38) and manifests exist (#39). This issue merges develop into main, runs the full pipeline, passes through a manual approval gate (supervisor or team lead), deploys to AKS, verifies the live site, and tags v1.0.0. Production uses the PayHere sandbox merchant unless live credentials have been provisioned by the client (SRS 12.3 assumption).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Release PR Approved and Merged</span>
+<span class="bold">**Given**</span> develop is green and demo-ready
+<span class="bold">**When**</span> a PR develop → main is raised in each repo
+<span class="bold">**Then**</span> it needs 1 approving review plus passing CI, and is merged only after supervisor sign-off is recorded in the PR
+
+<span class="h3">### AC2: Pipeline Runs All Stages</span>
+<span class="bold">**Given**</span> the merge to main
+<span class="bold">**When**</span> GitHub Actions starts
+<span class="bold">**Then**</span> lint, build, unit-test, integration, and security stages pass before the deploy-prod job is offered for approval
+
+<span class="h3">### AC3: Manual Approval Gate</span>
+<span class="bold">**Given**</span> the deploy-prod job targets the GitHub Environment "production"
+<span class="bold">**When**</span> the pipeline reaches it
+<span class="bold">**Then**</span> it waits for a required reviewer (supervisor or team lead) and does not proceed until approved
+
+<span class="h3">### AC4: Production Healthy</span>
+<span class="bold">**Given**</span> deployment completes
+<span class="bold">**When**</span> kubectl rollout status runs for all 12 workloads and the pipeline curls the production URL
+<span class="bold">**Then**</span> every pod is Running/Ready, https://&lt;production-domain&gt;/api/auth/health (and the other 10 health routes) return 200, and the frontend loads over a valid HTTPS certificate
+
+<span class="h3">### AC5: Read-Only Smoke Check on Production</span>
+<span class="bold">**Given**</span> production is live
+<span class="bold">**When**</span> a production-safe subset of the smoke test runs (health checks, login with a demo account, course list, lesson stream)
+<span class="bold">**Then**</span> all steps pass; the test does NOT send mock payment webhooks or create persistent test data
+
+<span class="h3">### AC6: Release Tagged and Rollback Proven</span>
+<span class="bold">**Given**</span> the production smoke check passes
+<span class="bold">**When**</span> the team tags v1.0.0 on main in all repos and publishes a GitHub Release with the CHANGELOG
+<span class="bold">**Then**</span> the release exists, [Unreleased] is renamed [1.0.0] in each CHANGELOG, and the documented rollback (kubectl rollout undo) has been rehearsed once on staging
+
+<span class="h2">## Technical Notes</span>
+- Create the GitHub Environment "production" with required reviewers and deployment branch restricted to main
+- Image tag = git SHA; the same image that ran in staging should be promoted where possible
+- Production smoke script flag: --read-only (skip steps 5–6 of the staging smoke test)
+- Point the PayHere notify_url and return_url at the production domain; confirm the merchant account mode (sandbox/live) before the demo
+- Hotfix path: branch hotfix/&lt;slug&gt; from main → PR to main → same approval gate; used on demo day only for minor fixes
+- If AKS blocks the deploy beyond Day 12 midday, invoke the fallback in the risk register (Railway + managed PostgreSQL) and record an ADR
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Integration: full pipeline passes on main
+<span class="chk">- [ ]</span> Manual test: approval gate blocks until a reviewer approves
+<span class="chk">- [ ]</span> Manual test: all 12 workloads Running; health routes return 200 over HTTPS
+<span class="chk">- [ ]</span> Manual test: production read-only smoke subset passes
+<span class="chk">- [ ]</span> Manual test: rollback rehearsed on staging
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Production URL live on AKS with valid HTTPS
+<span class="chk">- [ ]</span> v1.0.0 tag and GitHub Release created; CHANGELOGs updated
+<span class="chk">- [ ]</span> Production URL added to all READMEs and the submission package (#42)
+<span class="chk">- [ ]</span> Rollback procedure documented in edura-infra README
+<span class="chk">- [ ]</span> PR raised and approved; CI passes
+<span class="chk">- [ ]</span> Closes #40 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 4 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #38 (P1 bugs fixed), #39 (production manifests), #34, #35 (security and coverage gates met)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#41</span>
+      <span class="t-title">chore(infra): seed production database with demo accounts, sample courses, and published assessments</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-infra">edura-infra</span>
+      <span class="label-badge lb-teal">epic:dev-setup</span>
+      <span class="label-badge lb-gray">chore</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@danindu</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>2h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 12</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a presenter, I want the production system pre-loaded with realistic demo accounts and content so that every demo scenario works immediately without setup during the panel.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- SRS Reference: FR-001, FR-003, FR-004, FR-006 (data needed by the demo scenarios)</span>
+<span class="ref">- Client Report: Section 4.2.1 demo agenda (student, teacher, admin flows)</span>
+<span class="ref">- 2-Week Plan: Day 12 — seed accounts, 2 sample courses, 1 assessment with 5 MCQs, 2 student accounts</span>
+
+Users are authenticated through Asgardeo, so every demo user must exist both in the Asgardeo tenant and as a profile with a role in user_service. The seed script is idempotent (re-runnable without duplicates). Credentials are generated per run and are NOT committed.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Accounts Created in Asgardeo and EDURA</span>
+<span class="bold">**Given**</span> an empty production database and the Asgardeo tenant
+<span class="bold">**When**</span> the seed script runs
+<span class="bold">**Then**</span> these accounts exist and can log in with OTP: an ADMIN (ICT – Dimuthu), a TEACHER (Mr. Dimuthu), and 2 STUDENT accounts, each with the correct role claim
+
+<span class="h3">### AC2: Sample Courses Published</span>
+<span class="bold">**Given**</span> the teacher account
+<span class="bold">**When**</span> seeding completes
+<span class="bold">**Then**</span> 2 PUBLISHED courses exist, each with at least 2 modules and 3 lessons using real public YouTube video IDs and, where possible, one Cloudinary notes file
+
+<span class="h3">### AC3: Assessment Ready</span>
+<span class="bold">**Given**</span> one published course
+<span class="bold">**When**</span> seeding completes
+<span class="bold">**Then**</span> it has 1 published assessment with 5 MCQ questions (correct answers set) and a time limit appropriate for a 2-minute live demo
+
+<span class="h3">### AC4: Demo State for Scenarios 1 and 3</span>
+<span class="bold">**Given**</span> the scenarios in #37
+<span class="bold">**When**</span> seeding completes
+<span class="bold">**Then**</span> student 1 is enrolled in course 1 with some lessons already watched, and student 2 has a PENDING manual receipt (sample image) ready for the admin to approve live
+
+<span class="h3">### AC5: Idempotent and Safe</span>
+<span class="bold">**Given**</span> the script has already run
+<span class="bold">**When**</span> it is run again
+<span class="bold">**Then**</span> no duplicate users, courses, or enrollments are created, and no real student data is touched
+
+<span class="h2">## Technical Notes</span>
+- Script: infra/scripts/seed_production.py; reads connection settings and Asgardeo management credentials from environment variables
+- Create Asgardeo users via the SCIM2 / management API; create profiles via user_service admin endpoints rather than direct SQL
+- Generate strong passwords at run time and print them once to the terminal; store in the team password manager and in the supervisor submission pack (#42) — never in Git
+- Mark seed content with a tag (for example title prefix "[Demo]") so it can be removed after assessment
+- Run only against production after #40 passes; rehearse the script on staging first
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: log in with all four accounts on the production URL
+<span class="chk">- [ ]</span> Manual test: run script twice — no duplicates
+<span class="chk">- [ ]</span> Manual test: student 1 sees enrolled course and progress; admin sees the pending receipt
+<span class="chk">- [ ]</span> Manual test: assessment can be started and completed by a student
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> seed_production.py and a short runbook committed to edura-infra
+<span class="chk">- [ ]</span> Demo data verified on production with all four logins
+<span class="chk">- [ ]</span> Credentials stored securely and not present in any repository
+<span class="chk">- [ ]</span> PR raised against develop; 1 peer review; CI passes
+<span class="chk">- [ ]</span> Closes #41 in commit messages
+
+<span class="h2">## Estimate</span>
+Estimated: 2 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #40 (production live), #11 (user_service), #13 (course_service), #17 (assessment endpoints), #21 (admin endpoints)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#42</span>
+      <span class="t-title">fix(infra): resolve P2-High bugs and generate all final deliverable documents — coverage report, OWASP checklist, CHANGELOG</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-orange">epic:core-features</span>
+      <span class="label-badge lb-red">fix</span>
+      <span class="label-badge lb-orange">P2-High</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 12</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want all remaining important bugs fixed and every required deliverable assembled and submitted to the supervisor on time so that nothing is missing when the panel reviews our work.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: SENG 34213 Section 9.3 (deliverables must reach the supervisor 48 hours before the demo)</span>
+<span class="ref">- 2-Week Plan: Day 12 — fix P2 bugs, generate documents, submit URLs and credentials</span>
+
+Two parallel tracks run today. Track A: fix P2 bugs raised in #37 (UX issues that do not block the demo), using child issues like #38. Track B: collect the evidence documents and send the submission pack. Demo is on Day 14, so the pack must be sent by the end of Day 12.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: P2 Bugs Resolved or Deferred</span>
+<span class="bold">**Given**</span> the P2 list from #37 and #38
+<span class="bold">**When**</span> the track A window closes
+<span class="bold">**Then**</span> each P2 bug is either fixed via a reviewed PR with a regression test, or consciously deferred to documents/known-limitations.md with a reason
+
+<span class="h3">### AC2: Evidence Documents Complete</span>
+<span class="bold">**Given**</span> the work from #34, #35 and the integration tests
+<span class="bold">**When**</span> the pack is assembled
+<span class="bold">**Then**</span> edura-documents contains: the coverage report (PDF/HTML), a test register PDF (test ID, area, type, linked issue, result), the OWASP checklist PDF, and the integration/E2E test run results with dates
+
+<span class="h3">### AC3: Changelogs and READMEs Final</span>
+<span class="bold">**Given**</span> v1.0.0 has been tagged (#40)
+<span class="bold">**When**</span> the repositories are reviewed
+<span class="bold">**Then**</span> each CHANGELOG.md has a [1.0.0] section, each README documents setup, architecture summary, how to run tests, and the production URL, and the CI badge shows green
+
+<span class="h3">### AC4: Submission Pack Sent</span>
+<span class="bold">**Given**</span> all items are ready
+<span class="bold">**When**</span> the team emails the supervisor (Dr. Tiroshan Madushanka)
+<span class="bold">**Then**</span> the message includes: GitHub Organisation URL, all 5 repository URLs, production URL, GitHub Project board URL, demo credentials (sent securely, not in Git), and a link to the evidence documents — sent at least 48 hours before the demo
+
+<span class="h3">### AC5: Board and Repos Clean</span>
+<span class="bold">**Given**</span> Day 12 end of day
+<span class="bold">**When**</span> the project board is reviewed
+<span class="bold">**Then**</span> every completed issue is in Done and linked to a merged PR; open issues are correctly milestoned; no stale feature branches remain
+
+<span class="h2">## Technical Notes</span>
+- Test register can be generated from the issue list plus the pytest report; keep the format a simple table
+- Export HTML coverage reports to PDF with a headless browser or print-to-PDF
+- Demo credentials: send via the supervisor's preferred secure channel; never paste into a public issue
+- If a document cannot be completed (for example a missing measurement), record the gap honestly rather than inventing numbers
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: every URL in the submission email opens for a person outside the organisation (board URL public)
+<span class="chk">- [ ]</span> Manual check: every demo credential logs in on production
+<span class="chk">- [ ]</span> Manual check: each repo README renders and its badge is green
+<span class="chk">- [ ]</span> P2 fixes: regression tests pass in CI
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> P2 bugs fixed or deferred with documented reason
+<span class="chk">- [ ]</span> Coverage, test register, and OWASP documents committed to edura-documents
+<span class="chk">- [ ]</span> CHANGELOG [1.0.0] and README final in all repos
+<span class="chk">- [ ]</span> Submission pack emailed to the supervisor 48h before the demo
+<span class="chk">- [ ]</span> Closes #42 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #34, #35 (evidence), #37, #38 (bug lists), #40 (production URL and tag), #41 (demo credentials)</div>
+</div>
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 13 · Rehearsal</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#43</span>
+      <span class="t-title">test(infra): conduct first full 20-minute demo rehearsal on production URL with all team members presenting</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 13</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As presenters, we want to run the complete demo to time on the production URL so that every member knows their part, the story flows, and any production-only problem is found a day early.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: demo format — 20 minutes of presentation plus 15 minutes of Q&amp;A, on the production system only</span>
+<span class="ref">- 2-Week Plan: Day 13 — rehearsal 1, then fix anything that fails in production</span>
+<span class="ref">- Client Report: the client confirmed hybrid payments, analytics, and gamification as the highlights to show</span>
+
+The agenda is fixed: Context 2 min → Live walkthrough 12 min → Architecture 3 min → Limitations 2 min → Lessons learned 1 min. A suggested split keeps each member on a service they built: Nadun (context, architecture, CI/CD and deployment), Imansha (student journey and teacher flow), Danindu (payment, enrollment, admin receipt verification), Thushan (assessment, anti-cheat, analytics, testing evidence).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Full Run on Production Within Time</span>
+<span class="bold">**Given**</span> the seeded production system (#41)
+<span class="bold">**When**</span> the team runs the whole demo with a timer and no localhost
+<span class="bold">**Then**</span> the total is ≤ 20 minutes with each segment within its allotted time (±30 seconds)
+
+<span class="h3">### AC2: Every Member Presents</span>
+<span class="bold">**Given**</span> the speaking plan in documents/demo/script.md
+<span class="bold">**When**</span> the rehearsal is performed
+<span class="bold">**Then**</span> all four members present their segment and hand over smoothly, with a named backup who can continue if a presenter is unavailable
+
+<span class="h3">### AC3: Demo Script Finalised</span>
+<span class="bold">**Given**</span> observations from the run
+<span class="bold">**When**</span> the rehearsal ends
+<span class="bold">**Then**</span> documents/demo/script.md contains the final step-by-step script: URLs, account to use at each step, expected result, and the exact words for the 3 key claims (architecture, security, testing)
+
+<span class="h3">### AC4: Production Issues Logged and Fixed</span>
+<span class="bold">**Given**</span> anything fails or runs slowly in production
+<span class="bold">**When**</span> the observer notes it
+<span class="bold">**Then**</span> it is logged as a bug issue and, if P1/P2, fixed and redeployed the same day through the hotfix path from #40
+
+<span class="h3">### AC5: Backup Recording Made</span>
+<span class="bold">**Given**</span> a successful run
+<span class="bold">**When**</span> the team records one clean pass
+<span class="bold">**Then**</span> a screen-recorded backup video of the full live walkthrough exists on a local drive (not only online) for use if production fails on demo day
+
+<span class="h2">## Technical Notes</span>
+- Record timings per segment in documents/demo/rehearsal-1.md (planned vs actual)
+- Re-seed or reset demo data between runs so scenarios start from the same state (idempotent seed from #41)
+- Use the same machine, browser, and screen resolution intended for demo day; disable notifications
+- Keep a second browser profile pre-logged in as admin, teacher, and student to avoid login delays
+- Prepare the architecture slide, CI run, coverage report, and project board in open tabs for the architecture segment
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: complete run on the production URL, timed
+<span class="chk">- [ ]</span> Manual test: each of the 5 demo scenarios passes in production
+<span class="chk">- [ ]</span> Manual test: backup recording plays offline
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> rehearsal-1.md and the final script.md committed to edura-documents/demo/
+<span class="chk">- [ ]</span> All four members have rehearsed their segment on production
+<span class="chk">- [ ]</span> Production issues from the run fixed or consciously accepted
+<span class="chk">- [ ]</span> Backup recording saved locally on at least two devices
+<span class="chk">- [ ]</span> Closes #43 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #40, #41 (production live and seeded), #42 (evidence documents to show), #38 (P1 bugs fixed)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#44</span>
+      <span class="t-title">test(infra): conduct second demo rehearsal with Q&amp;A simulation — prepare answers for technical questions</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>2h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 13</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As presenters, we want to rehearse hard, realistic panel questions so that every member can answer accurately, concisely, and honestly about the parts of the system they own — and the parts they do not.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: 15-minute Q&amp;A after the 20-minute demo</span>
+<span class="ref">- 2-Week Plan: Day 13 — one member plays the evaluator and asks hard questions</span>
+
+Evaluators reward accurate answers and honest limitations. The simulation must include questions about decisions that changed during the project (MongoDB → PostgreSQL, Azure DevOps → GitHub Actions, GitHub board), and about requirements that are only partly met. Each answer should cite evidence we can show live (code, test, pipeline run, report).
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Question Bank Prepared</span>
+<span class="bold">**Given**</span> the system, SRS, and SDS
+<span class="bold">**When**</span> the team writes the bank
+<span class="bold">**Then**</span> documents/demo/qa-prep.md lists at least 30 likely questions grouped by owner (architecture and CI/CD, auth and security, payment and enrollment, assessment and analytics, process and testing) with a 2–4 sentence answer and an evidence pointer for each
+
+<span class="h3">### AC2: Mandatory Questions Covered</span>
+<span class="bold">**Given**</span> the list
+<span class="bold">**When**</span> it is reviewed
+<span class="bold">**Then**</span> it includes strong answers to at least: how the webhook prevents tampering and replay (HMAC verification plus unique transaction_id idempotency), how timed exams auto-submit (server-side Redis TTL, not just the client), how private videos are protected (signed URLs, domain-restricted embeds), why microservices and why the database changed to PostgreSQL, what the CI pipeline does (show a run), what the coverage figures are, and how RabbitMQ events flow
+
+<span class="h3">### AC3: Honest Limitations Answered</span>
+<span class="bold">**Given**</span> known gaps
+<span class="bold">**When**</span> the evaluator probes them
+<span class="bold">**Then**</span> each presenter can state clearly what is not done and why, including: automatic reconciliation polling for missed PayHere webhooks (SRS NFR-004) if not implemented, canary deployments, mTLS between services, field-level encryption and upload virus scanning from the SDS, AI assistant scope, and no formal user testing with real students
+
+<span class="h3">### AC4: Simulated Q&amp;A Run</span>
+<span class="bold">**Given**</span> one member acts as evaluator
+<span class="bold">**When**</span> a 15-minute Q&amp;A is simulated after a quick demo pass
+<span class="bold">**Then**</span> every member answers at least 3 questions, and weak or incorrect answers are noted and corrected in qa-prep.md
+
+<span class="h3">### AC5: Answer Discipline Agreed</span>
+<span class="bold">**Given**</span> the team's rehearsal notes
+<span class="bold">**When**</span> the session closes
+<span class="bold">**Then**</span> the team agrees a rule for handling unknown questions (say what is known, state that it is outside implemented scope or will be verified, never invent) and who fields questions about which area
+
+<span class="h2">## Technical Notes</span>
+- Practise showing evidence live: open the CI run, the coverage report, the OWASP checklist, the project board, the ER diagram, and the RabbitMQ management UI in under 20 seconds each
+- Use the requirement IDs (FR-xxx, BR-xxx, NFR-xxx) in answers — it shows traceability
+- Do not memorise exact numbers; read coverage and test counts from the report on the day
+- Record answers that changed after the session in the commit message so progress is visible
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: 15-minute simulated Q&amp;A completed with all four members answering
+<span class="chk">- [ ]</span> Manual check: every answer has a showable evidence link that works on production or in the repos
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> qa-prep.md committed to edura-documents/demo/ with ≥ 30 Q&amp;As
+<span class="chk">- [ ]</span> Limitations list agreed and consistent with the final report (#45)
+<span class="chk">- [ ]</span> Rehearsal notes added (what was weak, what changed)
+<span class="chk">- [ ]</span> Closes #44 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 2 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #43 (demo script final), #42 (evidence documents available)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#45</span>
+      <span class="t-title">docs(infra): write final development report Chapter 4 (Implementation) and Chapter 5 (Testing)</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-gray">epic:documentation</span>
+      <span class="label-badge lb-gray">docs</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>5h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 13</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want a clear, honest, evidence-backed final report on implementation and testing so that evaluators can see what we built, how we verified it, and what remains unfinished.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: final development report requirements (implementation and testing chapters), SENG 34213</span>
+<span class="ref">- Design Report: Chapters 1–5 completed in SENG 31242 define scope, the SRS/SDS, the prototype, and the earlier limitations (Section 5.3)</span>
+<span class="ref">- 2-Week Plan: Day 13 — AI-assisted writing is allowed, but every factual claim must match the real system</span>
+
+Chapter 4 (Implementation) explains how the design became a running system. Chapter 5 (Testing) proves quality with numbers and artefacts. AI assistance may draft prose, but all facts, numbers, and screenshots must be checked against the repositories, CI, and production. Honest limitations are part of the grade, not a weakness.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Chapter 4 — Implementation</span>
+<span class="bold">**Given**</span> the final code and pipelines
+<span class="bold">**When**</span> the chapter is complete
+<span class="bold">**Then**</span> it covers: final tech stack with justification; module-by-module description of all 11 services and the frontend with requirement traceability (FR/NFR/BR IDs); repository and branching strategy (5 repos, monorepo ADR-08); CI/CD pipeline and the AKS deployment; and the main implementation challenges with how they were solved
+
+<span class="h3">### AC2: Deviations From the Design Documented</span>
+<span class="bold">**Given**</span> differences between the SDS and the delivered system
+<span class="bold">**When**</span> the chapter is reviewed
+<span class="bold">**Then**</span> each is listed with reason and impact: MongoDB → PostgreSQL (Neon), Azure DevOps → GitHub Actions, the AI assistant proxy in the frontend (if #36 was done), canary deployment replaced by approval-gated rolling update, and any other deviation found
+
+<span class="h3">### AC3: Chapter 5 — Testing</span>
+<span class="bold">**Given**</span> the test evidence
+<span class="bold">**When**</span> the chapter is complete
+<span class="bold">**Then**</span> it presents: testing strategy (unit, integration, E2E, security, manual demo walkthrough); coverage summary per service with the actual figures from #35; integration test results (#24, #29, #32); the OWASP evidence summary from #34; and the demo walkthrough results from #37 with bugs found and fixed
+
+<span class="h3">### AC4: Honest Limitations Section</span>
+<span class="bold">**Given**</span> the known gaps
+<span class="bold">**When**</span> the limitations section is written
+<span class="bold">**Then**</span> it lists unimplemented or partial items with reasons, such as items from the known-limitations file, PayHere running in sandbox mode, no formal usability study with real students, and any SDS security measures not delivered — consistent with what the team will say in the demo
+
+<span class="h3">### AC5: Evidence and Quality</span>
+<span class="bold">**Given**</span> the draft is complete
+<span class="bold">**When**</span> it is reviewed by a member who did not write the section
+<span class="bold">**Then**</span> every number matches its source, every figure and screenshot has a caption and reference, references are in the same style as the design report, and the document is spell-checked and proofread
+
+<span class="h2">## Technical Notes</span>
+- Files: documents/final-report/chapter4.md, chapter5.md, then merge to a single PDF in the team template
+- Screenshots: GitHub Actions run, coverage summary, board, ER diagram, RabbitMQ UI, production dashboard
+- Write from the issue list: each epic gives a natural subsection in Chapter 4
+- Reuse retrospective notes (#25 and later) as the "challenges" source — they are first-hand evidence
+- Each member drafts the chapter sections for their services, then one editor harmonises tone
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: every statistic is traceable to a file, CI run, or report
+<span class="chk">- [ ]</span> Manual check: peer review of each section by another member
+<span class="chk">- [ ]</span> Manual check: spelling and grammar pass; PDF renders correctly
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> chapter4.md and chapter5.md committed to edura-documents/final-report/
+<span class="chk">- [ ]</span> Merged PDF generated and added to the submission pack
+<span class="chk">- [ ]</span> Limitations section consistent with qa-prep.md (#44)
+<span class="chk">- [ ]</span> 1 peer review completed per chapter
+<span class="chk">- [ ]</span> Closes #45 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 5 hours (team total, in parallel with #43 and #44)
+
+<span class="h2">## Dependencies</span>
+Blocked by: #34, #35, #37, #42 (evidence), #40 (production facts)</div>
+</div>
+<div class="week-divider"><span class="week-pill pill-w2">Week 2 · Day 14 · Demo Day</span><span class="week-line"></span></div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#46</span>
+      <span class="t-title">test(infra): pre-demo verification — check production URL 2 hours before panel; confirm all demo accounts work</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>2h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 14</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As presenters, we want a verified, working system and a ready fallback two hours before the panel so that we can fix small problems calmly instead of discovering them in front of the evaluators.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- 2-Week Plan: Day 14 — arrive early, test production first, have a hotfix branch and a backup recording</span>
+<span class="ref">- Risk register: AKS outage, expired credentials, third-party outage (PayHere sandbox, Cloudinary, YouTube, Asgardeo, SMTP)</span>
+
+This is a time-boxed checklist run at T-2 hours. The goal is a clear GO / GO-WITH-FALLBACK decision, not new development. Only minor hotfixes through the approved hotfix path are allowed. No deployment is permitted in the final 30 minutes before the panel unless the system is already broken.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Production Is Healthy</span>
+<span class="bold">**Given**</span> it is 2 hours before the panel
+<span class="bold">**When**</span> the team checks the production URL
+<span class="bold">**Then**</span> all 11 /health routes return 200 over HTTPS, the certificate is valid, and AKS shows all pods Running with no restarts since the last deployment
+
+<span class="h3">### AC2: All Demo Accounts Log In</span>
+<span class="bold">**Given**</span> the credentials from #41
+<span class="bold">**When**</span> each of the admin, teacher, student 1, and student 2 accounts signs in (including OTP email delivery)
+<span class="bold">**Then**</span> every login succeeds within 10 seconds and each lands on the correct role dashboard
+
+<span class="h3">### AC3: Five Scenarios Walked Once</span>
+<span class="bold">**Given**</span> the demo script
+<span class="bold">**When**</span> the team runs all five scenarios quickly
+<span class="bold">**Then**</span> each completes; the pending manual receipt for scenario 3 and a fresh quiz attempt for scenario 1 are reset or available
+
+<span class="h3">### AC4: Third-Party Dependencies Verified</span>
+<span class="bold">**Given**</span> the external services the demo uses
+<span class="bold">**When**</span> the team checks them
+<span class="bold">**Then**</span> the PayHere sandbox checkout opens, a YouTube lesson plays, a Cloudinary note downloads, and an OTP email arrives; any outage is noted and the corresponding fallback in the script is chosen
+
+<span class="h3">### AC5: Fallbacks Ready</span>
+<span class="bold">**Given**</span> the fallback plan
+<span class="bold">**When**</span> the check completes
+<span class="bold">**Then**</span> a hotfix/demo-day branch exists from main (no commits), the backup recording plays offline on the demo laptop, the CI run, coverage report, OWASP checklist, and project board are open in tabs, and mobile hotspot or an alternate network is available
+
+<span class="h3">### AC6: Go / No-Go Recorded</span>
+<span class="bold">**Given**</span> the results above
+<span class="bold">**When**</span> the team meets
+<span class="bold">**Then**</span> a GO or GO-WITH-FALLBACK decision is written in the log with the time, who checked what, and the agreed action for each failed item
+
+<span class="h2">## Technical Notes</span>
+- Checklist: documents/demo/pre-demo-checklist.md with timestamps and initials
+- Check from the panel network or a similar one if possible (some institutions block outbound ports or video embeds)
+- Keep OTP email inbox access ready; clear spam filters if OTP mail is delayed
+- Do not reseed production during this window except to reset the demo state
+- If production is down, decide within 15 minutes between hotfix, rollback (kubectl rollout undo), or localhost with the backup recording
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual test: all items in the checklist ticked with time and initials
+<span class="chk">- [ ]</span> Manual test: backup recording plays with no internet
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Checklist completed and committed or shared with the supervisor on request
+<span class="chk">- [ ]</span> GO / GO-WITH-FALLBACK decision logged
+<span class="chk">- [ ]</span> Every failed item has an owner and a fallback
+<span class="chk">- [ ]</span> Closes #46 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 2 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #43, #44 (rehearsals done), #40, #41 (production and demo data)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#47</span>
+      <span class="t-title">test(infra): live panel demonstration — present EDURA on production URL and conduct Q&amp;A</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-blue">epic:testing</span>
+      <span class="label-badge lb-blue">test</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>35min</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 14</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As the team, we want to present EDURA clearly and confidently on the live production system and answer questions honestly so that the panel sees a working, well-engineered, and well-understood product.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: 20-minute demo plus 15-minute Q&amp;A, presented on the production URL only</span>
+<span class="ref">- Client: Mr. Dimuthu Prabath (ICT – Dimuthu) — the system is built for his institute; use his terminology (students, teachers, receipts, monthly subscriptions)</span>
+- Rehearsal artefacts: script.md (#43), qa-prep.md (#44), pre-demo checklist (#46)
+
+This issue records the event itself. Success is a smooth, evidence-based presentation: every member speaks, every claim can be shown, and limitations are stated plainly.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Presented on Production Only</span>
+<span class="bold">**Given**</span> the pre-demo check passed
+<span class="bold">**When**</span> the demo starts
+<span class="bold">**Then**</span> every walkthrough step runs on the production URL (not localhost), unless the agreed fallback in #46 was triggered and is announced to the panel
+
+<span class="h3">### AC2: Agenda Followed</span>
+<span class="bold">**Given**</span> the script
+<span class="bold">**When**</span> the team presents
+<span class="bold">**Then**</span> the order is Context (2 min) → Live walkthrough (12 min) → Architecture (3 min) → Limitations (2 min) → Lessons learned (1 min), within the 20-minute limit
+
+<span class="h3">### AC3: All Four Members Present</span>
+<span class="bold">**Given**</span> the speaking plan
+<span class="bold">**When**</span> the demo ends
+<span class="bold">**Then**</span> each member has presented their segment and answered at least one question
+
+<span class="h3">### AC4: Evidence Shown</span>
+<span class="bold">**Given**</span> claims about quality and process
+<span class="bold">**When**</span> the panel asks or the script reaches those points
+<span class="bold">**Then**</span> the team shows live: a CI pipeline run, the coverage report, the OWASP checklist, the GitHub Project board with completed issues, and the RabbitMQ or Kubernetes view during the architecture segment
+
+<span class="h3">### AC5: Honest Limitations</span>
+<span class="bold">**Given**</span> the limitations list in the report
+<span class="bold">**When**</span> the limitations segment and Q&amp;A run
+<span class="bold">**Then**</span> the team states unfinished or partial items directly (for example sandbox payments, items not implemented from the SDS) and does not claim anything that was not built or verified
+
+<span class="h3">### AC6: Q&amp;A and Follow-Ups Captured</span>
+<span class="bold">**Given**</span> the 15-minute Q&amp;A
+<span class="bold">**When**</span> it ends
+<span class="bold">**Then**</span> a note-taker has recorded the questions, any feedback from the panel and the client, and any follow-up actions, saved in documents/demo/demo-day-notes.md the same day
+
+<span class="h2">## Technical Notes</span>
+- Arrive early; do a silent 5-minute check of production before the panel enters
+- Keep one member as the "driver" of the screen and another as the timekeeper
+- If something fails live: say it plainly, switch to the backup recording for that scenario, and continue — do not debug in front of the panel
+- Do not read from the slides; the live system is the main evidence
+- Record the demo (with permission) for the team's own review and the final retrospective
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: demo completed within 20 minutes
+<span class="chk">- [ ]</span> Manual check: Q&amp;A notes captured
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Demo delivered on production by all four members
+<span class="chk">- [ ]</span> demo-day-notes.md committed to edura-documents/demo/
+<span class="chk">- [ ]</span> Follow-up actions from the panel listed with owners
+<span class="chk">- [ ]</span> Closes #47 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 35 minutes (20 min demo + 15 min Q&amp;A)
+
+<span class="h2">## Dependencies</span>
+Blocked by: #46 (GO decision), #43, #44 (rehearsals), #45 (report draft available if requested)</div>
+</div>
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#48</span>
+      <span class="t-title">docs(infra): submit final report and peer evaluations; commit final retrospective to documents repo</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-gray">epic:documentation</span>
+      <span class="label-badge lb-gray">docs</span>
+      <span class="label-badge lb-red">P1-Critical</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 5 — Week 2</strong></div>
+    <div class="tm">Estimate: <strong>3h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Day 14</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a team, we want to complete every post-demo submission on time, with evidence-backed peer evaluations and a final retrospective, so that our work and each member's contribution are formally and fairly recorded.
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: SENG 34213 submission rules — final report PDF plus hard copy to the Teaching Unit; individual peer evaluation PDFs; within 48 hours of the demo</span>
+- Naming: PeerEval_SE2021047_SENG34213.pdf and equivalents for SE2021029, SE2021034, SE2021011
+- eKelaniya path: SENG 34213 → Assessments → Peer Evaluation Submission
+
+Final report content comes from #45 plus the design report chapters. Peer evaluations are written individually: each member rates the other three with written justification and evidence (commit logs, issue and PR history, CI screenshots). The final retrospective closes the sprint record started in #25.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Final Report Submitted</span>
+<span class="bold">**Given**</span> the chapters from #45 and any panel feedback from #47
+<span class="bold">**When**</span> the report is finalised
+<span class="bold">**Then**</span> one PDF is uploaded to the Teaching Unit's submission channel and a hard copy is delivered, both within the guideline deadline, with the cover page, declaration, and proofreading certification completed
+
+<span class="h3">### AC2: Peer Evaluations Submitted</span>
+<span class="bold">**Given**</span> each member has reviewed the others' contributions
+<span class="bold">**When**</span> the files are prepared
+<span class="bold">**Then**</span> each member submits their own PeerEval_&lt;studentno&gt;_SENG34213.pdf via the eKelaniya link, every rating is justified in writing, and each justification cites evidence such as commits, merged PRs, issues closed, or reviews performed
+
+<span class="h3">### AC3: Final Retrospective Committed</span>
+<span class="bold">**Given**</span> the whole sprint and the demo outcome
+<span class="bold">**When**</span> the retrospective is written
+<span class="bold">**Then**</span> documents/retrospectives/sprint5-final.md exists with: planned vs delivered issues (48 total), final velocity versus Week 1, what went well, what did not, lessons for future projects, and an honest list of work not completed
+
+<span class="h3">### AC4: Project Board and Repositories Final</span>
+<span class="bold">**Given**</span> all tickets are resolved
+<span class="bold">**When**</span> the board is reviewed
+<span class="bold">**Then**</span> every issue is Done or explicitly Deferred with a reason, the v1.0.0 tag and release exist, and the repositories remain accessible to the supervisor and assessors
+
+<span class="h3">### AC5: Submission Confirmation Recorded</span>
+<span class="bold">**Given**</span> each upload or delivery
+<span class="bold">**When**</span> it is done
+<span class="bold">**Then**</span> the confirmation (screenshot, email, or receipt) is saved in documents/submissions/ for every member and for the final report
+
+<span class="h2">## Technical Notes</span>
+- Peer evaluations must be independent; do not copy each other's text
+- Evidence: use git shortlog -sn, GitHub Insights, and PR review history; mention contribution types (design, review, infra, testing), not just commit counts
+- Keep the final report's reference list and figure numbering consistent with the design report
+- If the hard-copy deadline falls on a day when the Teaching Unit is closed, confirm the arrangement with the supervisor in writing
+- The Sprint 5 — Week 2 milestone due date (Day 14) may need extending to cover the 48-hour submission window; update it so the board does not show the sprint as overdue
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: final report PDF opens and matches the printed copy
+<span class="chk">- [ ]</span> Manual check: every peer evaluation file is named correctly and is readable
+<span class="chk">- [ ]</span> Manual check: confirmations saved for all submissions
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> Final report submitted (PDF and hard copy)
+<span class="chk">- [ ]</span> 4 peer evaluations submitted individually with evidence
+<span class="chk">- [ ]</span> sprint5-final.md committed to edura-documents/retrospectives/
+<span class="chk">- [ ]</span> Board, milestones, and releases in their final state
+<span class="chk">- [ ]</span> Closes #48 in commit messages (edura-documents)
+
+<span class="h2">## Estimate</span>
+Estimated: 3 hours
+
+<span class="h2">## Dependencies</span>
+Blocked by: #45 (report chapters), #47 (demo done), #42 (deliverables)</div>
+</div>
+
+</div>
+</body>
+</html>
