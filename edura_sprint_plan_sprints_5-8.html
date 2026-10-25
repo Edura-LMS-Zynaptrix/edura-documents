@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EDURA — 2-Week War Plan</title>
+<title>EDURA — 16-Week Sprint Plan (Sprints 5–8)</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=IBM+Plex+Mono:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
@@ -66,7 +66,7 @@ body {
   overflow: hidden;
 }
 .hero::after {
-  content: '14';
+  content: '16';
   position: absolute;
   right: -20px; top: -30px;
   font-family: 'Syne', sans-serif;
@@ -564,6 +564,29 @@ footer {
   font-size: 9.5px;
   color: var(--muted);
 }
+
+/* ── SPRINT REALIGNMENT ── */
+.pill-s5 { background: rgba(255,71,87,0.15); color: var(--red); border: 1px solid rgba(255,71,87,0.3); }
+.pill-s6 { background: rgba(255,140,66,0.15); color: var(--orange); border: 1px solid rgba(255,140,66,0.3); }
+.pill-s7 { background: rgba(76,201,240,0.15); color: var(--blue); border: 1px solid rgba(76,201,240,0.3); }
+.pill-s8 { background: rgba(6,214,160,0.15); color: var(--green); border: 1px solid rgba(6,214,160,0.3); }
+.day-label.s5 { color: var(--red); }
+.day-label.s6 { color: var(--orange); }
+.day-label.s7 { color: var(--blue); }
+.day-label.s8 { color: var(--green); }
+.week-gate { text-align: right; line-height: 1.5; }
+.task-id .orig { display: block; font-size: 8.5px; color: var(--dim); margin-top: 2px; }
+.break-note {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 0 0 40px;
+}
+.svc-table td { color: var(--muted); }
+.svc-table td .svc-name { color: var(--text); }
 </style>
 </head>
 <body>
@@ -571,14 +594,14 @@ footer {
 <!-- DANGER BANNER -->
 <div class="danger-banner">
   <span class="blink"></span>
-  CRITICAL TIMELINE — 14 DAYS · FULL STACK · GREENFIELD · PRODUCTION DEPLOY ON AZURE AKS
+  SPRINTS 5–8 · 16 WEEKS · JUN 16 – OCT 23 · FULL STACK · GREENFIELD · PRODUCTION DEPLOY ON AZURE AKS
   <span class="blink"></span>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-eyebrow">EDURA LMS · Team ZYNAPTRIX · 2-Week War Plan</div>
-  <h1>14 Days.<br><em>No Buffer.</em></h1>
+  <div class="hero-eyebrow">EDURA LMS · Team ZYNAPTRIX · 16-Week Sprint Plan</div>
+  <h1>16 Weeks.<br><em>4 Sprints.</em></h1>
   <p class="hero-sub">All 11 microservices. Full Azure AKS deploy. Client demo for Mr. Dimuthu Prabath. This plan assumes AI-assisted coding, parallel development, and zero wasted days.</p>
   <div class="stat-row">
     <div class="stat">
@@ -594,7 +617,7 @@ footer {
       <div class="stat-label">Gap Closed by AI Coding</div>
     </div>
     <div class="stat">
-      <div class="stat-val blue">Day 10</div>
+      <div class="stat-val blue">Week 12</div>
       <div class="stat-label">Last Safe Feature Cutoff</div>
     </div>
   </div>
@@ -612,13 +635,13 @@ footer {
   <div class="honest-card red-tint">
     <h3 class="red">What will kill this plan</h3>
     <ul>
-      <li>Any member going dark for even 1 full day</li>
+      <li>Any member going dark for a full week</li>
       <li>Debugging integration issues alone — always pair on cross-service problems</li>
       <li>Polishing UI before core APIs are working</li>
-      <li>Trying to set up Azure AKS from scratch in Week 2 — configure it in Week 1 Day 3</li>
+      <li>Trying to set up Azure AKS from scratch in Sprint 8 — configure it in Week 3</li>
       <li>Writing tests after features — tests and feature code in the same PR</li>
       <li>Waiting for a perfect architecture — ship working code, refactor later</li>
-      <li>Feature creep — AI assistant, leaderboard gamification are Week 2 only if ahead</li>
+      <li>Feature creep — AI assistant, leaderboard gamification are Sprint 7 only if ahead</li>
     </ul>
   </div>
   <div class="honest-card green-tint">
@@ -626,10 +649,10 @@ footer {
     <ul>
       <li>AI generates the boilerplate — you review, integrate, and test</li>
       <li>Each member owns 2–3 services end-to-end (schema → API → tests)</li>
-      <li>Shared Docker Compose running from Day 2 so everyone integrates daily</li>
-      <li>Staging deploy live from Day 5 — not Day 13</li>
+      <li>Shared Docker Compose running from Week 1 so everyone integrates continuously</li>
+      <li>Staging deploy live by Week 4 — not Week 15</li>
       <li>Daily 15-min sync: what's merged, what's blocked, who helps who</li>
-      <li>Feature freeze Day 10 — Days 11–14 are testing, fixes, and demo prep only</li>
+      <li>Feature freeze end of Week 12 — Sprint 8 (Weeks 13–16) is testing, fixes, and demo prep only</li>
       <li>One person (Nadun) owns infra/CI full-time — never rotates off it</li>
     </ul>
   </div>
@@ -650,7 +673,7 @@ footer {
     <div class="load-name">Nadun Dananjaya</div>
     <div class="load-id">SE/2021/047 · @n.dananjaya</div>
     <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
-    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-hrs">~62h across 16 weeks · ~3.9h/week</div>
     <div class="load-svcs">
       <span class="load-svc">infra-owner</span>
       <span class="load-svc">auth-svc</span>
@@ -663,7 +686,7 @@ footer {
     <div class="load-name">Imansha Rajapaksha</div>
     <div class="load-id">SE/2021/029 · @i.rajapaksha</div>
     <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
-    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-hrs">~62h across 16 weeks · ~3.9h/week</div>
     <div class="load-svcs">
       <span class="load-svc">course-svc</span>
       <span class="load-svc">content-svc</span>
@@ -675,7 +698,7 @@ footer {
     <div class="load-name">Danindu Ransika</div>
     <div class="load-id">SE/2021/034 · @d.ransika</div>
     <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
-    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-hrs">~62h across 16 weeks · ~3.9h/week</div>
     <div class="load-svcs">
       <span class="load-svc">payment-svc</span>
       <span class="load-svc">enroll-svc</span>
@@ -687,7 +710,7 @@ footer {
     <div class="load-name">Thushan Madushanka</div>
     <div class="load-id">SE/2021/011 · @t.madushanka</div>
     <div class="load-bar-wrap"><div class="load-bar" style="width:88%"></div></div>
-    <div class="load-hrs">~62h across 14 days · ~4.5h/day</div>
+    <div class="load-hrs">~62h across 16 weeks · ~3.9h/week</div>
     <div class="load-svcs">
       <span class="load-svc">assess-svc</span>
       <span class="load-svc">progress-svc</span>
@@ -757,7 +780,7 @@ footer {
     <tr>
       <th style="width:40px">Tier</th>
       <th style="width:180px">Service</th>
-      <th style="width:100px">Day Target</th>
+      <th style="width:100px">Week Target</th>
       <th style="width:80px">Owner</th>
       <th>Why this order + AI prompt seed</th>
     </tr>
@@ -766,145 +789,176 @@ footer {
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--red);">T0<br>Infra</td>
       <td><div class="svc-name">Docker + Nginx + RabbitMQ + Redis</div><div class="svc-tech">infra foundation</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 1–2</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 1–2</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya</td>
       <td><div class="ai-prompt">"Generate a docker-compose.yml for 11 Python FastAPI services on ports 8001-8011, postgres:16, redis:7, rabbitmq:3-management, nginx. Each service has its own Dockerfile with hot-reload."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">T1<br>Auth</td>
       <td><div class="svc-name">Auth Service + User Service</div><div class="svc-tech">auth_service · user_service</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 2–4</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 2–3</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya<br>@i.rajapaksha</td>
       <td><div class="ai-prompt">"FastAPI auth service integrating Asgardeo OAuth 2.0 PKCE flow. Endpoints: /auth/login, /auth/callback, /auth/refresh, /auth/logout. JWT validation middleware. Redis session store. SQLAlchemy models: User, RefreshToken, OtpCode."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yellow);">T2<br>Core</td>
       <td><div class="svc-name">Course + Content + Enrollment</div><div class="svc-tech">course_service · content_service · enrollment_service</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 4–7</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 5–6</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@i.rajapaksha<br>@d.ransika</td>
       <td><div class="ai-prompt">"FastAPI course service. Models: Course(id, title, teacher_id, status:ENUM[DRAFT,PUBLISHED,ARCHIVED]), Module, Lesson(youtube_video_id, cloudinary_asset_url). Full CRUD with teacher ownership check. Cloudinary signed URL generation. RabbitMQ publish on course.published."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--yellow);">T2<br>Pay</td>
       <td><div class="svc-name">Payment Service + Admin Service</div><div class="svc-tech">payment_service · admin_service</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 5–8</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 5–7</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@d.ransika</td>
       <td><div class="ai-prompt">"FastAPI payment service. PayHere checkout init (POST /payments/checkout). Webhook handler (POST /payments/webhook) with HMAC-MD5 verification using merchant_secret. payment_status ENUM(PENDING,SUCCESS,FAILED). Idempotency via transaction_id. Publish payment.success to RabbitMQ."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green);">T3<br>Assess</td>
       <td><div class="svc-name">Assessment + Progress Tracking</div><div class="svc-tech">assessment_service · progress_service</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 6–9</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 6–7</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@t.madushanka</td>
       <td><div class="ai-prompt">"FastAPI assessment service. Timed quiz session using Redis (store timer start, auto-submit on expiry). MCQ/True-False auto-grading. Tab-switch detection webhook endpoint. Models: Assessment, Question, Submission, ViolationLog. Publish assessment.graded to RabbitMQ."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--green);">T3<br>Support</td>
       <td><div class="svc-name">Notification + Analytics</div><div class="svc-tech">notification_service · analytics_service</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 8–10</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 7–8</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@t.madushanka<br>@d.ransika</td>
       <td><div class="ai-prompt">"Python pika RabbitMQ consumer service. Listen to events: auth.otp-requested, payment.success, certificate.issued. Send SMTP emails using Jinja2 templates. No HTTP endpoints — pure consumer."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);">T4<br>UI</td>
       <td><div class="svc-name">Next.js Frontend</div><div class="svc-tech">edura-frontend · Next.js + Redux</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 5–10</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 8–12</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@i.rajapaksha</td>
       <td><div class="ai-prompt">"Next.js 14 App Router + Redux Toolkit. Pages: /login, /register, /dashboard, /courses, /courses/[id], /courses/[id]/lesson/[lid], /assessment/[id], /admin, /profile. Use the Figma design as reference. Connect to API Gateway at NEXT_PUBLIC_API_URL."</div></td>
     </tr>
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);">T5<br>Deploy</td>
       <td><div class="svc-name">Azure AKS + CI/CD Pipeline</div><div class="svc-tech">infra · .github/workflows</div></td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Day 3 start → Day 12 production</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);">Wk 3 start → Wk 4 staging → Wk 15 production</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);">@n.dananjaya</td>
       <td><div class="ai-prompt">"GitHub Actions workflow: lint → build → unit tests → docker build + push to ACR → kubectl apply to AKS staging. Trigger on push to develop. Second job: deploy to production on push to main with manual approval."</div></td>
     </tr>
   </tbody>
 </table>
 
-<!-- ══ SECTION 5: WEEK 1 ══ -->
 <div class="section-head">
   <span class="section-num">05 —</span>
-  <h2>Week 1 — Build Everything</h2>
+  <h2>Sprint Calendar</h2>
+</div>
+
+<table class="svc-table">
+  <thead><tr>
+    <th>Sprint</th><th>Weeks</th><th>Dates</th><th>Duration</th><th>Focus Theme</th><th>Review Format</th><th>Tasks</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><div class="svc-name">Sprint 5</div></td><td>1–4</td><td>Jun 16 – Jul 13</td><td>4 weeks</td><td>Foundation &amp; Infrastructure</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#01 – #12, #18, #25</td></tr>
+    <tr><td><div class="svc-name">Sprint 6</div></td><td>5–8</td><td>Jul 14 – Aug 10</td><td>4 weeks</td><td>Core Features</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#13 – #17, #19 – #23, #49</td></tr>
+    <tr><td><div class="svc-name">Sprint 7</div></td><td>9–12</td><td>Aug 11 – Sep 7</td><td>4 weeks</td><td>Integration &amp; UX</td><td>Demo + retrospective</td><td class="svc-tech">DDP-#24, #26 – #33, #36</td></tr>
+    <tr><td><div class="svc-name">Sprint 8</div></td><td>13–16</td><td>Sep 28 – Oct 23</td><td>4 weeks</td><td>Quality &amp; Release</td><td>Final panel demo</td><td class="svc-tech">DDP-#34, #35, #37 – #48</td></tr>
+  </tbody>
+</table>
+
+<table class="svc-table">
+  <thead><tr>
+    <th>Week(s)</th><th>Phase</th><th>Gate</th><th>Key Activities</th><th>Dates</th><th>Tasks</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>1</td><td><div class="svc-name">Development Kick-Off</div></td><td>✓ Repo setup</td><td>Add code repos, set up CI scaffold, agree coding standards</td><td>Jun 16 – Jun 22</td><td class="svc-tech">DDP-#01 – #05</td></tr>
+    <tr><td>1–4</td><td><div class="svc-name">Sprint 5 – Core Foundation</div></td><td>Sprint 5 Review</td><td>Data layer, auth, core domain models, CI pipeline live</td><td>Jun 16 – Jul 13</td><td class="svc-tech">14 tasks</td></tr>
+    <tr><td>5–8</td><td><div class="svc-name">Sprint 6 – Feature Development</div></td><td>Sprint 6 Review</td><td>Primary features implemented and unit-tested</td><td>Jul 14 – Aug 10</td><td class="svc-tech">11 tasks</td></tr>
+    <tr><td>9–12</td><td><div class="svc-name">Sprint 7 – Integration &amp; Polish</div></td><td>Sprint 7 Review</td><td>Integration testing, API contracts, UI completion</td><td>Aug 11 – Sep 7</td><td class="svc-tech">10 tasks</td></tr>
+    <tr><td>13–14</td><td><div class="svc-name">Sprint 8 – Testing &amp; Hardening</div></td><td>Test coverage gate</td><td>Full test suite, performance testing, security review</td><td>Sep 28 – Oct 11</td><td class="svc-tech">6 tasks</td></tr>
+    <tr><td>15</td><td><div class="svc-name">Pre-Demo Staging</div></td><td>Supervisor sign-off</td><td>Staged deployment; end-to-end demo rehearsal</td><td>Oct 12 – Oct 18</td><td class="svc-tech">5 tasks</td></tr>
+    <tr><td>16</td><td><div class="svc-name">Final Demo &amp; Submission</div></td><td>Panel approval</td><td>Live product demonstration; final report submission</td><td>Oct 19 – Oct 23</td><td class="svc-tech">3 tasks</td></tr>
+  </tbody>
+</table>
+
+<div class="arch-box"><strong>Calendar note:</strong> Sprints 5–7 run back-to-back from Jun 16 to Sep 7. Sprint 8 then runs Mon Sep 28 – Fri Oct 23, so Sep 8 – Sep 27 is a gap with no sprint. All 48 issues (DDP-#01 to #48) are unchanged; each one shows the day it sat on in the original 2-week plan.</div>
+
+<div class="section-head">
+  <span class="section-num">06 —</span>
+  <h2>Sprint Plan — Sprints 5 to 8</h2>
 </div>
 
 <div class="week-wrapper">
   <div class="week-title-bar">
-    <span class="week-pill pill-w1">Week 1 · Days 1–7</span>
-    <span class="week-theme">Infrastructure → Auth → Core APIs → Staging Live</span>
-    <span class="week-gate">Gate: All services returning 200 on /health in staging by Day 7</span>
+    <span class="week-pill pill-s5">Sprint 5 · Weeks 1–4</span>
+    <span class="week-theme">Foundation &amp; Infrastructure</span>
+    <span class="week-gate">Jun 16 – Jul 13 · Demo + retrospective<br>Gate: Sprint 5 Review — data layer, auth, core domain models, CI pipeline live</span>
   </div>
 
-  <!-- D1 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 1 · MON</span>
-      <span class="day-focus">Repo setup, Docker Compose, CI scaffold, Sprint Planning</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s5">WEEK 1</span>
+      <span class="day-focus">Development kick-off: repos, Docker Compose, CI scaffold, Sprint Planning</span>
+      <span class="day-hours">Jun 16 – Jun 22 · ~13.5h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#01</div>
+        <div class="task-id">DDP-#01<span class="orig">orig. Day 1</span></div>
         <div><div class="task-title">Create all repos, branch protections, .env.example, README shells</div><div class="task-desc">edura-backend, edura-frontend, edura-infra, edura-tests. develop = default branch. main protected (1 review + CI pass). Commit linter configs (pyproject.toml + .eslintrc) immediately.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">2h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#02</div>
+        <div class="task-id">DDP-#02<span class="orig">orig. Day 1</span></div>
         <div><div class="task-title">Docker Compose with all 11 services + infra (postgres, redis, rabbitmq, nginx)</div><div class="task-desc">AI-generate the full docker-compose.yml. Each service folder gets a Dockerfile. Test: docker-compose up → all containers start. Nginx health check passes. This is the shared dev environment — everyone pulls and runs it by end of Day 1.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#03</div>
+        <div class="task-id">DDP-#03<span class="orig">orig. Day 1</span></div>
         <div><div class="task-title">GitHub Actions CI pipeline skeleton (lint + build + unit test stages)</div><div class="task-desc">Must be green on first push. Empty test file is fine — CI must pass. This unblocks everyone from Day 2 onwards. Add pip-audit security stage too.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#04</div>
+        <div class="task-id">DDP-#04<span class="orig">orig. Day 1</span></div>
         <div><div class="task-title">AI-generate all 11 FastAPI service skeletons (main.py, router, models, schemas, database.py)</div><div class="task-desc">One AI prompt per service. Each gets: GET /health endpoint, SQLAlchemy base setup, Alembic init, empty router. All services committed and building in Docker by end of day.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#05</div>
+        <div class="task-id">DDP-#05<span class="orig">orig. Day 1</span></div>
         <div><div class="task-title">GitHub Project board: extend SENG 31242 board, Sprint 5 milestone, all labels, columns</div><div class="task-desc">Phase=Development field, 6 Kanban columns, all epic + priority labels. Populate backlog with all 22 issues from this plan before end of Day 1.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">1.5h</div>
       </div>
-      <div class="ceremony">Sprint Planning (1.5h): Assign all issues. Confirm AI tooling setup (everyone has Claude/Cursor/Copilot ready). Agree: no async debugging — if blocked &gt;30min, ping team immediately.</div>
+      <div class="ceremony">Sprint 5 Planning (1.5h): Assign all issues. Confirm AI tooling setup (everyone has Claude/Cursor/Copilot ready). Agree: no async debugging — if blocked &gt;30min, ping team immediately.</div>
     </div>
   </div>
 
-  <!-- D2 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 2 · TUE</span>
-      <span class="day-focus">All DB schemas + Alembic migrations + RabbitMQ wiring</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s5">WEEK 2</span>
+      <span class="day-focus">Data layer: all DB schemas + Alembic migrations + RabbitMQ wiring + Nginx routing</span>
+      <span class="day-hours">Jun 23 – Jun 29 · ~11.5h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#06</div>
+        <div class="task-id">DDP-#06<span class="orig">orig. Day 2</span></div>
         <div><div class="task-title">All SQLAlchemy ORM models across all 11 services (AI-generated from SDS ER diagram)</div><div class="task-desc">Paste SDS §3.2 ER diagram description into AI. Get all models. Review FK relationships. Commit models.py per service. This is the data foundation everything else builds on — do not skip review step.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#07</div>
+        <div class="task-id">DDP-#07<span class="orig">orig. Day 2</span></div>
         <div><div class="task-title">All Alembic migration files + pytest fixture verifying migrations run cleanly</div><div class="task-desc">alembic revision --autogenerate per service. One pytest fixture: upgrade head → assert tables exist → downgrade → upgrade. This runs in CI postgres container on every push.</div></div>
         <div class="task-who own"><span class="ob">@danindu</span><span class="ob">@thushan</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#08</div>
+        <div class="task-id">DDP-#08<span class="orig">orig. Day 2</span></div>
         <div><div class="task-title">RabbitMQ exchanges, queues, and routing keys setup script</div><div class="task-desc">infra/rabbitmq/setup.py: declare edura.events topic exchange, all queues (notification.queue, enrollment.queue, progress.queue). Run on docker-compose startup. Test with simple publish/consume smoke test.</div></div>
         <div class="task-who own"><span class="ob">@danindu</span></div>
         <div class="task-est">2.5h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#09</div>
+        <div class="task-id">DDP-#09<span class="orig">orig. Day 2</span></div>
         <div><div class="task-title">Nginx routing config: all 11 service upstream blocks + location paths</div><div class="task-desc">/api/auth→8001, /api/users→8002, /api/courses→8003, /api/content→8004, /api/enrollments→8005, /api/payments→8006, /api/assessments→8007, /api/progress→8008, /api/admin→8009, /api/analytics→8010. Proxy headers, CORS, rate limit 100/min.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">2h</div>
@@ -912,28 +966,27 @@ footer {
     </div>
   </div>
 
-  <!-- D3 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 3 · WED</span>
-      <span class="day-focus">Auth Service complete + AKS cluster provisioned</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s5">WEEK 3</span>
+      <span class="day-focus">Auth Service + User Service complete, AKS cluster provisioned</span>
+      <span class="day-hours">Jun 30 – Jul 6 · ~12h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#10</div>
+        <div class="task-id">DDP-#10<span class="orig">orig. Day 3</span></div>
         <div><div class="task-title">Auth Service: Asgardeo OAuth flow, JWT middleware, session management, OTP</div><div class="task-desc">All endpoints: /auth/login, /auth/callback, /auth/refresh, /auth/logout, /auth/otp/request, /auth/otp/verify. JWT validation middleware decorator reusable by all other services. Redis session + OTP storage. Unit tests: TokenService (≥90% coverage).</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">5h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#11</div>
+        <div class="task-id">DDP-#11<span class="orig">orig. Day 3</span></div>
         <div><div class="task-title">User Service: CRUD endpoints + RBAC middleware shared decorator</div><div class="task-desc">GET/PUT /users/{id}, role assignment, resource ownership validation. The @require_role(["TEACHER","ADMIN"]) decorator is shared across all services via a common auth library in edura-backend/shared/. Critical: all other services import this.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#12</div>
+        <div class="task-id">DDP-#12<span class="orig">orig. Day 3</span></div>
         <div><div class="task-title">Azure AKS cluster provisioned + ACR registry created + kubectl configured</div><div class="task-desc">az aks create, az acr create. Configure GitHub Actions with AKS credentials (GitHub Secrets). Deploy a single hello-world pod to verify cluster is working. Do NOT wait until Week 2 for this — AKS provisioning takes 10–15 min but debugging takes hours.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">3h</div>
@@ -941,28 +994,59 @@ footer {
     </div>
   </div>
 
-  <!-- D4 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 4 · THU</span>
-      <span class="day-focus">Course + Content + Payment services core APIs</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s5">WEEK 4</span>
+      <span class="day-focus">CI pipeline live: staging deploy + Sprint 5 review and retrospective</span>
+      <span class="day-hours">Jul 7 – Jul 13 · ~5h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#13</div>
+        <div class="task-id">DDP-#18<span class="orig">orig. Day 5</span></div>
+        <div><div class="task-title">GitHub Actions: build all Docker images, push to ACR, deploy to AKS staging</div><div class="task-desc">Trigger on push to develop. Build matrix: all 11 service images + frontend. Push to ACR. kubectl apply -f k8s/staging/. Verify all pods Running. Add staging URL to README. This must be live by end of Day 5.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#25<span class="orig">orig. Day 7</span></div>
+        <div><div class="task-title">Week 1 Retrospective + Week 2 re-plan based on actual velocity</div><div class="task-desc">What's done? What's partial? What needs to move to Week 2? Adjust assignments. Update GitHub board. Document retro in documents/retrospectives/sprint5-week1.md. Do NOT skip this — it determines if Week 2 is survivable.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">1h</div>
+      </div>
+      <div class="ceremony">Sprint 5 Review (Demo + retrospective): Is staging live? Which services are green on /health? What is blocked for Sprint 6? Escalate anything not resolved to supervisor if needed.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="week-wrapper">
+  <div class="week-title-bar">
+    <span class="week-pill pill-s6">Sprint 6 · Weeks 5–8</span>
+    <span class="week-theme">Core Features</span>
+    <span class="week-gate">Jul 14 – Aug 10 · Demo + retrospective<br>Gate: Sprint 6 Review — primary features implemented and unit-tested</span>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label s6">WEEK 5</span>
+      <span class="day-focus">Course, Content and Payment services: core APIs</span>
+      <span class="day-hours">Jul 14 – Jul 20 · ~13h of tasks</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#13<span class="orig">orig. Day 4</span></div>
         <div><div class="task-title">Course Service: full CRUD, teacher ownership, RabbitMQ publish on publish/unpublish</div><div class="task-desc">POST/GET/PUT/DELETE /courses, /courses/{id}/modules, /courses/{id}/modules/{mid}/lessons. Store youtube_video_id + cloudinary_asset_url (never raw files). Enforce @require_role(["TEACHER","ADMIN"]) on mutating endpoints. Publish course.published event.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">5h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#14</div>
+        <div class="task-id">DDP-#14<span class="orig">orig. Day 4</span></div>
         <div><div class="task-title">Content Service: Cloudinary signed URL generation + YouTube embed token endpoint</div><div class="task-desc">POST /content/signed-url (generates time-expiring Cloudinary URL for authenticated user). GET /content/lessons/{id}/stream (returns signed embed params). File upload validation: MIME type + magic number. Max sizes enforced.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#15</div>
+        <div class="task-id">DDP-#15<span class="orig">orig. Day 4</span></div>
         <div><div class="task-title">Payment Service: PayHere checkout init + HMAC webhook handler + manual receipt upload</div><div class="task-desc">POST /payments/checkout (build PayHere payload, return redirect URL). POST /payments/webhook (verify HMAC signature, update payment_status, publish payment.success). POST /payments/receipts (upload to Azure Blob). Idempotency via transaction_id unique constraint.</div></div>
         <div class="task-who own"><span class="ob">@danindu</span></div>
         <div class="task-est">5h</div>
@@ -970,295 +1054,255 @@ footer {
     </div>
   </div>
 
-  <!-- D5 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 5 · FRI</span>
-      <span class="day-focus">Enrollment + Assessment services + Staging deploy LIVE</span>
-      <span class="day-hours">Team: ~18h total · Gate: staging URL working</span>
+      <span class="day-label s6">WEEK 6</span>
+      <span class="day-focus">Enrollment and Assessment services</span>
+      <span class="day-hours">Jul 21 – Jul 27 · ~8h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#16</div>
+        <div class="task-id">DDP-#16<span class="orig">orig. Day 5</span></div>
         <div><div class="task-title">Enrollment Service: RabbitMQ consumer for payment.success + access grant/revoke</div><div class="task-desc">Listens to payment.success → creates enrollment record + grants course access. Listens to subscription.expired → suspends access (BR-001). GET /enrollments?student_id=X for dashboard. Publish enrollment.activated.</div></div>
         <div class="task-who own"><span class="ob">@danindu</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#17</div>
+        <div class="task-id">DDP-#17<span class="orig">orig. Day 5</span></div>
         <div><div class="task-title">Assessment Service: MCQ/TF quiz CRUD + timed session (Redis) + auto-grade + anti-cheat</div><div class="task-desc">POST /assessments, POST /assessments/{id}/start (Redis timer), POST /assessments/{id}/submit (auto-grade MCQ/TF, flag short-answer for manual). POST /assessments/{id}/violations (tab-switch event from frontend JS). Publish assessment.graded.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">5h</div>
       </div>
-      <div class="task">
-        <div class="task-id">DDP-#18</div>
-        <div><div class="task-title">GitHub Actions: build all Docker images, push to ACR, deploy to AKS staging</div><div class="task-desc">Trigger on push to develop. Build matrix: all 11 service images + frontend. Push to ACR. kubectl apply -f k8s/staging/. Verify all pods Running. Add staging URL to README. This must be live by end of Day 5.</div></div>
-        <div class="task-who own"><span class="ob">@nadun</span></div>
-        <div class="task-est">4h</div>
-      </div>
-      <div class="ceremony">End of Day 5 Sync (30 min): Is staging live? Which services are green on /health? What's blocked for Week 1 end? Escalate anything not resolved to supervisor if needed.</div>
     </div>
   </div>
 
-  <!-- D6 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w1">DAY 6 · SAT</span>
-      <span class="day-focus">Progress Tracking + Notification + Admin services + Frontend skeleton</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s6">WEEK 7</span>
+      <span class="day-focus">Progress Tracking, Notification and Admin services</span>
+      <span class="day-hours">Jul 28 – Aug 3 · ~10h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#19</div>
+        <div class="task-id">DDP-#19<span class="orig">orig. Day 6</span></div>
         <div><div class="task-title">Progress Tracking: watch-status, completion %, certificate eligibility, leaderboard (Redis)</div><div class="task-desc">POST /progress/lessons/{id}/watch (record progress, check 100% completion). GET /progress/courses/{id} (completion %). Cert eligibility: 100% videos AND pass all assessments (BR-004). Leaderboard cache in Redis (sorted set). Listens to assessment.graded, lesson.watched.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#20</div>
+        <div class="task-id">DDP-#20<span class="orig">orig. Day 6</span></div>
         <div><div class="task-title">Notification Service: RabbitMQ consumer + SMTP email dispatch (OTP, payment, cert)</div><div class="task-desc">Pure consumer — no HTTP endpoints. Jinja2 email templates for: OTP, payment confirmation, certificate ready, violation alert. SMTP via Gmail App Password or SendGrid. Test by triggering auth.otp-requested manually.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#21</div>
+        <div class="task-id">DDP-#21<span class="orig">orig. Day 6</span></div>
         <div><div class="task-title">Admin Service: receipt verification dashboard endpoints + user management + audit log</div><div class="task-desc">GET/PUT /admin/payments/receipts (approve/reject with audit trail). GET/POST/PUT/DELETE /admin/users. GET /admin/violations. GET /admin/audit-logs. All @require_role(["ADMIN"]).</div></div>
         <div class="task-who own"><span class="ob">@danindu</span></div>
         <div class="task-est">3h</div>
       </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label s6">WEEK 8</span>
+      <span class="day-focus">Frontend skeleton (login, dashboard, catalog) + Analytics service</span>
+      <span class="day-hours">Aug 4 – Aug 10 · ~10h of tasks</span>
+    </div>
+    <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#22</div>
+        <div class="task-id">DDP-#22<span class="orig">orig. Day 6</span></div>
         <div><div class="task-title">Next.js: Login, Register, Student Dashboard, Course Catalog pages (connected to live APIs)</div><div class="task-desc">Wire to staging API Gateway URL. Redux auth slice (login, token refresh). Protected route HOC. Course catalog fetches from course-svc. Student dashboard fetches enrolled courses + progress. Use Figma prototype as visual reference.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">5h</div>
       </div>
-    </div>
-  </div>
-
-  <!-- D7 -->
-  <div class="day-block">
-    <div class="day-header">
-      <span class="day-label w1">DAY 7 · SUN</span>
-      <span class="day-focus">Analytics service + Integration smoke test + Week 1 gate check</span>
-      <span class="day-hours">Team: ~18h total · GATE: all /health endpoints 200 on staging</span>
-    </div>
-    <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#23</div>
+        <div class="task-id">DDP-#23<span class="orig">orig. Day 7</span></div>
         <div><div class="task-title">Analytics Service: aggregation queries + PDF/Excel report endpoints</div><div class="task-desc">GET /analytics/courses/{id}/performance (pass rate, avg score, completion). GET /analytics/revenue (subscription summary). GET /analytics/reports/export?format=pdf|excel. Use materialized views for heavy aggregations. ReportLab for PDF, openpyxl for Excel.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#24</div>
+        <div class="task-id">DDP-#49<span class="orig">Sprint 6</span></div>
+        <div><div class="task-title">Sprint 6 Retrospective: document Sprint 6 outcome, metrics, and update GitHub Project board velocity</div><div class="task-desc">Review Sprint 6 velocity (planned vs. completed), document what went well and what to improve across core service APIs, record test coverage and CI pass rate, update risk log, and re-plan Sprint 7. Create documents/retrospectives/sprint-6.md.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">1h</div>
+      </div>
+      <div class="ceremony">Sprint 6 Review (Demo + retrospective) — Gate check: open the staging URL and verify every service returns {"status":"ok"} on GET /health. Any service not live is fixed before Sprint 7 starts.</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="week-wrapper">
+  <div class="week-title-bar">
+    <span class="week-pill pill-s7">Sprint 7 · Weeks 9–12</span>
+    <span class="week-theme">Integration &amp; UX</span>
+    <span class="week-gate">Aug 11 – Sep 7 · Demo + retrospective<br>Gate: Sprint 7 Review — integration testing, API contracts, UI complete, feature freeze</span>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label s7">WEEK 9</span>
+      <span class="day-focus">Integration testing: smoke test, payment flow, assessment flow</span>
+      <span class="day-hours">Aug 11 – Aug 17 · ~10h of tasks</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#24<span class="orig">orig. Day 7</span></div>
         <div><div class="task-title">End-to-end smoke test: student register → OTP verify → login → enroll → view course</div><div class="task-desc">httpx script hitting staging URLs. Covers the critical path the demo will walk through. If any step fails here, it means cross-service integration is broken. Fix today — not Day 13.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#25</div>
-        <div><div class="task-title">Week 1 Retrospective + Week 2 re-plan based on actual velocity</div><div class="task-desc">What's done? What's partial? What needs to move to Week 2? Adjust assignments. Update GitHub board. Document retro in documents/retrospectives/sprint5-week1.md. Do NOT skip this — it determines if Week 2 is survivable.</div></div>
-        <div class="task-who own"><span class="ob">@all</span></div>
-        <div class="task-est">1h</div>
+        <div class="task-id">DDP-#29<span class="orig">orig. Day 8</span></div>
+        <div><div class="task-title">Integration tests: payment webhook flow (PayHere mock → enrollment.activated → access granted)</div><div class="task-desc">Mock PayHere HMAC payload. POST to /payments/webhook. Assert payment_status=SUCCESS in DB. Assert RabbitMQ published payment.success. Assert enrollment record created. Assert course access granted. This is the most critical cross-service flow.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">3h</div>
       </div>
-      <div class="ceremony">Week 1 Gate Check: Open staging URL and verify every service returns {"status":"ok"} on GET /health. Any service not live = drop Saturday sleep, not Sunday features.</div>
+      <div class="task">
+        <div class="task-id">DDP-#32<span class="orig">orig. Day 9</span></div>
+        <div><div class="task-title">Integration tests: full assessment flow (start → timed session → submit → auto-grade → progress update)</div><div class="task-desc">Seed: enrolled student, course with MCQ assessment. Start session → fake timer expiry → auto-submit → assert score in DB → assert assessment.graded published → assert progress updated.</div></div>
+        <div class="task-who own"><span class="ob">@thushan</span></div>
+        <div class="task-est">4h</div>
+      </div>
     </div>
   </div>
-</div><!-- end week 1 -->
 
-<!-- ══ SECTION 6: WEEK 2 ══ -->
-<div class="section-head">
-  <span class="section-num">06 —</span>
-  <h2>Week 2 — Complete, Test, Deploy, Demo</h2>
-</div>
-
-<div class="week-wrapper">
-  <div class="week-title-bar">
-    <span class="week-pill pill-w2">Week 2 · Days 8–14</span>
-    <span class="week-theme">Frontend complete → Full integration testing → Production deploy → Demo</span>
-    <span class="week-gate">Gate: Feature freeze Day 10. Production live Day 12. Demo-ready Day 13.</span>
-  </div>
-
-  <!-- D8 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w2">DAY 8 · MON</span>
-      <span class="day-focus">Frontend: Course viewer, Assessment, Payment pages</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s7">WEEK 10</span>
+      <span class="day-focus">UI completion I: course viewer, assessment UI, payment flow UI</span>
+      <span class="day-hours">Aug 18 – Aug 24 · ~11h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#26</div>
+        <div class="task-id">DDP-#26<span class="orig">orig. Day 8</span></div>
         <div><div class="task-title">Course content viewer: YouTube embed + Cloudinary notes + lesson navigation</div><div class="task-desc">Next.js dynamic route /courses/[id]/lesson/[lid]. YouTube IFrame API embed with private video. Signed Cloudinary URL fetch for attachments. Progress tracking call on video completion event. Ref: SDS §6.1.4.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#27</div>
+        <div class="task-id">DDP-#27<span class="orig">orig. Day 8</span></div>
         <div><div class="task-title">Assessment UI: timed quiz, MCQ interface, submission, results + anti-cheat JS</div><div class="task-desc">Timer countdown from Redis state. Tab-switch detection (visibilitychange + blur events → POST /assessments/{id}/violations). MCQ selection → submit → display score. Ref: SDS §6.1.5.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#28</div>
+        <div class="task-id">DDP-#28<span class="orig">orig. Day 8</span></div>
         <div><div class="task-title">Payment flow UI: PayHere redirect + manual receipt upload + subscription status</div><div class="task-desc">Course purchase page → PayHere redirect. Upload receipt form (for manual fallback). Subscription status badge on dashboard. POST to /payments/checkout, POST to /payments/receipts. Ref: SDS §6 enrollment flow wireframe.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
-        <div class="task-est">3h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#29</div>
-        <div><div class="task-title">Integration tests: payment webhook flow (PayHere mock → enrollment.activated → access granted)</div><div class="task-desc">Mock PayHere HMAC payload. POST to /payments/webhook. Assert payment_status=SUCCESS in DB. Assert RabbitMQ published payment.success. Assert enrollment record created. Assert course access granted. This is the most critical cross-service flow.</div></div>
-        <div class="task-who own"><span class="ob">@danindu</span></div>
         <div class="task-est">3h</div>
       </div>
     </div>
   </div>
 
-  <!-- D9 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w2">DAY 9 · TUE</span>
-      <span class="day-focus">Admin dashboard + Progress/Leaderboard UI + Integration tests</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s7">WEEK 11</span>
+      <span class="day-focus">UI completion II: admin dashboard, progress dashboard, leaderboard, certificates</span>
+      <span class="day-hours">Aug 25 – Aug 31 · ~7h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#30</div>
+        <div class="task-id">DDP-#30<span class="orig">orig. Day 9</span></div>
         <div><div class="task-title">Admin dashboard: receipt verification, user management, violation reports, analytics</div><div class="task-desc">Next.js /admin route (ADMIN role guard). Tables: pending receipts (approve/reject buttons), user list (role assignment), violation log, analytics charts using Recharts. Ref: SDS §6.1.7.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#31</div>
+        <div class="task-id">DDP-#31<span class="orig">orig. Day 9</span></div>
         <div><div class="task-title">Progress dashboard + Leaderboard + Certificate download page</div><div class="task-desc">Student progress: completion % per course, assessment scores. Graphical + numerical dashboard (SDS §6.1.6). Leaderboard with points + badges. Certificate download button (triggers PDF generation from progress-svc).</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">3h</div>
       </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label s7">WEEK 12</span>
+      <span class="day-focus">Teacher dashboard + optional AI assistant — FEATURE FREEZE</span>
+      <span class="day-hours">Sep 1 – Sep 7 · ~7h of tasks</span>
+    </div>
+    <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#32</div>
-        <div><div class="task-title">Integration tests: full assessment flow (start → timed session → submit → auto-grade → progress update)</div><div class="task-desc">Seed: enrolled student, course with MCQ assessment. Start session → fake timer expiry → auto-submit → assert score in DB → assert assessment.graded published → assert progress updated.</div></div>
-        <div class="task-who own"><span class="ob">@thushan</span></div>
-        <div class="task-est">4h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#33</div>
+        <div class="task-id">DDP-#33<span class="orig">orig. Day 9</span></div>
         <div><div class="task-title">Teacher dashboard: course creation form + module/lesson builder + assessment builder</div><div class="task-desc">Teacher route /teacher/courses. Create course form → add modules → add lessons (YouTube URL + Cloudinary upload). Assessment builder (add questions, set time limit). POST to course-svc and assessment-svc.</div></div>
         <div class="task-who own"><span class="ob">@imansha</span></div>
         <div class="task-est">4h</div>
       </div>
+      <div class="task">
+        <div class="task-id">DDP-#36<span class="orig">orig. Day 10</span></div>
+        <div><div class="task-title">Gemini AI assistant widget (if ahead of schedule — else skip to Day 11)</div><div class="task-desc">Simple chat widget on student dashboard. POST /ai/query → forwards to Gemini API with LMS context prompt. Stream response back. This is the only optional feature — skip if anything else is not fully tested yet.</div></div>
+        <div class="task-who own"><span class="ob">@imansha</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="ceremony">Sprint 7 Review (Demo + retrospective) and Feature Freeze Declaration: all team members agree — no new features from Week 13. Only bug fixes, test coverage, and demo prep. Violations delay production deploy.</div>
     </div>
   </div>
 
-  <!-- D10 -->
+</div>
+
+<div class="break-note">Sep 8 – Sep 27: no sprint scheduled (gap between Sprint 7 and Sprint 8 in the calendar). Nothing is planned here.</div>
+
+<div class="week-wrapper">
+  <div class="week-title-bar">
+    <span class="week-pill pill-s8">Sprint 8 · Weeks 13–16</span>
+    <span class="week-theme">Quality &amp; Release</span>
+    <span class="week-gate">Sep 28 – Oct 23 · Final panel demo<br>Gates: test coverage (Wk 13–14) → supervisor sign-off (Wk 15) → panel approval (Wk 16)</span>
+  </div>
+
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w2">DAY 10 · WED</span>
-      <span class="day-focus">FEATURE FREEZE — Security hardening + OWASP + coverage push</span>
-      <span class="day-hours">Team: ~18h total · ⚠ No new features after this point</span>
+      <span class="day-label s8">WEEK 13</span>
+      <span class="day-focus">Security hardening: OWASP sweep + coverage push (test coverage gate)</span>
+      <span class="day-hours">Sep 28 – Oct 4 · ~7h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#34</div>
+        <div class="task-id">DDP-#34<span class="orig">orig. Day 10</span></div>
         <div><div class="task-title">OWASP Top 10 compliance sweep across all services</div><div class="task-desc">A01: verify @require_role on every mutating endpoint. A02: bcrypt ≥12 on any password storage, JWT RS256. A03: confirm all DB queries use SQLAlchemy ORM (no raw SQL). A05: error responses never expose stack traces in staging. A06: pip-audit CI gate active. Document evidence in documents/security/owasp-checklist.pdf.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span><span class="ob">@danindu</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#35</div>
+        <div class="task-id">DDP-#35<span class="orig">orig. Day 10</span></div>
         <div><div class="task-title">Push unit test coverage to ≥80% on all services, ≥90% on auth + payment</div><div class="task-desc">Run pytest --cov on each service. Identify gaps. AI-generate missing test cases. Focus: auth token rotation, payment webhook validation, assessment auto-grading, enrollment access grant/revoke. Coverage report saved to documents/testing/.</div></div>
         <div class="task-who own"><span class="ob">@thushan</span></div>
         <div class="task-est">4h</div>
       </div>
-      <div class="task">
-        <div class="task-id">DDP-#36</div>
-        <div><div class="task-title">Gemini AI assistant widget (if ahead of schedule — else skip to Day 11)</div><div class="task-desc">Simple chat widget on student dashboard. POST /ai/query → forwards to Gemini API with LMS context prompt. Stream response back. This is the only optional feature — skip if anything else is not fully tested yet.</div></div>
-        <div class="task-who own"><span class="ob">@imansha</span></div>
-        <div class="task-est">3h</div>
-      </div>
-      <div class="ceremony">Feature Freeze Declaration: All team members agree — no new features from Day 11. Only bug fixes, test coverage, and demo prep. Violations delay production deploy.</div>
     </div>
   </div>
 
-  <!-- D11 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w2">DAY 11 · THU</span>
-      <span class="day-focus">Full end-to-end test run + bug fixes + performance check</span>
-      <span class="day-hours">Team: ~18h total</span>
+      <span class="day-label s8">WEEK 14</span>
+      <span class="day-focus">Full end-to-end test run, bug fixes, production manifests, report chapters</span>
+      <span class="day-hours">Oct 5 – Oct 11 · ~17h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#37</div>
+        <div class="task-id">DDP-#37<span class="orig">orig. Day 11</span></div>
         <div><div class="task-title">Full demo walkthrough on staging — all 5 demo scenarios working end-to-end</div><div class="task-desc">Scenario 1: Student register → OTP → login → browse courses → purchase (PayHere) → access lesson → watch video → take quiz → get certificate. Scenario 2: Teacher creates course + assessment. Scenario 3: Admin verifies manual receipt. Scenario 4: Admin views analytics + exports PDF. Scenario 5: Student views leaderboard. Log every failure as a bug issue.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">3h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#38</div>
+        <div class="task-id">DDP-#38<span class="orig">orig. Day 11</span></div>
         <div><div class="task-title">Fix all P1-Critical bugs found in Day 11 walkthrough</div><div class="task-desc">Triage: P1 (blocks demo) → fix today. P2 (UX issue) → fix Day 12. P3 (cosmetic) → document as known limitation. Each fix = PR → review → merge → staging redeploy. No direct commits to develop.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">4h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#39</div>
+        <div class="task-id">DDP-#39<span class="orig">orig. Day 11</span></div>
         <div><div class="task-title">K8s manifests for production: Deployments, Services, Ingress, ConfigMaps, Secrets</div><div class="task-desc">k8s/production/ directory. One Deployment + Service per microservice. Nginx Ingress for routing. ConfigMaps for non-sensitive env vars. Azure Key Vault or AKS Secrets for ASGARDEO_SECRET, DATABASE_URL, PAYHERE_MERCHANT_SECRET etc. Resource limits set on all pods.</div></div>
         <div class="task-who own"><span class="ob">@nadun</span></div>
         <div class="task-est">5h</div>
       </div>
-    </div>
-  </div>
-
-  <!-- D12 -->
-  <div class="day-block">
-    <div class="day-header">
-      <span class="day-label w2">DAY 12 · FRI</span>
-      <span class="day-focus">Production deploy + v1.0.0 tag + final bug fixes</span>
-      <span class="day-hours">Team: ~18h total · Gate: production URL live and demo account working</span>
-    </div>
-    <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#40</div>
-        <div><div class="task-title">Production deploy to AKS via GitHub Actions (merge main → manual approval → deploy)</div><div class="task-desc">Merge develop → main after supervisor sign-off. CI runs full pipeline. Manual approval gate (requires supervisor or team lead). kubectl apply k8s/production/. Verify all pods Running. Test production URL with demo account. Tag v1.0.0 on main.</div></div>
-        <div class="task-who own"><span class="ob">@nadun</span></div>
-        <div class="task-est">4h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#41</div>
-        <div><div class="task-title">Seed production database with demo data for client demo</div><div class="task-desc">Create: admin account (ICT-Dimuthu), teacher account (Mr. Dimuthu), 2 sample courses with modules + lessons (use test YouTube video IDs), 1 published assessment with 5 MCQ questions, 2 student accounts. Test all logins work on production URL.</div></div>
-        <div class="task-who own"><span class="ob">@danindu</span></div>
-        <div class="task-est">2h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#42</div>
-        <div><div class="task-title">Fix P2 bugs + generate all final deliverable documents</div><div class="task-desc">Coverage report PDF, test register PDF, OWASP checklist PDF, CHANGELOG.md finalized. Submit to supervisor: GitHub Org URL, all repo URLs, production URL, GitHub Project board URL, demo credentials. Deadline: 48h before demo per SENG 34213 §9.3.</div></div>
-        <div class="task-who own"><span class="ob">@all</span></div>
-        <div class="task-est">3h</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- D13 -->
-  <div class="day-block">
-    <div class="day-header">
-      <span class="day-label w2">DAY 13 · SAT</span>
-      <span class="day-focus">Demo rehearsal × 2 + final report draft</span>
-      <span class="day-hours">Team: ~16h total</span>
-    </div>
-    <div class="day-body">
-      <div class="task">
-        <div class="task-id">DDP-#43</div>
-        <div><div class="task-title">Demo rehearsal run 1 (full 20-min demo script on production URL)</div><div class="task-desc">Context 2min → Live walkthrough 12min → Architecture 3min → Limitations 2min → Lessons learned 1min. Every member presents their section. Time it. Log anything that doesn't work in production. Fix immediately.</div></div>
-        <div class="task-who own"><span class="ob">@all</span></div>
-        <div class="task-est">3h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#44</div>
-        <div><div class="task-title">Demo rehearsal run 2 (with Q&A simulation)</div><div class="task-desc">One member plays evaluator, asks hard questions: "How does PayHere webhook prevent replay attacks?" "How does your timed exam auto-submit?" "Show me the CI pipeline run." "What's your test coverage?" Know the answers cold.</div></div>
-        <div class="task-who own"><span class="ob">@all</span></div>
-        <div class="task-est">2h</div>
-      </div>
-      <div class="task">
-        <div class="task-id">DDP-#45</div>
+        <div class="task-id">DDP-#45<span class="orig">orig. Day 13</span></div>
         <div><div class="task-title">Final Development Report: Chapter 4 (Implementation) + Chapter 5 (Testing) written</div><div class="task-desc">AI-assist the writing. Chapter 4: tech stack justification, module descriptions, CI/CD pipeline description, challenges. Chapter 5: testing strategy, coverage summary, OWASP evidence. Honest limitations section — evaluators respect honesty.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">5h</div>
@@ -1266,37 +1310,78 @@ footer {
     </div>
   </div>
 
-  <!-- D14 -->
   <div class="day-block">
     <div class="day-header">
-      <span class="day-label w2">DAY 14 · SUN</span>
-      <span class="day-focus">Final demo + submission</span>
-      <span class="day-hours">Demo day — arrive early, test production URL first thing</span>
+      <span class="day-label s8">WEEK 15</span>
+      <span class="day-focus">Pre-demo staging: production deploy, demo data, final documents, rehearsals (supervisor sign-off)</span>
+      <span class="day-hours">Oct 12 – Oct 18 · ~14h of tasks</span>
     </div>
     <div class="day-body">
       <div class="task">
-        <div class="task-id">DDP-#46</div>
+        <div class="task-id">DDP-#40<span class="orig">orig. Day 12</span></div>
+        <div><div class="task-title">Production deploy to AKS via GitHub Actions (merge main → manual approval → deploy)</div><div class="task-desc">Merge develop → main after supervisor sign-off. CI runs full pipeline. Manual approval gate (requires supervisor or team lead). kubectl apply k8s/production/. Verify all pods Running. Test production URL with demo account. Tag v1.0.0 on main.</div></div>
+        <div class="task-who own"><span class="ob">@nadun</span></div>
+        <div class="task-est">4h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#41<span class="orig">orig. Day 12</span></div>
+        <div><div class="task-title">Seed production database with demo data for client demo</div><div class="task-desc">Create: admin account (ICT-Dimuthu), teacher account (Mr. Dimuthu), 2 sample courses with modules + lessons (use test YouTube video IDs), 1 published assessment with 5 MCQ questions, 2 student accounts. Test all logins work on production URL.</div></div>
+        <div class="task-who own"><span class="ob">@danindu</span></div>
+        <div class="task-est">2h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#42<span class="orig">orig. Day 12</span></div>
+        <div><div class="task-title">Fix P2 bugs + generate all final deliverable documents</div><div class="task-desc">Coverage report PDF, test register PDF, OWASP checklist PDF, CHANGELOG.md finalized. Submit to supervisor: GitHub Org URL, all repo URLs, production URL, GitHub Project board URL, demo credentials. Deadline: 48h before demo per SENG 34213 §9.3.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#43<span class="orig">orig. Day 13</span></div>
+        <div><div class="task-title">Demo rehearsal run 1 (full 20-min demo script on production URL)</div><div class="task-desc">Context 2min → Live walkthrough 12min → Architecture 3min → Limitations 2min → Lessons learned 1min. Every member presents their section. Time it. Log anything that doesn't work in production. Fix immediately.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">3h</div>
+      </div>
+      <div class="task">
+        <div class="task-id">DDP-#44<span class="orig">orig. Day 13</span></div>
+        <div><div class="task-title">Demo rehearsal run 2 (with Q&A simulation)</div><div class="task-desc">One member plays evaluator, asks hard questions: "How does PayHere webhook prevent replay attacks?" "How does your timed exam auto-submit?" "Show me the CI pipeline run." "What's your test coverage?" Know the answers cold.</div></div>
+        <div class="task-who own"><span class="ob">@all</span></div>
+        <div class="task-est">2h</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-label s8">WEEK 16</span>
+      <span class="day-focus">Final demo and submission (panel approval)</span>
+      <span class="day-hours">Oct 19 – Oct 23 · ~5.58333h of tasks</span>
+    </div>
+    <div class="day-body">
+      <div class="task">
+        <div class="task-id">DDP-#46<span class="orig">orig. Day 14</span></div>
         <div><div class="task-title">Pre-demo: verify production URL 2 hours before panel starts</div><div class="task-desc">Login with all demo accounts. Walk through all 5 demo scenarios once. Check CI pipeline badge is green. Have a hotfix branch ready to deploy if something minor breaks. Have a screen-recorded backup demo ready on localhost as absolute last resort.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">2h</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#47</div>
+        <div class="task-id">DDP-#47<span class="orig">orig. Day 14</span></div>
         <div><div class="task-title">Live demo to panel + Q&A (20 min demo + 15 min Q&A)</div><div class="task-desc">Present on production URL only — not localhost. All 4 members present. Honest about limitations. Show CI pipeline run. Show test coverage report. Show GitHub board with completed issues.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">35min</div>
       </div>
       <div class="task">
-        <div class="task-id">DDP-#48</div>
+        <div class="task-id">DDP-#48<span class="orig">orig. Day 14</span></div>
         <div><div class="task-title">Submit final report + peer evaluations within 48 hours of demo</div><div class="task-desc">PeerEval_SE2021047_SENG34213.pdf etc. Final report PDF + hard copy to Teaching Unit. All ratings justified with written comments + evidence (commit logs, CI screenshots). eKelaniya submission link: SENG 34213 → Assessments → Peer Evaluation Submission.</div></div>
         <div class="task-who own"><span class="ob">@all</span></div>
         <div class="task-est">3h</div>
       </div>
-      <div class="ceremony">After submission: commit final retrospective to documents/retrospectives/sprint5-final.md. You shipped 11 microservices in 14 days. That's worth documenting properly.</div>
+      <div class="ceremony">After submission: commit final retrospective to documents/retrospectives/sprint5-final.md. You shipped 11 microservices in 16 weeks. That's worth documenting properly.</div>
     </div>
   </div>
 
-</div><!-- end week 2 -->
+</div>
+
+
 
 <!-- ══ SECTION 7: RISKS ══ -->
 <div class="section-head">
@@ -1313,12 +1398,12 @@ footer {
   <div class="risk-row">
     <div><div class="risk-name">Asgardeo OAuth not working</div></div>
     <div><span class="risk-level rl-critical">CRITICAL</span></div>
-    <div class="risk-mit">Test Asgardeo sandbox connection on Day 1 before writing any auth code. If Asgardeo has registration/config delays, fall back to custom JWT with bcrypt — document as ADR deviation. Do not lose more than 4 hours on this.</div>
+    <div class="risk-mit">Test Asgardeo sandbox connection in Week 1 before writing any auth code. If Asgardeo has registration/config delays, fall back to custom JWT with bcrypt — document as ADR deviation. Do not lose more than 4 hours on this.</div>
   </div>
   <div class="risk-row">
     <div><div class="risk-name">AKS deploy failing in Week 2</div></div>
     <div><span class="risk-level rl-critical">CRITICAL</span></div>
-    <div class="risk-mit">Provision AKS on Day 3 (Week 1) and deploy a hello-world pod. If AKS is unresolvable by Day 10, use Railway + managed PostgreSQL as fallback — document in ADR. Production deploy on any platform beats no deploy.</div>
+    <div class="risk-mit">Provision AKS in Week 3 (Sprint 5) and deploy a hello-world pod. If AKS is unresolvable by Week 12, use Railway + managed PostgreSQL as fallback — document in ADR. Production deploy on any platform beats no deploy.</div>
   </div>
   <div class="risk-row">
     <div><div class="risk-name">PayHere webhooks not testable locally</div></div>
@@ -1328,7 +1413,7 @@ footer {
   <div class="risk-row">
     <div><div class="risk-name">RabbitMQ cross-service events not firing</div></div>
     <div><span class="risk-level rl-high">HIGH</span></div>
-    <div class="risk-mit">Test RabbitMQ publish/consume on Day 2 with a simple script before any service depends on it. Use the RabbitMQ management UI (port 15672) to inspect queues and messages during debugging.</div>
+    <div class="risk-mit">Test RabbitMQ publish/consume in Week 2 with a simple script before any service depends on it. Use the RabbitMQ management UI (port 15672) to inspect queues and messages during debugging.</div>
   </div>
   <div class="risk-row">
     <div><div class="risk-name">Team member blocked for 1+ full day</div></div>
@@ -1343,14 +1428,14 @@ footer {
   <div class="risk-row">
     <div><div class="risk-name">Frontend integration with APIs broken</div></div>
     <div><span class="risk-level rl-med">MEDIUM</span></div>
-    <div class="risk-mit">Imansha builds frontend against staging URL from Day 5 — not localhost mocks. Real integration failures are caught in Week 1, not Week 2. Use FastAPI's auto-generated OpenAPI docs at /docs to verify endpoint contracts.</div>
+    <div class="risk-mit">Imansha builds frontend against the staging URL (live from Week 4) — not localhost mocks. Real integration failures are caught in Sprint 6, not Sprint 8. Use FastAPI's auto-generated OpenAPI docs at /docs to verify endpoint contracts.</div>
   </div>
 </div>
 
 <!-- ══ SECTION 8: DoD ══ -->
 <div class="section-head">
   <span class="section-num">08 —</span>
-  <h2>Definition of Done (Compressed for 2-Week Timeline)</h2>
+  <h2>Definition of Done</h2>
 </div>
 
 <div class="dod-strip">
@@ -1369,7 +1454,7 @@ footer {
 </div>
 
 <!-- CI pipeline yaml reference -->
-<div class="cb"><span class="kw">name</span>: <span class="str">EDURA CI — 2-Week Build</span>
+<div class="cb"><span class="kw">name</span>: <span class="str">EDURA CI — Sprint Build</span>
 <span class="kw">on</span>:
   <span class="fn">push</span>: { <span class="fn">branches</span>: [develop, main, <span class="str">'feature/**'</span>, <span class="str">'fix/**'</span>] }
   <span class="fn">pull_request</span>: { <span class="fn">branches</span>: [develop, main] }
@@ -1394,8 +1479,8 @@ footer {
 </div><!-- end container -->
 
 <footer>
-  <span>EDURA LMS · Team ZYNAPTRIX · 2-Week War Plan · SENG 34213 · University of Kelaniya · 2026</span>
-  <span>Feature Freeze: Day 10 · Production Deploy: Day 12 · Demo: Day 14</span>
+  <span>EDURA LMS · Team ZYNAPTRIX · 16-Week Sprint Plan · SENG 34213 · University of Kelaniya · 2026</span>
+  <span>Feature Freeze: Week 12 · Production Deploy: Week 15 · Final Demo: Week 16 (by Oct 23)</span>
 </footer>
 
 </body>

@@ -7,4 +7,4 @@ This repository contains the specifications, design sheets, architectural decisi
 * `2 weeks plan.html` — The day-by-day project development plan
 * `development guideline.md` — Development guideline issued by SETU
 * `ADR-11-nextjs-version-upgrade.md` — Architectural Decision Record for upgrading Next.js and React versions
-* `retrospectives/` — Sprint-level evaluation documents (to be added during reviews)
+* `retrospectives/` — Sprint-level evaluation documents ([Sprint 5 Retrospective](retrospectives/sprint-5.md))
