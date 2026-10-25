@@ -2076,6 +2076,75 @@ Estimated: 4 hours
 Blocked by: #21 (admin_service endpoints on staging), #23 (analytics_service on staging), #22 (auth HOC and role in Redux state)</div>
 </div>
 
+<!-- ════════ ISSUE #49 ════════ -->
+<div class="ticket">
+  <div class="ticket-top">
+    <div class="ticket-top-row1">
+      <span class="t-id">DDP-#49</span>
+      <span class="t-title">docs(retro): write Sprint 6 retrospective and update GitHub Project board velocity</span>
+    </div>
+    <div class="ticket-top-row2">
+      <span class="repo-badge rb-docs">edura-documents</span>
+      <span class="label-badge lb-gray">epic:documentation</span>
+      <span class="label-badge lb-gray">docs</span>
+      <span class="label-badge lb-amber">P3-Medium</span>
+    </div>
+  </div>
+  <div class="ticket-meta">
+    <div class="tm">Assignee: <strong>@all</strong></div>
+    <div class="tm">Milestone: <strong>Sprint 6</strong></div>
+    <div class="tm">Estimate: <strong>1h</strong></div>
+    <div class="tm">Phase: <strong>Development</strong></div>
+    <div class="tm">Day: <strong>Week 8 (Sprint 6 End)</strong></div>
+  </div>
+  <div class="ticket-body"><span class="h2">## User Story</span>
+As a software engineering team, we want to formally review and document the outcomes, velocity, and technical challenges of Sprint 6 (Core Features) so that our supervisor can verify our continuous Agile self-management and we can effectively plan and execute Sprint 7 (Integration &amp; UX).
+
+<span class="h2">## Background / Context</span>
+<span class="ref">- Guideline Reference: §6.1, §4.1, Appendix B.1, Appendix B.2 (Retrospective documentation requirement)</span>
+
+Sprint 6 covered the implementation and unit testing of core services: Course, Content, Payment, Enrollment, Assessment, Progress, Notification, Admin, Analytics, and initial Next.js frontend pages (DDP-#13 to #17, #19 to #23). The SENG 34213 guideline requires documented retrospectives demonstrating actual velocity tracking, lessons learned, and active risk management. This retrospective creates documents/retrospectives/sprint-6.md and aligns the GitHub Project board before starting Sprint 7.
+
+<span class="h2">## Acceptance Criteria</span>
+
+<span class="h3">### AC1: Retrospective Document Written</span>
+<span class="bold">**Given**</span> the team completes Sprint 6 feature implementation and review
+<span class="bold">**When**</span> this issue is closed
+<span class="bold">**Then**</span> documents/retrospectives/sprint-6.md exists in edura-documents with: (a) velocity table — planned vs completed hours and issues across all Sprint 6 tickets, (b) what went well, (c) what blocked us or needs improvement, (d) risk log update, (e) actionable items and owners for Sprint 7
+
+<span class="h3">### AC2: GitHub Project Board Reconciled</span>
+<span class="bold">**Given**</span> Sprint 6 tickets are reviewed
+<span class="bold">**When**</span> this issue is closed
+<span class="bold">**Then**</span> all completed Sprint 6 issues are moved to the Done column, actual velocity is recorded, and the Sprint 7 milestone is populated with prioritized issues
+
+<span class="h3">### AC3: Sprint 7 Dependencies &amp; Scope Aligned</span>
+<span class="bold">**Given**</span> the outcome of Sprint 6 features
+<span class="bold">**When**</span> the team conducts the Sprint 6 review and retrospective
+<span class="bold">**Then**</span> any technical debt, API contract updates, or incomplete edge cases from Sprint 6 are carried over and prioritized for Sprint 7 Week 9 integration testing
+
+<span class="h2">## Technical Notes</span>
+- Retrospective format: Follow SETU Guideline Appendix B.2 template structure
+- Velocity table format: | Issue # | Estimated Hours | Actual Hours | Status | Owner | Notes |
+- Document location: edura-documents/retrospectives/sprint-6.md
+
+<span class="h2">## Test Requirements</span>
+<span class="chk">- [ ]</span> Manual check: sprint-6.md committed to edura-documents/retrospectives/
+<span class="chk">- [ ]</span> Manual check: GitHub Project board reflects completed Sprint 6 issues
+<span class="chk">- [ ]</span> Manual check: Sprint 7 backlog verified and milestone assigned
+
+<span class="h2">## Definition of Done</span>
+<span class="chk">- [ ]</span> documents/retrospectives/sprint-6.md committed and pushed to edura-documents
+<span class="chk">- [ ]</span> GitHub Project board updated to reflect end-of-Sprint-6 state
+<span class="chk">- [ ]</span> Retrospective shared with academic supervisor
+<span class="chk">- [ ]</span> Closes #49 in commit messages in edura-documents
+
+<span class="h2">## Estimate</span>
+Estimated: 1 hour
+
+<span class="h2">## Dependencies</span>
+Blocked by: #22 (frontend initial pages), #23 (analytics_service)</div>
+</div>
+
 </div><!-- end container -->
 </body>
 </html>
