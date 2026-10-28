@@ -3,8 +3,9 @@
 Guideline reference: §6.4 (test coverage requirements), §7.2 (Unit Tests stage generates a coverage report), §8.2 (quality gates), §10.1 item 6.
 
 - **Report date:** 2026-10-27
-- **Source:** coverage reports produced by the CI pipelines on the `develop` branch, not measured by hand.
-  - Backend: [Backend CI run 40474889384](https://github.com/Edura-LMS-Zynaptrix/edura-backend/actions/runs/40474889384) (commit `3778203`), artifacts `coverage-<service>` (`coverage.xml`).
+- **Source:** coverage reports produced by the CI pipelines, not measured by hand.
+  - Backend lines: [Backend CI run 40474889384](https://github.com/Edura-LMS-Zynaptrix/edura-backend/actions/runs/40474889384) on `develop` (commit `3778203`), artifacts `coverage-<service>` (`coverage.xml`).
+  - Backend branches: [Backend CI run 40614773460](https://github.com/danindu2024/edura-backend/actions/runs/40614773460) on the `feature/DDP-63-backend-branch-coverage` branch, the first run with `--cov-branch` (DDP-#63). The line figures in that run are identical to the `develop` run, so the two sets of numbers describe the same code. Re-export both from `develop` once DDP-#63 is merged.
   - Frontend: [Frontend CI run 40475255079](https://github.com/Edura-LMS-Zynaptrix/edura-frontend/actions/runs/40475255079) (commit `574e385`), artifact `coverage-report` (`lcov.info`).
 - **Test inventory:** see `test-register.md` (every test case) and `endpoint-register.md` (every API endpoint).
 
@@ -16,26 +17,26 @@ Guideline reference: §6.4 (test coverage requirements), §7.2 (Unit Tests stage
 | API endpoints | 100% have at least one integration test | `endpoint-register.md` |
 | Critical business logic | 90% branch coverage | defined in the SDS |
 
-## Backend (pytest-cov, line coverage)
+## Backend (pytest-cov, lines and branches)
 
-| Service | Lines covered | Lines total | Line coverage | Test cases |
-|---|---|---|---|---|
-| admin_service | 910 | 925 | 98.4% | 66 |
-| analytics_service | 1,610 | 1,631 | 98.7% | 97 |
-| assessment_service | 2,892 | 2,914 | 99.2% | 141 |
-| auth_service | 1,486 | 1,505 | 98.7% | 88 |
-| content_service | 626 | 639 | 98.0% | 37 |
-| course_service | 1,800 | 1,822 | 98.8% | 81 |
-| enrollment_service | 1,221 | 1,269 | 96.2% | 65 |
-| notification_service | 807 | 827 | 97.6% | 38 |
-| payment_service | 1,017 | 1,028 | 98.9% | 44 |
-| progress_service | 960 | 977 | 98.3% | 36 |
-| user_service | 1,445 | 1,463 | 98.8% | 85 |
-| **Total** | **14,774** | **15,000** | **98.5%** | **778** |
+| Service | Lines covered | Lines total | Line coverage | Branches covered | Branches total | Branch coverage | Test cases |
+|---|---|---|---|---|---|---|---|
+| admin_service | 910 | 925 | 98.4% | 50 | 56 | 89.3% | 66 |
+| analytics_service | 1,610 | 1,631 | 98.7% | 143 | 160 | 89.4% | 97 |
+| assessment_service | 2,892 | 2,914 | 99.2% | 308 | 324 | 95.1% | 141 |
+| auth_service | 1,486 | 1,505 | 98.7% | 133 | 142 | 93.7% | 88 |
+| content_service | 626 | 639 | 98.0% | 51 | 60 | 85.0% | 37 |
+| course_service | 1,800 | 1,822 | 98.8% | 174 | 188 | 92.6% | 81 |
+| enrollment_service | 1,221 | 1,269 | 96.2% | 145 | 158 | 91.8% | 65 |
+| notification_service | 807 | 827 | 97.6% | 44 | 52 | 84.6% | 38 |
+| payment_service | 1,017 | 1,028 | 98.9% | 51 | 58 | 87.9% | 44 |
+| progress_service | 960 | 977 | 98.3% | 103 | 110 | 93.6% | 36 |
+| user_service | 1,445 | 1,463 | 98.8% | 143 | 156 | 91.7% | 85 |
+| **Total** | **14,774** | **15,000** | **98.5%** | **1,345** | **1,464** | **91.9%** | **778** |
 
-Every service is above the 80% target; the two critical services named in the plan, `auth_service` (98.7%) and `payment_service` (98.9%), are above 90% on lines.
+Every service is above the 80% target for lines and for branches.
 
-**Branch coverage is not measured for the backend.** The pytest command runs with `--cov` but not `--cov-branch`, so the 90% branch-coverage target for critical business logic (§6.4) cannot be shown from the current reports. Enabling `--cov-branch` in `edura-backend/.github/workflows/ci.yml` would produce the figures with no change to the tests.
+**Critical business logic (§6.4: 90% branch coverage).** `auth_service` reaches **93.7%**. `payment_service` reaches **87.9%**, which is **below the 90% target**: 7 of its 58 branches are not exercised. Overall backend branch coverage is 91.9%. `content_service` (85.0%) and `notification_service` (84.6%) are the lowest services but are not named as critical logic.
 
 ## Frontend (Jest)
 
@@ -71,7 +72,8 @@ All test jobs in the two runs linked above passed (every `Verify <service>` job 
 
 | # | Gap | Suggested action |
 |---|---|---|
-| 1 | Backend branch coverage is not measured, so the 90% branch target for critical logic is not demonstrated | Add `--cov-branch` to the backend CI and re-export this report |
+| 1 | `payment_service` branch coverage is 87.9%, below the 90% target for critical logic | Add tests for the 7 uncovered payment branches (new tests only, no code change) |
+| 1a | Branch coverage is collected from the DDP-#63 branch, not yet from `develop` | Merge DDP-#63, then re-export both runs from `develop` |
 | 2 | No performance test results (guideline §10.1 item 9) and no load tests in the repositories | Run a load test against staging and add `performance-report` |
 | 3 | The report is a snapshot of one CI run | Re-export after the last merge before submission |
 | 4 | Report is Markdown; the deliverable list asks for HTML or PDF | Export to PDF as `coverage-sprint8.pdf` for the final submission |
