@@ -18,7 +18,7 @@ Items that need an application code change:
 | 5 | No Python lock file | A08 | `requirements.txt` files mix pinned and unpinned versions. |
 | 6 | No threat model in the SDS | A04 | The SDS has a project risk register only. |
 
-Items that need no application code change are being handled separately: response security headers at the edge (configuration), branch coverage reporting in CI (pipeline), and the RabbitMQ default credentials (secrets).
+Items that needed no application code change were handled separately and are done: response security headers at the edge (DDP-#64), branch coverage reporting in CI (DDP-#63) and the RabbitMQ default credentials (DDP-#73).
 
 ### Decision
 The release keeps the six limitations above. They are **accepted and recorded**, not fixed, until after the final demonstration:
@@ -40,7 +40,7 @@ The release keeps the six limitations above. They are **accepted and recorded**,
 - Python builds are not fully reproducible.
 
 ### Follow-up
-1. Verify, with someone who holds the secrets, that the staging and production `SECRET_KEY` values differ from the fallback in the code.
+1. ~~Verify that the staging `SECRET_KEY` differs from the fallback in the code.~~ Done on 2026-10-28 (compared by fingerprint). Still to do for production when it is deployed.
 2. After the demonstration, create issues for items 1 to 5 and schedule them in the next release (account lockout, authentication-event logging with masked emails, removing the key fallback so a missing key fails at start-up, explicit bcrypt rounds, pinned dependencies).
 3. Add the threat model to the SDS security section.
 4. Re-run the OWASP review after those changes and update `security/owasp-checklist.md`.
