@@ -8,3 +8,4 @@ This repository contains the specifications, design sheets, architectural decisi
 * `development guideline.md` — Development guideline issued by SETU
 * `ADR-11-nextjs-version-upgrade.md` — Architectural Decision Record for upgrading Next.js and React versions
 * `retrospectives/` — Sprint-level evaluation documents ([Sprint 5](retrospectives/sprint-5.md), [Sprint 6](retrospectives/sprint-6.md))
+* `standards/coding-standards.md` — Coding standards: principles, linters and formatters, git workflow, commit convention and code review rules
