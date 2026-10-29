@@ -54,11 +54,11 @@ The figures cover production code only: Jest's `collectCoverageFrom` already exc
 | Suite | Test cases | What it checks |
 |---|---|---|
 | `edura-tests/integration` | 203 | 198 tests against staging (all services except payments and enrolments) and 5 payment and enrolment tests against an in-process mock gateway |
-| `edura-tests/e2e` | 5 | Playwright UI tests of three critical flows (register and sign in, browse and enrol, take an exam), run against staging |
+| `edura-tests/e2e` | 6 | Playwright UI tests of three critical flows (register and sign in, browse and enrol, take an exam), run against staging |
 | `edura-tests/smoke` | 1 | End-to-end critical path on staging, run after each staging deploy |
 | `edura-infra` | 14 | Nginx gateway configuration, Caddy security headers and RabbitMQ topology (run in the infra CI since DDP-#72) |
 | `edura-tests/performance` | – | Latency and load script; results in `performance-report.md` |
-| **Total, all suites** | **1,855** | |
+| **Total, all suites** | **1,856** | |
 
 The per-test results are in `test-register.md` and `test-results.md`.
 
