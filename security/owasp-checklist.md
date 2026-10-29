@@ -2,9 +2,9 @@
 
 Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates). Evidence for the final report (§10.1, item 8).
 
-- **Date of review:** 2026-10-27
+- **Date of review:** 2026-10-27; updated 2026-10-28 after the security headers (DDP-#64), the dependency scans of the infra and tests repositories, and the RabbitMQ credential change (DDP-#73) were merged and deployed to staging.
 - **Scope:** `edura-backend` (11 services), `edura-frontend`, `edura-infra` (gateway, Kubernetes, pipelines), `edura-tests`.
-- **Method:** static review of the source, configuration and CI workflows, plus a count of the tests that assert the behaviour. The staging environment was **not** probed (no live requests were sent), so runtime behaviour such as error bodies and response headers is marked where it was not observed.
+- **Method:** static review of the source, configuration and CI workflows, plus a count of the tests that assert the behaviour. On 2026-10-28 the staging response headers were read with a plain HTTPS request; other runtime behaviour, such as error bodies, was not observed and is marked where it applies.
 - **Status key:** **Met** = implemented and evidenced. **Partly met** = implemented with a stated gap. **Not met** = required by the guideline but not implemented. A line number is given where a file is cited.
 
 ## Summary
@@ -12,10 +12,10 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 | ID | Risk | Status |
 |---|---|---|
 | A01 | Broken Access Control | Met |
-| A02 | Cryptographic Failures | Partly met (hardcoded fallback signing key) |
+| A02 | Cryptographic Failures | Partly met (hardcoded fallback signing key in the code; staging key checked) |
 | A03 | Injection | Met (no dedicated injection test) |
 | A04 | Insecure Design | Not met (no threat model in the SDS) |
-| A05 | Security Misconfiguration | Partly met |
+| A05 | Security Misconfiguration | Partly met (no Content-Security-Policy yet) |
 | A06 | Vulnerable and Outdated Components | Partly met |
 | A07 | Identification and Authentication Failures | Partly met |
 | A08 | Software and Data Integrity Failures | Partly met |
@@ -52,7 +52,7 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 - The payment webhook signature (PayHere HMAC-MD5) is checked before an event is accepted (`payment_service/utils.py`).
 
 **Gaps**
-- **Hardcoded fallback signing key.** `shared/auth.py` (used by every service) and `auth_service/config.py` read `SECRET_KEY` from the environment but fall back to a fixed development value if it is unset. If a deployment ever started without the variable, tokens could be forged with a publicly known key. This is a configuration risk, not an active vulnerability, as long as every environment sets its own key. Someone with access should confirm that staging's `SECRET_KEY` differs from the default.
+- **Hardcoded fallback signing key.** `shared/auth.py` (used by every service) and `auth_service/config.py` read `SECRET_KEY` from the environment but fall back to a fixed development value if it is unset. If a deployment ever started without the variable, tokens could be forged with a publicly known key. This is a configuration risk, not an active vulnerability, as long as every environment sets its own key. **Checked 2026-10-28:** the `SECRET_KEY` deployed to staging differs from the fallback value in the code (compared by SHA-256 fingerprint, without printing either key). Production has not been deployed, so its key is still to be checked.
 - The bcrypt cost depends on the library default and is not set explicitly in code.
 - Access tokens are signed with HS256 and a shared `SECRET_KEY`.
 - The webhook signature is compared with `==`, not a constant-time comparison.
@@ -88,9 +88,13 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 - No debug mode or custom exception handler that returns tracebacks was found in the service entry points. FastAPI returns a generic body for unhandled errors by default; this was **not observed** on staging.
 - Internal-only endpoints are blocked at the gateway (see A01).
 
+**Done since the first review**
+- **Response security headers (DDP-#64).** Caddy sets `Strict-Transport-Security` (max-age 15552000), `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN` and `Referrer-Policy: strict-origin-when-cross-origin`, and removes the `Server` header (`edura-infra/k8s/base/50-edge.yaml`). All four were seen on `https://staging.eduralms.com` on 2026-10-28. A test (`nginx/tests/test_edge_headers.py`) checks the configuration, and it runs in the infra CI (DDP-#72).
+- **RabbitMQ default credentials removed (DDP-#73).** The broker, the setup Job and all services use one account, `edura`, with a password from the environment secret `RABBITMQ_PASSWORD`. The deploy script creates the account and deletes `guest` after the services have rolled out. The staging deploy of 2026-10-28 completed with all pods running; the absence of `guest` was not checked separately on the broker.
+
 **Gaps**
-- **RabbitMQ still uses `guest/guest`.** It is reachable only inside the cluster, but the guideline asks for default credentials to be removed (also listed in `edura-infra/docs/AZURE-DEPLOYMENT.md`).
-- **No security response headers** (HSTS, `X-Content-Type-Options`, a basic CSP) were found in the gateway or Caddy configuration.
+- **No Content-Security-Policy.** It needs a report-only trial against Next.js, Google sign-in and the YouTube and Cloudinary embeds first (noted in `50-edge.yaml`).
+- Error bodies for unhandled exceptions were not observed on staging.
 
 ## A06: Vulnerable and Outdated Components
 
@@ -98,7 +102,7 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 
 **Evidence**
 - Every code repository scans dependencies in CI: `pip-audit` for the backend (all 11 services), `edura-infra` and `edura-tests`; `audit-ci` (npm) for the frontend. Each fails the build on a new advisory.
-- Accepted exceptions are written down, not hidden: frontend advisories in `audit-ci.jsonc`; infra and tests in `security/accepted-vulnerabilities.txt` (currently empty; DDP-#56 and DDP-#57, pending merge when this checklist was written); procedure in each repository's `docs/SECURITY-SCAN.md`; rationale in ADR-14.
+- Accepted exceptions are written down, not hidden: frontend advisories in `audit-ci.jsonc`; infra and tests in `security/accepted-vulnerabilities.txt` (currently empty; DDP-#56 and DDP-#57, merged); procedure in each repository's `docs/SECURITY-SCAN.md`; rationale in ADR-14.
 
 **Gap**
 - The frontend allow-list (`audit-ci.jsonc`) holds **22 accepted advisories** (ADR-14: `next`, `dompurify`, `follow-redirects`, `js-yaml`, `postcss`, `sharp` and others). The scan fails on high or critical advisories, so these are documented exceptions to "no high or critical vulnerabilities".
@@ -155,12 +159,12 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 | 1 | No account lockout | A07 | Record as a limitation (application code is frozen); add failed-attempt counting in a later release |
 | 2 | Authentication events not logged; recipient emails in logs | A09 | Record as a limitation; later: log auth events, mask emails |
 | 3 | No threat model in the SDS | A04 | Add a short threat model to the SDS security section |
-| 4 | No security response headers | A05 | Add headers in the Caddy/Nginx configuration (no application change) |
-| 5 | RabbitMQ `guest/guest` | A05 | Change in the Kubernetes secret and `.env` (configuration change) |
+| 4 | No security response headers | A05 | **Done** (DDP-#64); a Content-Security-Policy is still to be added |
+| 5 | RabbitMQ `guest/guest` | A05 | **Done** (DDP-#73) |
 | 6 | 22 accepted high-severity frontend advisories | A06 | Keep ADR-14 up to date; remove entries as upstream fixes land |
 | 7 | No Python lock file | A08 | Add pinned requirements or a lock file in a later release |
 | 8 | No injection-payload test | A03 | Add one negative test per search or list endpoint |
 | 9 | bcrypt cost relies on the library default | A02 | Set `rounds=12` explicitly in a later release |
-| 10 | Hardcoded fallback `SECRET_KEY` in `shared/auth.py` and `auth_service/config.py` | A02 | Verify every environment sets its own key (configuration check); remove the default in a later release so a missing key fails at start-up |
+| 10 | Hardcoded fallback `SECRET_KEY` in `shared/auth.py` and `auth_service/config.py` | A02 | Staging key checked (differs from the fallback); check production when it is deployed; remove the default in a later release so a missing key fails at start-up |
 
 Items 1, 2, 7, 9 and 10 need application code changes, which the team has deferred to avoid destabilising the running system; they should be listed under "Limitations & future work" in the report and the demonstration (§9.2).
