@@ -4,7 +4,7 @@ Functional test cases for the key requirements, in the §6.3.3 format. The compl
 
 - **Date executed:** 2026-10-28.
 - **Where the Actual Output comes from:**
-  - **Live** = run against the staging environment (`https://staging.eduralms.com`) with `edura-tests/integration` (branch DDP-#66, 197 passed, 1 skipped) or the Playwright suite `edura-tests/e2e` (DDP-#68, 5 passed).
+  - **Live** = run against the staging environment (`https://staging.eduralms.com`) with `edura-tests/integration` (branch DDP-#66, 197 passed, 1 skipped) or the Playwright suite `edura-tests/e2e` (DDP-#68, 6 passed).
   - **CI** = passed in the Backend CI run for the 11 services (778 tests) or in the in-process mock-gateway run of `edura-tests/integration/test_payment_enrollment_flow.py`.
 - **Status key:** Pass, Fail, Blocked. A requirement with no automated test is listed in "Requirements without an automated test" instead of being given an invented result.
 - Priority: P1 = must pass, P2 = should pass.
