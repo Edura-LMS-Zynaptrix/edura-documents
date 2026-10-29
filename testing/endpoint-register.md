@@ -1,6 +1,6 @@
 # API Endpoint Register
 
-Generated: 2026-10-27 · Source: FastAPI routes in `edura-backend` and the HTTP calls in the service tests (`testing/tools/generate_registers.py`) · Guideline §6.4: every endpoint must have at least one integration test
+Generated: 2026-10-28 · Source: FastAPI routes in `edura-backend` and the HTTP calls in the service tests (`testing/tools/generate_registers.py`) · Guideline §6.4: every endpoint must have at least one integration test
 
 ## Summary
 

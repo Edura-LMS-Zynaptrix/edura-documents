@@ -12,8 +12,14 @@ edura-frontend and writes, next to this script's parent folder:
     testing/endpoint-register.md  every API endpoint and the tests that call it
                                   (guideline 6.4)
 
-Static analysis only: no tests are run, so Status / Actual Output stay blank
-until a run is recorded. Standard library only.
+Static analysis only: no tests are run by this script. To fill the Status column,
+run the suites first and pass the result files (pytest JUnit XML and the Jest --json
+file) as a folder:
+
+    python3 edura-documents/testing/tools/generate_registers.py . --results path/to/results
+
+Each *.xml file is read as pytest JUnit output and each *.json file as Jest output.
+A test with no result keeps a blank Status. Standard library only.
 """
 
 import ast
@@ -304,11 +310,55 @@ def best(route_path, rx, method, calls):
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
+# --------------------------------------------------------------------------
+# Recorded results (Status column)
+# --------------------------------------------------------------------------
+def _combine(states):
+    """One status for a test that ran several times (parametrised)."""
+    if "Fail" in states:
+        return "Fail"
+    if "Pass" in states:
+        return "Pass"
+    if "Xfail" in states:
+        return "Xfail"
+    return "Skipped"
+
+
+def load_results(folder):
+    """{(file base name, test name): [state, ...]} from JUnit XML and Jest JSON files."""
+    import json
+    import xml.etree.ElementTree as ET
+    found = collections.defaultdict(list)
+    for path in walk(folder):
+        if path.endswith(".xml"):
+            for case in ET.parse(path).getroot().iter("testcase"):
+                parts = case.get("classname", "").split(".")
+                module = next((p for p in reversed(parts) if p.startswith("test_")), "")
+                name = re.sub(r"\[.*\]$", "", case.get("name", ""))
+                if case.find("failure") is not None or case.find("error") is not None:
+                    state = "Fail"
+                elif case.find("skipped") is not None:
+                    skipped = case.find("skipped")
+                    state = "Xfail" if "xfail" in (skipped.get("type") or "").lower() \
+                        or "xfail" in (skipped.get("message") or "").lower() else "Skipped"
+                else:
+                    state = "Pass"
+                found[(module + ".py", name)].append(state)
+        elif path.endswith(".json"):
+            for suite in json.load(open(path, encoding="utf8")).get("testResults", []):
+                base = os.path.basename(suite.get("name", ""))
+                for a in suite.get("assertionResults", []):
+                    state = {"passed": "Pass", "failed": "Fail"}.get(a.get("status"), "Skipped")
+                    found[(base, a.get("title", ""))].append(state)
+    return {k: _combine(v) for k, v in found.items()}
+
+
 def md_escape(text):
     return text.replace("|", "\\|")
 
 
-def main(base):
+def main(base, results=None):
+    results = results or {}
     docs_testing = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
     today = datetime.date.today().isoformat()
     suites = []  # (title, [rows])
@@ -377,10 +427,28 @@ def main(base):
         "# Complete Test Case Register", "",
         f"Generated: {today} · Source: static scan of the test code in the repositories "
         "(`testing/tools/generate_registers.py`) · Guideline: development guideline §6.3.3 / §6.4", "",
-        "## Summary", "", "| Layer / suite | Test cases |", "|---|---|",
+        "## Summary", "",
     ]
-    out += [f"| {title} | {len(rows)} |" for title, rows in suites]
-    out += [f"| **Total** | **{total}** |", "", "Notes:", "",
+
+    def state_of(r):
+        return results.get((os.path.basename(r["file"]), r["name"]), "")
+
+    if results:
+        out += ["| Layer / suite | Test cases | Pass | Fail | Skipped / xfail | Not run |", "|---|---|---|---|---|---|"]
+        totals = collections.Counter()
+        for title, rows in suites:
+            c = collections.Counter(state_of(r) for r in rows)
+            skipped = c["Skipped"] + c["Xfail"]
+            out.append(f"| {title} | {len(rows)} | {c['Pass']} | {c['Fail']} | {skipped} | {c['']} |")
+            totals.update({"n": len(rows), "p": c["Pass"], "f": c["Fail"], "s": skipped, "x": c[""]})
+        out.append(f"| **Total** | **{totals['n']}** | **{totals['p']}** | **{totals['f']}** | "
+                   f"**{totals['s']}** | **{totals['x']}** |")
+    else:
+        out += ["| Layer / suite | Test cases |", "|---|---|"]
+        out += [f"| {title} | {len(rows)} |" for title, rows in suites]
+    if not results:
+        out.append(f"| **Total** | **{total}** |")
+    out += ["", "Notes:", "",
             "- This register lists only tests that exist in the repositories on the date above. "
             "Re-run `testing/tools/generate_registers.py` after tests are added or removed.",
             "- Type: `test_migrations` → Migration; backend test files that send HTTP requests to the "
@@ -390,8 +458,11 @@ def main(base):
             "- Priority: P1 for integration and end-to-end tests, P2 for unit, migration and config tests.",
             "- **Description** is the test's docstring if present, otherwise its humanised name. For "
             "frontend tests it is the `it(...)` title and **Class** is the top-level `describe(...)`.",
-            "- **Status** is blank until the suite is executed; this register was generated from source "
-            "and no test run was done. Record *Actual Output* and *Status* per §6.3.3 after a run.",
+            ("- **Status** comes from the recorded runs listed in `testing/test-results.md` "
+             "(Pass, Fail, Skipped, Xfail = expected failure). A blank Status means the test was not run "
+             "in those runs." if results else
+             "- **Status** is blank until the suite is executed; this register was generated from source "
+             "and no test run was done."),
             "- This register is the index of test cases. The fields it does not hold (related requirement, "
             "preconditions, input, expected and actual output) still have to be written, in the §6.3.3 "
             "format, for the key cases in the development report appendix.",
@@ -404,7 +475,8 @@ def main(base):
         for r in rows:
             counter += 1
             out.append(f"| TC-{counter:04d} | {r['type']} | {r['prio']} | {md_escape(r['class'])} | "
-                       f"`{md_escape(r['name'])}` | {md_escape(r['desc'])} | `{r['file']}` | |")
+                       f"`{md_escape(r['name'])}` | {md_escape(r['desc'])} | `{r['file']}` | "
+                       f"{results.get((os.path.basename(r['file']), r['name']), '')} |")
         out.append("")
     with open(os.path.join(docs_testing, "test-register.md"), "w", encoding="utf8") as fh:
         fh.write("\n".join(out))
@@ -480,4 +552,11 @@ def main(base):
 
 
 if __name__ == "__main__":
-    main(os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else "."))
+    args = sys.argv[1:]
+    results_dir = None
+    if "--results" in args:
+        i = args.index("--results")
+        results_dir = args[i + 1]
+        del args[i:i + 2]
+    main(os.path.abspath(args[0] if args else "."),
+         load_results(results_dir) if results_dir else None)
