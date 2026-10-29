@@ -12,10 +12,10 @@ Guideline reference: §6.3.3 (Actual Output / Status), §7.2 (Unit Tests stage),
 | Backend, 11 services | `edura-backend`, branch `feature/DDP-67-gwt-test-naming` | Local; PostgreSQL 16 in Docker (one database per service), as the CI job does | `pytest <service>` with `DATABASE_URL`, `PYTHONPATH=.:<service>` | 857 test results: 855 passed, 1 skipped (enrollment) and 1 expected failure (assessment, xfail); see Notes |
 | Frontend | `edura-frontend`, branch `feature/DDP-58-frontend-coverage-gate` | Local, `npm ci` | `npx jest --ci --json` | 1,170 passed, 0 failed (31 files) |
 | Infrastructure | `edura-infra`, branch `feature/DDP-64-security-headers` | Local | `pytest nginx/tests rabbitmq/tests` | 10 passed, 1 failed, 3 skipped (they need a live RabbitMQ) |
-| Cross-service integration, payment and enrolment | `edura-tests`, branch `feature/DDP-66-staging-integration-tests` | In-process mock gateway (as in CI) | `pytest integration/test_payment_enrollment_flow.py` | 5 passed |
+| Cross-service integration, payment and enrolment | `edura-tests`, branch `feature/DDP-66-staging-integration-tests` | In-process mock gateway (as in CI) | `pytest integration/test_payment_enrollment_flow.py` | 6 passed |
 | Cross-service integration, all other services | same | **Staging**, `https://staging.eduralms.com` | `pytest integration/test_*_flow.py` with `STAGING_API_URL` | 197 passed, 1 skipped, 0 failed |
 | Cross-service integration, all services including payment and enrolment | `edura-tests` `develop`, plus the payment and enrolment test files from open PR #11 | **Local throwaway stack** (see below) | `pytest integration` with `STAGING_API_URL=http://localhost:8080` | `develop` suite: 201 passed, 1 failed (needs Cloudinary, see Notes), 1 skipped. PR #11 files `test_payment_flow.py` and `test_enrollment_flow.py`: 68 passed |
-| UI end-to-end (Playwright) | `edura-tests`, branch `feature/DDP-68-ui-e2e-tests` | **Staging** | `npx playwright test` | 5 passed |
+| UI end-to-end (Playwright) | `edura-tests`, branch `feature/DDP-68-ui-e2e-tests` | **Staging** | `npx playwright test` | 6 passed |
 
 The register counts test functions found in the source (1,850). The runs count every executed instance, so parametrised tests count more than once (for example Jest reports 1,170 results for 854 test definitions). Statuses in the register are matched by file and test name; a test with several instances shows Fail if any failed, otherwise Pass.
 
@@ -35,7 +35,7 @@ Guideline §6.3.2 asks for integration tests "against a test database", and the 
 - **Local integration failure:** `test_given_admin_when_request_signed_url_then_returns_url_and_expiry` returned 503 `CLOUDINARY_NOT_CONFIGURED` because the throwaway stack has no Cloudinary credentials. It passes on staging, where they are set.
 - **Payment and enrolment tests (PR #11):** the 68 tests in `test_payment_flow.py` and `test_enrollment_flow.py` are not in `develop` yet, so they are not in the register. They passed on the local stack, including the PayHere webhook signature checks. They were not run on staging, which would need its PayHere credentials and would leave payment records behind.
 - **Not run in this record:** the end-to-end smoke test `edura-tests/smoke/critical_path.py` (it runs after each staging deploy) and 7 Jest tests whose names are built at run time and so cannot be matched to the register.
-- **Playwright tests** are not in the register yet because it is generated from the three repositories' source scan and the Playwright suite is a new folder; their five results are recorded here and in `test-case-table.md`.
+- **Playwright tests** are not in the register yet because it is generated from the three repositories' source scan and the Playwright suite is a new folder; their six results are recorded here and in `test-case-table.md`.
 - The `edura-backend` code under test includes the unmerged Given-When-Then renames (DDP-#67), so the names in the register are the names after that PR merges. The test logic is unchanged.
 - CI is the authoritative run for each merge: every `Verify <service>` job in the Backend CI passes on the DDP-#67 branch (run 40635707724).
 
