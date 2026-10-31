@@ -2,6 +2,21 @@
 
 This repository contains the specifications, design documents, architectural decisions, and test, security and project evidence for the EDURA LMS project. The source code is in `edura-backend`, `edura-frontend`, `edura-infra` and `edura-tests`.
 
+## Deployed application
+
+| Environment | URL |
+|---|---|
+| Staging | https://staging.eduralms.com |
+| Production | https://eduralms.com |
+
+The application is built from four code repositories: [edura-backend](https://github.com/Edura-LMS-Zynaptrix/edura-backend), [edura-frontend](https://github.com/Edura-LMS-Zynaptrix/edura-frontend), [edura-infra](https://github.com/Edura-LMS-Zynaptrix/edura-infra) and [edura-tests](https://github.com/Edura-LMS-Zynaptrix/edura-tests).
+
+## CI, coverage and setup
+
+This repository holds documents only: no code, no pipeline and no deployment (see ADR-15), so it has no CI or coverage badge. The badges are on the [edura-backend](https://github.com/Edura-LMS-Zynaptrix/edura-backend#readme) and [edura-frontend](https://github.com/Edura-LMS-Zynaptrix/edura-frontend#readme) READMEs, and the coverage results are in [testing/coverage-report.md](testing/coverage-report.md).
+
+Nothing needs to be installed or run to read the documents. They are Markdown files; the PDF versions are regenerated with `testing/tools/export_pdfs.py`.
+
 ## Contents
 
 | Location | Contents |
