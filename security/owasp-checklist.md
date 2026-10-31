@@ -105,7 +105,7 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 - Accepted exceptions are written down, not hidden: frontend advisories in `audit-ci.jsonc`; infra and tests in `security/accepted-vulnerabilities.txt` (currently empty; DDP-#56 and DDP-#57, merged); procedure in each repository's `docs/SECURITY-SCAN.md`; rationale in ADR-14.
 
 **Gap**
-- The frontend allow-list (`audit-ci.jsonc`) holds **22 accepted advisories** (ADR-14: `next`, `dompurify`, `follow-redirects`, `js-yaml`, `postcss`, `sharp` and others). The scan fails on high or critical advisories, so these are documented exceptions to "no high or critical vulnerabilities".
+- The frontend allow-list (`audit-ci.jsonc`) holds **20 accepted advisories** (ADR-14: `next`, `dompurify`, `js-yaml`, `postcss`, `sharp` and others; the two `follow-redirects` entries were removed on 31 October 2026 after the package was updated). The scan fails on high or critical advisories, so these are documented exceptions to "no high or critical vulnerabilities".
 
 ## A07: Identification and Authentication Failures
 
@@ -161,7 +161,7 @@ Guideline reference: §8.1 (OWASP Top 10 compliance), §8.2 (code quality gates)
 | 3 | No threat model in the SDS | A04 | Add a short threat model to the SDS security section |
 | 4 | No security response headers | A05 | **Done** (DDP-#64); a Content-Security-Policy is still to be added |
 | 5 | RabbitMQ `guest/guest` | A05 | **Done** (DDP-#73) |
-| 6 | 22 accepted high-severity frontend advisories | A06 | Keep ADR-14 up to date; remove entries as upstream fixes land |
+| 6 | 20 accepted high-severity frontend advisories | A06 | Keep ADR-14 up to date; remove entries as upstream fixes land |
 | 7 | No Python lock file | A08 | Add pinned requirements or a lock file in a later release |
 | 8 | No injection-payload test | A03 | Add one negative test per search or list endpoint |
 | 9 | bcrypt cost relies on the library default | A02 | Set `rounds=12` explicitly in a later release |

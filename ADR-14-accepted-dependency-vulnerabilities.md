@@ -7,14 +7,14 @@ Proposed. Needs supervisor review within one sprint (development guideline §1.3
 ### Context
 The development guideline requires "no known high or critical vulnerabilities in dependencies" (§8.2) and a dependency scan in CI (§7.2, OWASP A06). The frontend `Security Scan` job runs `npm audit`.
 
-`npm audit` on the frontend lockfile (`edura-frontend`, `next@15.5.20`) reports **10 vulnerable packages: 2 critical, 7 high, 1 moderate**, covering 22 high or critical advisories (table below).
+`npm audit` on the frontend lockfile (`edura-frontend`, `next@15.5.20`) reported **22 high or critical advisories** when this record was written (table below). After `follow-redirects` was updated to 1.16.2 on 31 October 2026 (DDP-#81), `npm audit` reports **8 packages with high or critical advisories: 2 critical, 6 high**, covered by **20** accepted advisories.
 
 - `npm audit fix` fixes most of them without a major version change, including a patch update of `next` inside 15.x.
 - The remaining PostCSS issue (bundled inside Next) can only be fixed by upgrading to Next 16, a breaking change.
 - The frontend is **already deployed to production** (AKS, Docker image built from `next start` on `node:20-alpine`). When a dependency update was tried, the Jest suite failed and there was no time to regression-test the live system before the demo.
 
 ### Decision
-**Do not change the frontend dependency tree before the final demonstration.** The 22 high and critical advisories are accepted as known risks, listed by ID in `edura-frontend/audit-ci.jsonc`. The `Security Scan` job runs `audit-ci` with that list, so:
+**Do not change the frontend dependency tree before the final demonstration.** The 20 high and critical advisories are accepted as known risks, listed by ID in `edura-frontend/audit-ci.jsonc`. The `Security Scan` job runs `audit-ci` with that list, so:
 
 - the listed advisories no longer fail the build;
 - **any new high or critical advisory still fails the build**;
@@ -27,8 +27,6 @@ The development guideline requires "no known high or critical vulnerabilities in
 | brace-expansion | [GHSA-qhr7-859c-m2p7](https://github.com/advisories/GHSA-qhr7-859c-m2p7) | high | brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion |
 | dompurify | [GHSA-cg2g-xh64-v4q7](https://github.com/advisories/GHSA-cg2g-xh64-v4q7) | critical | DOMPurify SAFE_FOR_TEMPLATES bypass: split template expressions survive in attached shadow root content on DOM output modes |
 | dompurify | [GHSA-mrv2-3pqr-j5jr](https://github.com/advisories/GHSA-mrv2-3pqr-j5jr) | high | DOMPurify IN_PLACE: hook that removes a parent or sibling leaves the detached subtree's event handlers armed (incomplete fix for GHSA-p98j-92pf-mc4p) |
-| follow-redirects | [GHSA-8r9p-f939-6h3c](https://github.com/advisories/GHSA-8r9p-f939-6h3c) | high | follow-redirects sensitiveHeaders regex escaping can expose credential headers |
-| follow-redirects | [GHSA-q3jh-wrc6-jgq8](https://github.com/advisories/GHSA-q3jh-wrc6-jgq8) | high | follow-redirects array-form headers bypass cross-origin credential stripping |
 | js-yaml | [GHSA-2883-xcg3-v3hh](https://github.com/advisories/GHSA-2883-xcg3-v3hh) | high | js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources |
 | js-yaml | [GHSA-5p4m-2wfm-xmqj](https://github.com/advisories/GHSA-5p4m-2wfm-xmqj) | high | JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported |
 | nanoid | [GHSA-2v37-7h3g-55p8](https://github.com/advisories/GHSA-2v37-7h3g-55p8) | high | nanoid: custom generators can loop indefinitely when size is zero |
@@ -55,7 +53,7 @@ Based on how the frontend is built and run (`next.config.js`, `Dockerfile`). **R
 | Windows or custom server (`p293-qw3h-jr36`, `89xv-2m56-2m9x`) | Production runs on Linux with `next start`, not a custom server and not Windows. |
 | Image Optimization (`2464-fhr4-w9xw`, `2xp9-vwfh-vxw4`, critical) | **Possibly exposed.** `next.config.js` enables image optimization (`images.remotePatterns`, avif/webp) and `next/image` is used on the landing page and course list. This is the highest-risk item. |
 | Rewrites SSRF (`p9j2-gv94-2wf4`) | Not checked. The gateway (nginx) does routing, but `next.config.js` has no rewrites. |
-| `dompurify`, `follow-redirects`, `js-yaml`, `brace-expansion`, `nanoid`, `source-map-js`, `sharp`, `postcss` | Transitive dependencies. Several are build-time only. Not individually checked. |
+| `dompurify`, `js-yaml`, `brace-expansion`, `nanoid`, `source-map-js`, `sharp`, `postcss` | Transitive dependencies. Several are build-time only. Not individually checked. |
 
 ### Mitigations while the risk is accepted
 - The browser reaches the frontend only through the nginx gateway; the Next.js server is not exposed directly.
@@ -68,8 +66,11 @@ Based on how the frontend is built and run (`next.config.js`, `Dockerfile`). **R
 - CI stays meaningful: new vulnerabilities still fail the build.
 
 **Negative / risks**
-- The system knowingly runs with 2 critical and 7 high advisories. The guideline's A06 expectation ("no high/critical vulnerabilities") is **not met** and is recorded as a deviation.
+- The system knowingly runs with 2 critical and 6 high severity packages (20 advisories). The guideline's A06 expectation ("no high/critical vulnerabilities") is **not met** and is recorded as a deviation.
 - The Image Optimization advisories may be exploitable on the public site.
+
+### Update, 31 October 2026
+`follow-redirects` (GHSA-8r9p-f939-6h3c, GHSA-q3jh-wrc6-jgq8, and the new GHSA-mrwp-f3q8-3g9p that failed the Security Scan) was fixed by updating the lock file to 1.16.2, a patch change that passed the full test suite. Its two entries were removed from `audit-ci.jsonc` and from the table above. The other 20 remain accepted.
 
 ### Follow-up (after the demonstration)
 1. Run `npm audit fix` on a branch, run the full test suite and deploy it to staging first.
